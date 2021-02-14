@@ -37,13 +37,6 @@ from pprint import pprint
 from datetime import datetime
 from github import Github
 
-# todo: generate schema from existing yaml, validate against schema  -- done
-# commit, -- done
-# issue pull request  -- done
-# migrate gspread to work as a bot as well as oauth -- done
-# only create a pull request if there are changes (run a git diff first?) -- done
-# sync to spreadsheet (different script runs from master)
-# make github action -- done
 
 spreadsheets_file = "working_spreadsheets.yaml"
 commit_msg_base = "cre_sync_%s" % (datetime.now().isoformat().replace(":", "."))
@@ -72,30 +65,31 @@ CRE_LINK_schema = {
         "required": ["CRE-ID-lookup-from-taxonomy-table", "Description"]
     }
 }
-logging.basicConfig()
 
+logging.basicConfig()
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
 
   
-def readSpreadsheet(url: str, cres_loc: str, alias:str):
+def readSpreadsheet(url: str, cres_loc: str, alias:str,validate=True):
     """given remote google spreadsheet url,
      reads each workbook into a yaml file"""
-    # gc = gspread.oauth() # oauth config, TODO (northdpole): make this configurable
     changes_present = False
     try:
-        gc = gspread.service_account()
+        gc = gspread.oauth() # oauth config, TODO (northdpole): make this configurable
+        # gc = gspread.service_account()
         sh = gc.open_by_url(url)
-        logger.debug("accessing spreadsheet \"%s\" : \"%s\""%(alias,url))
+        print("accessing spreadsheet \"%s\" : \"%s\""%(alias,url))
         for wsh in sh.worksheets():
             if wsh.title[0].isdigit():
-                logger.debug(
+                print(
                     "handling worksheet %s  (remember, only numbered worksheets will be processed by convention)" % wsh.title)
                 records = wsh.get_all_records()
                 toyaml = yaml.safe_load(yaml.dump(records))
                 try:
-                    validateYaml(yamldoc=toyaml, schema=CRE_LINK_schema)
-                    logger.debug("Worksheet is valid, saving to disk")
+                    if validate:
+                        validateYaml(yamldoc=toyaml, schema=CRE_LINK_schema)
+                        logger.debug("Worksheet is valid, saving to disk")
                     with open(os.path.join(cres_loc, wsh.title + ".yaml"), "wb") as fp:
                         fp.write(yaml.dump(toyaml, encoding='utf-8'))
                         changes_present = True
@@ -167,7 +161,7 @@ def main():
         urls = yaml.safe_load(sfile)
         for spreadsheet_url in urls:
             logger.info("Dealing with spreadsheet %s"%spreadsheet_url['alias'])
-            if readSpreadsheet(spreadsheet_url['url'], cres_loc=cre_loc,alias=spreadsheet_url['alias']):
+            if readSpreadsheet(spreadsheet_url['url'], cres_loc=cre_loc,alias=spreadsheet_url['alias']): # todo: make this optional
                 add_to_github(cre_loc, spreadsheet_url['alias'],os.getenv("GITHUB_API_KEY"))
             else:
                 logger.info("Spreadsheet \"%s\" didn't produce any changes, no pull request needed"%spreadsheet_url['alias'])
