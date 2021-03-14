@@ -1,192 +1,41 @@
+from spreadsheet_utils import readSpreadsheet, createSpreadsheet
+import shutil
 import yaml
 import os
 import argparse
 import logging
 import uuid
+import tempfile
+import db
+import parsers
 from collections import namedtuple
 from pprint import pprint
-from sqlalchemy import UniqueConstraint, ForeignKey, Column, Integer, String, create_engine, orm, and_
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import sessionmaker, relationship
-from enum import Enum
 
 logging.basicConfig()
 logger = logging.getLogger(__name__)
-logger.setLevel(logging.DEBUG)
-Base = declarative_base()
+logger.setLevel(logging.INFO)
 
 
-class CREDocTypes(Enum):
-    OFFICIAL = "official"
-    PROPOSED = "proposed"
-    LINK = "link"
-
-
-class Standard(Base):
-    __tablename__ = 'standard'
-    id = Column(Integer, primary_key=True)
-    name = Column(String)  # ASVS or standard name,  what are we linking to
-    section = Column(String)  # which part of <name> are we linking to
-    subsection = Column(String)  # which subpart of <name> are we linking to
-
-    # some external link to where this is, usually a URL with an anchor
-    link = Column(String)
-    __table_args__ = (UniqueConstraint(
-        name, section,subsection, name='standard_section'),)
-
-
-class CRE(Base):
-    __tablename__ = 'cre'
-    id = Column(Integer, primary_key=True)
-    # <name> <des> defines <x>,<y>,<z>
-    description = Column(String, default='')
-    name = Column(String)  # ASVS or standard name,  what are we linking to
-    section = Column(String)  # which part of <name> are we linking to
-    # some external link to where this is, usually a URL with an anchor
-    link = Column(String)
-    __table_args__ = (UniqueConstraint(
-        name, section, name='cre_section'),)
-
-
-class Links(Base):
-    __tablename__ = 'links'
-
-    cre = Column(Integer, ForeignKey('cre.id'), primary_key=True)
-    standard = Column(Integer, ForeignKey('standard.id'), primary_key=True)
-
-
-class Standard_collection:
-    info_arr: []
-    cache: bool
-    cache_file: str
-
-    def __init__(self, cache: bool = True, cache_file: str = None):
-        self.info_arr = list()
-        self.cache = cache
-        self.cache_file = cache_file
-
-        if cache:
-            self.connect()
-            self.load()
-
-    def connect(self):
-        connection = create_engine('sqlite:///'+self.cache_file, echo=False)
-        Session = sessionmaker(bind=connection)
-        self.session = Session()
-        Base.metadata.bind = connection
-
-        if not connection.dialect.has_table(connection, Standard.__tablename__):
-            Base.metadata.create_all(connection)
-
-    def load(self):
-        """ generator, loads db into memory
-        TODO:implement?
-        """
-        pass
-
-    def add_cre(self, cre: CRE):
-        cache_entry = self.session.query(CRE).filter(
-            and_(CRE.name == cre.name, CRE.section == cre.section)).first()
-        if cache_entry is not None:
-            logger.debug("knew of %s ,skipping" % cre.name)
-            return
-        else:
-            logger.debug("did not know of %s ,adding" % cre.name)
-            self.session.add(cre)
-        self.session.flush()
-        self.session.commit()
-
-    def add_standard(self, standard: Standard):
-        cache_entry = self.session.query(Standard).filter(and_(Standard.name == standard.name,
-                                                               Standard.section == standard.section,
-                                                               Standard.subsection==standard.subsection)).first()
-        if cache_entry is not None:
-            logger.debug("knew of %s:%s ,skipping" %
-                         (cache_entry.name, cache_entry.section))
-            return
-        else:
-            logger.debug("did not know of %s:%s ,adding" %
-                         (standard.name, standard.section))
-            self.session.add(standard)
-        self.session.flush()
-        self.session.commit()
-
-    def add_link(self, cre: CRE, standard: Standard):
-        if cre.id == None:
-            cre = self.session.query(CRE).filter(
-                and_(CRE.name == cre.name, CRE.section == cre.section)).first()
-        if standard.id == None:
-            standard = self.session.query(Standard).filter(and_(
-                Standard.name == standard.name,
-                Standard.section == standard.section,
-                Standard.subsection==standard.subsection)).first()
-
-        cache_entry = self.session.query(Links).filter(
-            and_(Links.cre == cre.id, Links.standard == standard.id)).count()
-        if cache_entry != 0:
-            logger.debug("knew of link %s:%s========%s:%s ,updating" % (
-                standard.name, standard.section, cre.name, cre.section))
-            return
-        else:
-            logger.debug("did not know of link %s)%s:%s=========%s)%s:%s ,adding" % (
-                standard.id, standard.name, standard.section, cre.id, cre.name, cre.section))
-            self.session.add(Links(cre=cre.id, standard=standard.id))
-        self.session.flush()
-        self.session.commit()
-
-
-def not_empty(value: str):
-    value = str(value)
-    return value != None and value != "" and "N/A" not in value
-
-
-def parse_standards(cre_file: list, status: CREDocTypes, result: Standard_collection):
-    """ given a yaml with standards, build a list of standards
+def parse_standards(cre_file: list, result: db.Standard_collection):
+    """ given a yaml with standards, build a list of standards in the db
     """
-    for cre_mapping in cre_file:
-
-        # temporary workaround, the CRE team is the only one adding mappings so everything is official for now
-        # when we accept proposed mappings and other links, uncomment:
-        # if status == Proposed:
-        #   link_status = proposed
-        #   cre_status = proposed
-        # and change db to have a "proposed status" and change visualisation to paint proposed mappings somehow else
-
-        # so far CRE-ID-lookup-from-taxonomy-table has been used to map CREs
-        # so this means that the yaml is "official" and definitely has CRE mapping
-        cre = None
-        linked_standard = None
-        if cre_mapping.get("CRE-ID-lookup-from-taxonomy-table"):
-            cre = CRE(description=cre_mapping.pop("Description"),
-                      name="CRE",
-                      section=cre_mapping.pop("CRE-ID-lookup-from-taxonomy-table"))
-            result.add_cre(cre)
-
-        # parse ASVS, the v0 docs have a human-friendly but non-standard way of doing asvs
-        if cre_mapping.get("ID-taxonomy-lookup-from-ASVS-mapping"):
-            linked_standard = Standard(
-                name="ASVS",
-                section=cre_mapping.pop(
-                    "ID-taxonomy-lookup-from-ASVS-mapping"),
-                subsection=cre_mapping.pop("Item")
-            )
+    cres = parsers.parse_v0_standards(cre_file)
+    for cre_name, cre in cres.items():
+        dbcre = db.CRE(description=cre.description,
+                        name=cre.name)
+        result.add_cre(dbcre)
+        for link in cre.links:
+            linked_standard = db.Standard(
+                name=link.name,
+                section=link.section,
+                subsection=link.subsection)
             result.add_standard(linked_standard)
-            result.add_link(cre, linked_standard)
+            result.add_link(dbcre, linked_standard)
 
-        for key, value in cre_mapping.items():
-            if not_empty(value):
-                linked_standard = Standard(
-                    name=key,
-                    section=value
-                )
-                result.add_standard(linked_standard)
-                result.add_link(cre, linked_standard)
 
 # this is a library function to be used by other scripts written to specifically parse external mappings
 # due to external mappings having special structure, custom parsing will always be needed
-
-
-def suggest_mapping(known_standard: Standard, new_standard: Standard, collection: Standard_collection):
+def suggest_mapping(known_standard: db.Standard, new_standard: db.Standard, collection: db.Standard_collection):
     """if known_standard in db, find which CRE it's mapped to and add standard b as a link"""
     known_standard = collection.session.query(Standard).filter(_and(Standard.name == known_standard.name,
                                                                     Standard.section == known_standard.section,
@@ -217,15 +66,7 @@ def suggest_mapping(known_standard: Standard, new_standard: Standard, collection
 def get_standards_files_from_disk(cre_loc: str):
     result = []
     for root, directory, cre_docs in os.walk(cre_loc):
-
-        if CREDocTypes.OFFICIAL.value in root:
-            status = CREDocTypes.OFFICIAL
-        elif CREDocTypes.PROPOSED.value in root:
-            status = CREDocTypes.PROPOSED
-        elif CREDocTypes.LINK.value in root:
-            status = CREDocTypes.LINK
-        else:
-            continue
+        status = "OFFICIAL"
         for name in cre_docs:
             yield (status, os.path.join(root, name))
 
@@ -237,9 +78,12 @@ def main():
     parser = argparse.ArgumentParser(
         description='Add documents describing standards to a database')
     parser.add_argument(
-        '--from_spreadsheet', help='import from a spreadsheet to yaml and then database')
+        '--add', action='store_true', help='will treat the incoming spreadsheet as a reviewed cre and add to the database')
     parser.add_argument(
-        '--proposed', help='when used with "--from_spreadsheet" will put the yaml documents in the /proposed/ dir, will still build the local database')
+        '--review', action='store_true', help='will treat the incoming spreadsheet as a new mapping, will try to map the incoming connections to existing cre\
+            and will create a new spreadsheet with the result for review. Nothing will be added to the database at this point')
+    parser.add_argument(
+        '--from_spreadsheet', help='import from a spreadsheet to yaml and then database')
     parser.add_argument(
         '--print-graph', help='will show the graph of the relationships between standards')
     parser.add_argument(
@@ -247,23 +91,46 @@ def main():
     args = parser.parse_args()
 
     cache = args.cache_file
+
+    loc = ""
+    if args.review:
+        # load the remote spreadsheet to disk,
+        # parse the yaml and put into the db without polluting the existing CREs
+        loc, cache = prepare_for_review(cache)
+    elif args.add:
+        loc = cre_loc
+    
     if args.from_spreadsheet:
-        from spreadsheet_to_yaml import readSpreadsheet
-        if args.proposed:
-            loc = os.path.join(cre_loc, "/proposed")
-        else:
-            loc = cre_loc
+        # write the mappings to disk
         readSpreadsheet(url=args.from_spreadsheet,
-                        cres_loc=loc, alias="new spreadsheet")
+                        cres_loc=loc, alias="new spreadsheet",validate=False)
 
-    """ for standard yaml in dir parse_standards(file) """
-    result = Standard_collection(cache=True, cache_file=cache)
-
+    # build the db
+    result = db.Standard_collection(cache=True, cache_file=cache)
     for status, standard_file in get_standards_files_from_disk(cre_loc):
         with open(standard_file) as standard:
             unparsed = yaml.safe_load(standard)
-            parse_standards(unparsed, status, result)
+            parse_standards(unparsed, result)
+    
+    result.export(loc)
 
+    if args.review:
+        create_spreadsheet(result, loc)
+        logger.info("Stored temporary files and database in %s if you want to use them next time, set cache to the location of the database in that dir"%loc)
+
+def create_spreadsheet(result:dict, location:str):
+    """ Reads cres and groups docs exported from a standards_collection.export()
+    loads yaml and dumps each doc into a workbook"""
+    return
+    raise NotImplementedError()
+    createSpreadsheet()
+
+def prepare_for_review(cache):
+    loc =  tempfile.mkdtemp()
+    cache_filename = os.path.basename(cache)
+    shutil.copy(cache, loc)
+
+    return loc, os.path.join(loc,cache_filename)
 
 if __name__ == "__main__":
     main()
