@@ -48,21 +48,15 @@ spreadsheets_file = "working_spreadsheets.yaml"
 
 
 cache = "file::memory:?cache=shared"
-
+ 
 def parse(workbook:list, result : db.Standard_collection)->db.Standard_collection:
     """ parses custom cre docs into cre_defs classes the opposite of db.py Export"""
     if workbook[0].get("CRE-ID-lookup-from-taxonomy-table"):
         cres = parsers.parse_v0_standards(workbook)
         for cre_name, cre in cres.items():
-            dbcre = db.CRE(description=cre.description,
-                            name=cre.name)
-            result.add_cre(dbcre)
+            dbcre = result.add_cre(cre)
             for link in cre.links:
-                linked_standard = db.Standard(
-                    name=link.name,
-                    section=link.section,
-                    subsection=link.subsection)
-                result.add_standard(linked_standard)
+                linked_standard = result.add_standard(link)
                 result.add_link(dbcre, linked_standard)
     return result
     # todo: add support for v1 (groups)

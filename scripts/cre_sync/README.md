@@ -25,3 +25,35 @@ This script runs automatically, if you want to run it yourself against your own 
 
 
 
+
+
+
+
+TODO: 
+add more edge cases in spreadsheet
+
+add tests
+    defs ~
+    db 2 tests remaining
+    parsers ~
+    mapping_add
+    git_utils
+    spreadsheet_utils
+
+add parse from export format
+
+add parse from export format where the root doc is a standard and it links to cres or groups
+add parse from spreadsheet with unknown standards (for key,val in items add_standard)
+
+merge spreadsheet to yaml and mapping add, they do the same thing
+
+add git integration in the root script
+
+make library out of ????
+
+add sparse_spreadsheet_export functionality one leve of mapping per row, either everything that maps to standard X or everything that maps to CRE x
+
+add the ability for standards to link other standards, then you can handle assigning CREs yourself  <-- this is what mapping add was supposed to be initially
+
+add the ability for a mapping document to have multiple yamls in it
+add dockerfile????

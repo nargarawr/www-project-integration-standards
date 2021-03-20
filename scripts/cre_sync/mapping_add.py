@@ -1,4 +1,3 @@
-from spreadsheet_utils import readSpreadsheet, createSpreadsheet
 import shutil
 import yaml
 import os
@@ -8,29 +7,95 @@ import uuid
 import tempfile
 import db
 import parsers
+from cre_defs import *
 from collections import namedtuple
 from pprint import pprint
+from spreadsheet_utils import readSpreadsheet, createSpreadsheet
 
 logging.basicConfig()
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
 
 
-def parse_standards(cre_file: list, result: db.Standard_collection):
+def register_standard(standard: Standard, result: db.Standard_collection):
+    linked_standard = result.add_standard(standard)
+    for link in standard.links:
+        if type(link).__name__ == Standard.__name__:
+             # if a standard links another standard it is likely that a standards writer references something
+             # in that case, find which of the two standards has at least one CRE attached to it and link both to the parent CRE
+            cres = result.find_cres_of_standard(link)
+            if cres:
+                for cre in cres:
+                    result.add_link(cre=cre, link=linked_standard)
+            else:
+                cres = result.find_cres_of_standard(linked_standard)
+                if cres:
+                    for cre in cres:
+                        result.add_link(cre=cre, link=register_standard(link))
+        elif type(link).__name__ == CRE.__name__ or type(link).__name__ == CreGroup.__name__:
+            # TODO: what if the CRE applies to all the other standards linked?
+            result.add_link(register_cre(link),linked_standard)
+    return linked_standard
+
+
+def register_cre(cre: CRE, result: db.Standard_collection):
+    dbcre = result.add_cre(cre)
+    for link in cre.links:
+        result.add_link(dbcre, register_standard(link, result))
+    return dbcre
+
+
+def parse_file(contents: dict, result: db.Standard_collection):
+    """ given yaml from export format add standards to db"""
+    if contents.get('doctype') == Credoctypes.CRE.value:
+        links = contents.get('links')
+        cre = CRE(contents)
+        for link in links:
+            cre.add_link(link)
+        register_cre(cre, result=result)
+        return cre
+    elif contents.get('doctype') == Credoctypes.Group.value:
+        links = contents.get('links')
+        group = CreGroup(contents)
+        for link in links:
+            group.add_link(link)
+        register_cre(group, result=result)
+        return group
+    elif contents.get('doctype') == Credoctypes.Standard.value:
+        links = contents.get('links')
+        standard = Standard(contents)
+        for link in links:
+            standard.add_link(link)
+        register_standard(standard, result=result)
+        return standard
+
+
+def parse_standards_from_spreadsheeet(cre_file: list, result: db.Standard_collection):
     """ given a yaml with standards, build a list of standards in the db
     """
-    cres = parsers.parse_v0_standards(cre_file)
+    groups = {}
+    cres = {}
+    if "CRE Group 1" in cre_file[0].keys():
+        groups, cres = parsers.parse_v1_standards(cre_file)
+    else:
+        cres = parsers.parse_v0_standards(cre_file)
+
+    # register groupless cres first
     for cre_name, cre in cres.items():
-        dbcre = db.CRE(description=cre.description,
-                        name=cre.name)
-        result.add_cre(dbcre)
-        for link in cre.links:
-            linked_standard = db.Standard(
-                name=link.name,
-                section=link.section,
-                subsection=link.subsection)
-            result.add_standard(linked_standard)
-            result.add_link(dbcre, linked_standard)
+        register_cre(cre, result)
+
+    # groups
+    for group_name, group in groups.items():
+        dbgroup = result.add_cre(group)
+
+        for document in group.links:
+            if type(document).__name__ == CRE.__name__:
+                dbcre = register_cre(document, result)
+                result.add_internal_link(group=dbgroup, cre=dbcre)
+
+            elif type(document).__name__ == Standard.__name__:
+                dbstandard = register_standard(document, result)
+                result.add_link(cre=dbgroup, standard=dbstandard)
 
 
 # this is a library function to be used by other scripts written to specifically parse external mappings
@@ -39,15 +104,15 @@ def suggest_mapping(known_standard: db.Standard, new_standard: db.Standard, coll
     """if known_standard in db, find which CRE it's mapped to and add standard b as a link"""
     known_standard = collection.session.query(Standard).filter(_and(Standard.name == known_standard.name,
                                                                     Standard.section == known_standard.section,
-                                                                    Standard.subsection==known_standard.subsection)).first()
+                                                                    Standard.subsection == known_standard.subsection)).first()
     new_standard = collection.session.query(Standard).filter(_and(Standard.name == new_standard.name,
                                                                   Standard.section == new_standard.section,
-                                                                  Standard.subsection==new_standard.subsection)).first()
+                                                                  Standard.subsection == new_standard.subsection)).first()
     if known_standard and not new_standard:
         collection.add_standard(new_standard)
         new_standard = collection.session.query(Standard).filter(_and(Standard.name == new_standard.name,
                                                                       Standard.section == new_standard.section,
-                                                                      Standard.subsection==new_standard.subsection)).first()
+                                                                      Standard.subsection == new_standard.subsection)).first()
 
         links = collection.session.query(Links).filter(
             and_(Links.standard == known_standard.id))
@@ -65,10 +130,13 @@ def suggest_mapping(known_standard: db.Standard, new_standard: db.Standard, coll
 
 def get_standards_files_from_disk(cre_loc: str):
     result = []
+    pprint(cre_loc)
     for root, directory, cre_docs in os.walk(cre_loc):
-        status = "OFFICIAL"
+        pprint(cre_docs)
         for name in cre_docs:
-            yield (status, os.path.join(root, name))
+            pprint(name)
+            if name.endswith(".yaml") or name.endswith(".yml"):
+                yield os.path.join(root, name)
 
 
 def main():
@@ -83,54 +151,73 @@ def main():
         '--review', action='store_true', help='will treat the incoming spreadsheet as a new mapping, will try to map the incoming connections to existing cre\
             and will create a new spreadsheet with the result for review. Nothing will be added to the database at this point')
     parser.add_argument(
+        '--email', help='used in conjuctions with --review, what email to share the resulting spreadsheet with', default="standards_cache.sqlite")
+    parser.add_argument(
         '--from_spreadsheet', help='import from a spreadsheet to yaml and then database')
     parser.add_argument(
         '--print-graph', help='will show the graph of the relationships between standards')
     parser.add_argument(
         '--cache_file', help='where to read/store data', default="standards_cache.sqlite")
+    parser.add_argument(
+        '--cre_loc', help='define location of local cre files, not compatible with --review')
+
     args = parser.parse_args()
 
     cache = args.cache_file
 
-    loc = ""
+    loc = cre_loc
+
+    if args.cre_loc:
+        loc = args.cre_loc
+    else:
+        loc = cre_loc
+
     if args.review:
         # load the remote spreadsheet to disk,
         # parse the yaml and put into the db without polluting the existing CREs
         loc, cache = prepare_for_review(cache)
-    elif args.add:
-        loc = cre_loc
-    
+    # elif args.add:
+        # TODO: read the spreadsheet, use internal parser to parse,<-- how do i find out which parser i need tho?
+        #  and add to db and our local cre_loc
+
+    database = db.Standard_collection(cache=True, cache_file=cache)
     if args.from_spreadsheet:
         # write the mappings to disk
-        readSpreadsheet(url=args.from_spreadsheet,
-                        cres_loc=loc, alias="new spreadsheet",validate=False)
+        spreadsheet = readSpreadsheet(url=args.from_spreadsheet,
+                                      cres_loc=loc, alias="new spreadsheet", validate=False)
+        for worksheet, contents in spreadsheet.items():
+            parse_standards_from_spreadsheeet(contents, database)
 
-    # build the db
-    result = db.Standard_collection(cache=True, cache_file=cache)
-    for status, standard_file in get_standards_files_from_disk(cre_loc):
-        with open(standard_file) as standard:
-            unparsed = yaml.safe_load(standard)
-            parse_standards(unparsed, result)
-    
-    result.export(loc)
+    else:  # not from spreadsheet means parse local yamlfiles
+        for file in get_standards_files_from_disk(loc):
+            pprint(file)
+            with open(file,'rb') as standard:
+                parse_file(yaml.safe_load(standard), database)
+
+    docs = database.export(loc)
+    spreadsheet = []
+    spreadsheet.extend(docs)
 
     if args.review:
-        create_spreadsheet(result, loc)
-        logger.info("Stored temporary files and database in %s if you want to use them next time, set cache to the location of the database in that dir"%loc)
+        # create_spreadsheet(spreadsheet, title='cre_review',
+        #                    share_with=args.email)
+        logger.info("Stored temporary files and database in %s if you want to use them next time, set cache to the location of the database in that dir" % loc)
 
-def create_spreadsheet(result:dict, location:str):
+
+def create_spreadsheet(spreadsheet: list, title: str, share_with: str):
     """ Reads cres and groups docs exported from a standards_collection.export()
-    loads yaml and dumps each doc into a workbook"""
-    return
-    raise NotImplementedError()
-    createSpreadsheet()
+        dumps each doc into a workbook"""
+    createSpreadsheet(spreadsheet, title, share_with)
+
 
 def prepare_for_review(cache):
-    loc =  tempfile.mkdtemp()
+    loc = tempfile.mkdtemp()
     cache_filename = os.path.basename(cache)
-    shutil.copy(cache, loc)
+    if os.path.isfile(cache):
+        shutil.copy(cache, loc)
 
-    return loc, os.path.join(loc,cache_filename)
+    return loc, os.path.join(loc, cache_filename)
+
 
 if __name__ == "__main__":
     main()

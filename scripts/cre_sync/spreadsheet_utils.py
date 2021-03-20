@@ -23,7 +23,7 @@ def readSpreadsheet(url: str, cres_loc: str, alias:str,validate=True):
                 logger.info(
                     "handling worksheet %s  (remember, only numbered worksheets will be processed by convention)" % wsh.title)
                 records = wsh.get_all_records()
-                toyaml = yaml.safe_load(yaml.dump(records))
+                toyaml = yaml.safe_load(yaml.safe_dump(records))
                 result[wsh.title] = toyaml
     except gspread.exceptions.APIError as ae:
         logger.error("Error opening spreadsheet \"%s\" : \"%s\""%(alias,url))
@@ -31,17 +31,25 @@ def readSpreadsheet(url: str, cres_loc: str, alias:str,validate=True):
     return result
 
 
+## TODO: need a custom serialiser to CSV, and a custom parser from that specific csv format
+## e.g. for every link in every top level cre or group: add a line with the CRE and all the standard key/val/subval pairs if there are
+## duplicate standard names add another line
 
-def createSpreadsheet(docs:list,title:str, share_with:list) -> str:
+## this requires for each csv to find all the standard names so we can build the initial heading
+
+def createSpreadsheet(docs:list, title:str, share_with:list) -> str:
     """ Given a list of cre_defs.Document will create a new spreadsheet and dump each document into a new worksheet
         will share spreadsheet with the emails identified in the "share_with" list
         returns: the url of the new spreadsheet
     """
+    raise NotImplementedError
     gc = gspread.oauth() # oauth config, TODO (northdpole): make this configurable
     sh = gc.create(title)
     for doc in docs:
-        worksheet = sh.add_worksheet(title=doc.name, rows="100", cols="20")
-        worksheet.update(yaml.dump(doc))
+        logger.debug("adding %s"%doc)
+        print("adding %s"%doc)
+        worksheet = sh.add_worksheet(title=doc.name, rows="1000", cols="200")
+        worksheet.update(yaml.safe_dump(doc.todict()))
 
     for email in share_with:
         sh.share(email, perm_type='user', role='writer')
