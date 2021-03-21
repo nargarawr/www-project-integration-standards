@@ -27,7 +27,8 @@ This script runs automatically, if you want to run it yourself against your own 
 
 
 
-
+Notes
+===
 
 TODO: 
 add more edge cases in spreadsheet
@@ -36,7 +37,7 @@ add tests
     defs --- Done
     db -- Done
     parsers -- Done
-    mapping_add   --- Need to move individual use cases into their own methods and mock dependencies 
+    mapping_add -- Done for important methods, -- argparse logic only remains
     git_utils
     spreadsheet_utils
 
@@ -46,15 +47,15 @@ add tests
 
 ~ add parse from spreadsheet with unknown standards (for key,val in items add_standard) ~ Done
 
-merge spreadsheet to yaml and mapping add, they do the same thing
+~ merge spreadsheet to yaml and mapping add, they do the same thing ~ Done
 
 add git integration in the root script
 
 make library out of ????
 
-add sparse_spreadsheet_export functionality one leve of mapping per row, either everything that maps to standard X or everything that maps to CRE x
+add sparse_spreadsheet_export functionality one level of mapping per row, either everything that maps to standard X or everything that maps to CRE x
 
-add the ability for standards to link other standards, then you can handle assigning CREs yourself  <-- Done 
+~ add the ability for standards to link other standards, then you can handle assigning CREs yourself ~ Done
 
 add the ability for a mapping document to have multiple yamls in it
 

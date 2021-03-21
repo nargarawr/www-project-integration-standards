@@ -1,29 +1,3 @@
-# make spreadsheets a frontend for the cre api
-# export from spreadsheet to yaml
-# yaml to github as a pull request
-# import from rest api to spreadsheet
-
-# given: a spreadsheet url
-#   export to yaml
-#   pull latest yaml from github
-#   git merge
-#   push to merge branch
-
-# Qs:
-# * do i have fs access with a spreadsheet app?
-# * can i run git commands?
-# * how do we make users setup a github account? maybe get them to create a GH api token?
-# if i provide a GO/pex binary
-#   can i compile for mac and windows?
-#   is there a github client for go?
-#   spreadsheets?
-
-# A:
-# i can sync s3 and google sheets
-# i miss on merging
-# i miss on who did what
-#
-
 import json
 import os.path
 import yaml
@@ -82,7 +56,3 @@ def main():
             #     logger.info("Spreadsheet \"%s\" didn't produce any changes, no pull request needed"%spreadsheet_url['alias'])
 if __name__ == "__main__":
     main()
-
-
-#  todo : split into spreadsheet utilities, git utilities
-#  allow "parse spreadsheet" to write CRE docs instead of Yaml.dump
