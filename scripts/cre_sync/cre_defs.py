@@ -72,8 +72,15 @@ class Document():
         self.links.append(document)
 
     def __init__(self, version, name, doctype=None, id="", description="", links=[], tags=[], metadata: Metadata = Metadata()):
-        self.version = version or raise_MandatoryFieldException(
-            "Document version not defined for document %s" % name)
+        if version == CreVersions.V0.value or version == CreVersions.V0:
+            self.version = CreVersions.V0
+        elif version == CreVersions.V1.value or version == CreVersions.V1:
+            self.version = CreVersions.V1
+        elif version == CreVersions.V2.value or version == CreVersions.V2:
+            self.version = CreVersions.V2
+        else:
+            print(version)
+            raise MandatoryFieldException("Document version not defined for document %s" % name)
         self.description = str(description)
         self.name = str(name) or raise_MandatoryFieldException(
             "Document name not defined for document of doctype %s" % doctype)

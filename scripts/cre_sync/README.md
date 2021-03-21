@@ -33,17 +33,18 @@ TODO:
 add more edge cases in spreadsheet
 
 add tests
-    defs ~
-    db 2 tests remaining
-    parsers ~
-    mapping_add
+    defs --- Done
+    db -- Done
+    parsers -- Done
+    mapping_add   --- Need to move individual use cases into their own methods and mock dependencies 
     git_utils
     spreadsheet_utils
 
-add parse from export format
+~ add parse from export format ~ Done
 
-add parse from export format where the root doc is a standard and it links to cres or groups
-add parse from spreadsheet with unknown standards (for key,val in items add_standard)
+~ add parse from export format where the root doc is a standard and it links to cres or groups ~ Done
+
+~ add parse from spreadsheet with unknown standards (for key,val in items add_standard) ~ Done
 
 merge spreadsheet to yaml and mapping add, they do the same thing
 
@@ -53,7 +54,16 @@ make library out of ????
 
 add sparse_spreadsheet_export functionality one leve of mapping per row, either everything that maps to standard X or everything that maps to CRE x
 
-add the ability for standards to link other standards, then you can handle assigning CREs yourself  <-- this is what mapping add was supposed to be initially
+add the ability for standards to link other standards, then you can handle assigning CREs yourself  <-- Done 
 
 add the ability for a mapping document to have multiple yamls in it
+
+add export for Standards unmapped to CREs as lone standards (useful for visibility)
+
+add conditional export (select the standards you want exported and if you want to see the CRE ids or not, get spreadsheet with mappings)
+
+write docs and record usage gif
+
+add db integration of tags and metadata
+support importing yaml export files of more than 1 levels deep
 add dockerfile????

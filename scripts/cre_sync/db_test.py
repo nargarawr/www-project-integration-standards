@@ -60,7 +60,7 @@ class TestDB(unittest.TestCase):
         with open(os.path.join(loc, groupname), 'r') as f:
             doc = yaml.safe_load(f)
             self.assertDictEqual(group, doc)
-        crename  = result[1].name+'.yaml'
+        crename = result[1].name+'.yaml'
         with open(os.path.join(loc, crename), 'r') as f:
             doc = yaml.safe_load(f)
             self.assertDictEqual(cre, doc)
@@ -86,37 +86,7 @@ class TestDB(unittest.TestCase):
         self.assertEqual(g, db.GroupfromDB(
             db.CRE(external_id='gid', description='gd', name='g', is_group=True)))
 
-    def test_add_cre(self):
-        original_desc = uuid.uuid4()
-        name = uuid.uuid4()
-
-        c = defs.CRE(id="cid", version=defs.CreVersions.V2, doctype=defs.Credoctypes.CRE,
-                     description=original_desc, name=name, links=[])
-        emptyCRE = self.collection.session.query(
-            db.CRE).filter(db.CRE.name == c.name).first()
-        self.assertIsNone(emptyCRE)
-        # happy path, add new cre
-        newCRE = self.collection.add_cre(c)
-        dbcre = self.collection.session.query(db.CRE).filter(
-            db.CRE.name == c.name).first()  # ensure transaction happened (commint() called)
-        self.assertIsNotNone(dbcre.id)
-        self.assertEqual(dbcre.name, c.name)
-        self.assertEqual(dbcre.description, c.description)
-        self.assertEqual(dbcre.external_id, c.id)
-        # ensure the right thing got returned
-        self.assertEqual(newCRE.name, c.name)
-
-        # ensure no accidental update (add only adds)
-        c.description = "description2"
-        newCRE = self.collection.add_cre(c)
-        dbcre = self.collection.session.query(db.CRE).filter(
-            db.CRE.name == c.name).first()  # ensure transaction happened (commint() called)
-        # ensure original description
-        self.assertEqual(dbcre.description, str(original_desc))
-        # ensure original description
-        self.assertEqual(newCRE.description, str(original_desc))
-
-    def test_add_cre(self):
+    def test_add_group(self):
         original_desc = uuid.uuid4()
         name = uuid.uuid4()
         gname = uuid.uuid4()
@@ -184,11 +154,81 @@ class TestDB(unittest.TestCase):
         self.assertEqual(newStandard.name, s.name)
 
         # standards match on all of name,section, subsection <-- if you change even one of them it's a new entry
-        
+
     def test_find_groups_of_cre(self):
-        raise NotImplementedError
-    
+        dbcre = db.CRE(description="CREdesc1", name="CREname1")
+        groupless_cre = db.CRE(description="CREdesc2", name="CREname2")
+        dbgroup = db.CRE(description="Groupdesc1",
+                         name="GroupName1", is_group=True)
+        dbgroup2 = db.CRE(description="Groupdesc2",
+                          name="GroupName2", is_group=True)
+
+        only_one_group = db.CRE(description="CREdesc3", name="CREname3")
+
+        self.collection.session.add(dbcre)
+        self.collection.session.add(groupless_cre)
+        self.collection.session.add(dbgroup)
+        self.collection.session.add(dbgroup2)
+        self.collection.session.add(only_one_group)
+        self.collection.session.commit()
+
+        internalLink = db.InternalLinks(cre=dbcre.id, group=dbgroup.id)
+        internalLink2 = db.InternalLinks(cre=dbcre.id, group=dbgroup2.id)
+        internalLink3 = db.InternalLinks(
+            cre=only_one_group.id, group=dbgroup.id)
+        self.collection.session.add(internalLink)
+        self.collection.session.add(internalLink2)
+        self.collection.session.add(internalLink3)
+        self.collection.session.commit()
+
+        # happy path, find cre with 2 groups
+        groups = self.collection.find_groups_of_cre(dbcre)
+        self.assertEqual(len(groups), 2)
+        self.assertEqual(groups, [dbgroup, dbgroup2])
+
+        # find cre with 1 group
+        group = self.collection.find_groups_of_cre(only_one_group)
+        self.assertEqual(len(group), 1)
+        self.assertEqual(group, [dbgroup])
+
+        # ensure that None is return if there are no groups
+        groups = self.collection.find_groups_of_cre(groupless_cre)
+        self.assertIsNone(groups)
+
     def test_find_cres_of_standard(self):
-        raise NotImplementedError
+        dbcre = db.CRE(description="CREdesc1", name="CREname1")
+        dbgroup = db.CRE(description="CREdesc2",
+                         name="CREname2", is_group=True)
+        dbstandard1 = db.Standard(section="section1", name="standard1")
+        group_standard = db.Standard(section="section2", name="standard2")
+        lone_standard = db.Standard(section="section3", name="standard3")
+
+        self.collection.session.add(dbcre)
+        self.collection.session.add(dbgroup)
+        self.collection.session.add(dbstandard1)
+        self.collection.session.add(group_standard)
+        self.collection.session.add(lone_standard)
+        self.collection.session.commit()
+
+        self.collection.session.add(db.Links(cre=dbcre.id, standard=dbstandard1.id))
+        self.collection.session.add(db.Links(cre=dbgroup.id, standard=dbstandard1.id))
+        self.collection.session.add(db.Links(cre=dbgroup.id, standard=group_standard.id))
+        self.collection.session.commit()
+
+        # happy path, 1 group and 1 cre link to 1 standard
+        cres = self.collection.find_cres_of_standard(dbstandard1)
+        self.assertEqual(len(cres), 2)
+        self.assertEqual(cres, [dbcre, dbgroup])
+
+        # group links to standard
+        cres = self.collection.find_cres_of_standard(group_standard)
+        self.assertEqual(len(cres), 1)
+        self.assertEqual(cres, [dbgroup])
+
+        # no links = None
+        cres = self.collection.find_cres_of_standard(lone_standard)
+        self.assertIsNone(cres)
+
+
 if __name__ == '__main__':
     unittest.main()

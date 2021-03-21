@@ -97,26 +97,29 @@ class Standard_collection:
             internal_links.append((group, cre))
         return internal_links
 
-    def find_groups_of_cre(self, cre: cre_defs.CRE):
-        """ returns the db representation of all the cre groups or none if cre doesn't have groups"""
+    def find_groups_of_cre(self, cre: CRE):
+        """ returns the CREGroups of all the cre groups or none if cre doesn't have groups"""
         cre_id = self.session.query(CRE).filter(CRE.name == cre.name).first().id
-        links = self.session.query(InternalLinks).filter(Links.cre == cre_id)
+        links = self.session  .query(InternalLinks).filter(InternalLinks.cre == cre_id).all()
         if links:
             result = []
             for link in links:
-                result.append(GroupfromDB(self.session.query(CRE).filter(CRE.id == link.group).first()))
+                result.append(self.session.query(CRE).filter(CRE.id == link.group).first())
             return result
 
-    def find_cres_of_standard(self, standard: cre_defs.Standard):
-        standard_id = self.session.query(Standard).filter(and_(Standard.name == standard.name,
+    def find_cres_of_standard(self, standard: Standard):
+        db_standard = self.session.query(Standard).filter(and_(Standard.name == standard.name,
                                                          Standard.section == standard.section,
-                                                         Standard.subsection == standard.subsection)).first().id
-        """ returns the db representation of all cres or groups that link to this standard or none if none link to it"""
-        links = self.session.query(Links).filter(Links.standard == standard_id)
+                                                         Standard.subsection == standard.subsection)).first()
+        """ returns the CRE or CREGroup of all cres or groups that link to this standard or none if none link to it"""
+        if not db_standard:
+            return
+        links = self.session.query(Links).filter(Links.standard == db_standard.id).all()
         if links:
             result = []
             for link in links:
-                result.append(CREfromDB(self.session.query(CRE).filter(CRE.id == link.cre).first()))
+                cre = self.session.query(CRE).filter(CRE.id == link.cre).first()
+                result.append(cre)
             return result
 
     def export(self, dir):
@@ -199,7 +202,7 @@ class Standard_collection:
         self.session.commit()
         return entry
 
-    def add_standard(self, standard: cre_defs.Standard):
+    def add_standard(self, standard: cre_defs.Standard)->Standard:
         entry = self.session.query(Standard).filter(and_(Standard.name == standard.name,
                                                          Standard.section == standard.section,
                                                          Standard.subsection == standard.subsection)).first()
@@ -293,3 +296,4 @@ def GroupfromDB(dbgroup: CRE):
     return cre_defs.CreGroup(version=cre_defs.CreVersions.V2,
                              name=dbgroup.name,
                              description=dbgroup.description, id=dbgroup.external_id)
+

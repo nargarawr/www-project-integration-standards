@@ -1,7 +1,7 @@
 import cre_defs as defs
 from enum import Enum
 from cre_defs import CreVersions
-
+from pprint import pprint
 # collection of methods to parse different versions of spreadsheet standards
 # each method returns a list of cre_defs documents
 
@@ -13,6 +13,40 @@ def is_empty(value: str):
 
 def parse_review_standards(cre_file: list) -> dict:
     raise NotImplementedError
+
+
+def parse_uknown_key_val_spreadsheet(link_file: list) -> dict:
+    """ parses a cre-less spreadsheet into a list of Standards documents"""
+    standards = {}
+    # get the first Key of the first row, pretty much, choose a standard at random to be the main one
+    main_standard_name = None
+    for stand in list(link_file[0]):
+        if not is_empty(stand):
+            main_standard_name = stand
+            break
+
+    for mapping in link_file:
+        primary_standard = None
+        linked_standard = None
+        if not is_empty(mapping.get(main_standard_name)):
+            primary_standard = standards.get(
+                main_standard_name+"-"+str(mapping.get(main_standard_name)))
+            if not primary_standard:
+                # pop is important here, if the primary standard is not removed, it will end up linking to itself
+                primary_standard = defs.Standard(version=CreVersions.V2,
+                                                 name=main_standard_name,
+                                                 section=mapping.pop(
+                                                     main_standard_name))
+
+        for key, value in mapping.items():
+            if not is_empty(value) and not is_empty(key):
+                linked_standard = defs.Standard(
+                    version=CreVersions.V2, name=key, section=mapping.get(key))
+                primary_standard.add_link(linked_standard)
+        if primary_standard:
+            standards[primary_standard.name+"-" +
+                      primary_standard.section] = primary_standard
+        return standards
 
 
 def parse_v1_standards(cre_file: list) -> dict:
