@@ -79,7 +79,6 @@ class Document():
         elif version == CreVersions.V2.value or version == CreVersions.V2:
             self.version = CreVersions.V2
         else:
-            print(version)
             raise MandatoryFieldException("Document version not defined for document %s" % name)
         self.description = str(description)
         self.name = str(name) or raise_MandatoryFieldException(

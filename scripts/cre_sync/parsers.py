@@ -88,7 +88,7 @@ def parse_v1_standards(cre_file: list) -> dict:
                                        name='CWE',
                                        section=cre_mapping.pop('CWE')))
 
-        if not is_empty(cre_mapping.get('Cheat Sheet')):
+        if not is_empty(cre_mapping.get('Cheat Sheet')) and not is_empty(cre_mapping.get('cheat_sheets')):
             cre.add_link(defs.Standard(version=defs.CreVersions.V1,
                                        name='Cheatsheet',
                                        section=cre_mapping.pop('Cheat Sheet'),
@@ -134,13 +134,15 @@ def parse_v1_standards(cre_file: list) -> dict:
         # group mapping
         is_in_group = False
         for i in range(1, 8):
-            name = cre_mapping.pop("CRE Group %s" % i)
-            id = cre_mapping.pop("CRE Group %s Lookup" % i)
-            if not is_empty(name):
-                if name not in groups.keys():
-                    group = defs.CreGroup(version=defs.CreVersions.V1,
-                                          name=name,
-                                          id=id)
+            group = None
+            gname = cre_mapping.pop("CRE Group %s" % i)
+            gid = cre_mapping.pop("CRE Group %s Lookup" % i)
+            if not is_empty(gname):
+                if gname not in groups.keys():
+                    group = defs.CreGroup(
+                        version=defs.CreVersions.V1, name=gname, id=gid)
+                else:
+                    group = groups.get(gname)
                 # elif id != groups.get(name).id:
                 #     raise Exception("Group %s has two different ids %s and %s" % (
                 #         name, id, groups.get('name')))

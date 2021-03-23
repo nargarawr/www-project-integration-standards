@@ -18,7 +18,6 @@ logger.setLevel(logging.INFO)
 Base = declarative_base()
 
 
-
 class Standard(Base):
     __tablename__ = 'standard'
     id = Column(Integer, primary_key=True)
@@ -41,6 +40,9 @@ class CRE(Base):
     name = Column(String)
 
     is_group = Column(Boolean, default=False)
+    __table_args__ = (UniqueConstraint(
+    name, external_id, name='unique_cre_fields'),)
+
 
 
 class InternalLinks(Base):
@@ -84,7 +86,8 @@ class Standard_collection:
         all_links = self.session.query(Links).all()
         for link in all_links:
             cre = self.session.query(CRE).filter(CRE.id == link.cre).first()
-            standard = self.session.query(Standard).filter(Standard.id == link.standard).first()
+            standard = self.session.query(Standard).filter(
+                Standard.id == link.standard).first()
             external_links.append((cre, standard))
         return external_links
 
@@ -99,26 +102,31 @@ class Standard_collection:
 
     def find_groups_of_cre(self, cre: CRE):
         """ returns the CREGroups of all the cre groups or none if cre doesn't have groups"""
-        cre_id = self.session.query(CRE).filter(CRE.name == cre.name).first().id
-        links = self.session  .query(InternalLinks).filter(InternalLinks.cre == cre_id).all()
+        cre_id = self.session.query(CRE).filter(
+            CRE.name == cre.name).first().id
+        links = self.session  .query(InternalLinks).filter(
+            InternalLinks.cre == cre_id).all()
         if links:
             result = []
             for link in links:
-                result.append(self.session.query(CRE).filter(CRE.id == link.group).first())
+                result.append(self.session.query(CRE).filter(
+                    CRE.id == link.group).first())
             return result
 
     def find_cres_of_standard(self, standard: Standard):
         db_standard = self.session.query(Standard).filter(and_(Standard.name == standard.name,
-                                                         Standard.section == standard.section,
-                                                         Standard.subsection == standard.subsection)).first()
+                                                               Standard.section == standard.section,
+                                                               Standard.subsection == standard.subsection)).first()
         """ returns the CRE or CREGroup of all cres or groups that link to this standard or none if none link to it"""
         if not db_standard:
             return
-        links = self.session.query(Links).filter(Links.standard == db_standard.id).all()
+        links = self.session.query(Links).filter(
+            Links.standard == db_standard.id).all()
         if links:
             result = []
             for link in links:
-                cre = self.session.query(CRE).filter(CRE.id == link.cre).first()
+                cre = self.session.query(CRE).filter(
+                    CRE.id == link.cre).first()
                 result.append(cre)
             return result
 
@@ -145,19 +153,19 @@ class Standard_collection:
 
         # external links are Group/CRE -> standard
         for link in self.__get_external_links():
-            
+
             internal_doc = link[0]
             standard = link[1]
             cr = None
             grp = None
-            if internal_doc.is_group: # Group -> standard
+            if internal_doc.is_group:  # Group -> standard
                 if internal_doc.name in docs.keys():
                     grp = docs[internal_doc.name]
                 else:
                     grp = GroupfromDB(internal_doc)
                 grp.add_link(StandardFromDB(standard))
                 docs[group.name] = grp
-            else: # cre -> standard
+            else:  # cre -> standard
                 if internal_doc.name in docs.keys():
                     cr = docs[internal_doc.name]
                 else:
@@ -166,7 +174,7 @@ class Standard_collection:
                 cr.add_link(StandardFromDB(standard))
             docs[cr.name] = cr
         for _, doc in docs.items():
-            title = doc.name.replace("/","-")+'.yaml'
+            title = doc.name.replace("/", "-")+'.yaml'
             file_utils.writeToDisk(file_title=title,
                                    file_content=yaml.safe_dump(doc.todict()), cres_loc=dir)
         return docs.values()
@@ -183,13 +191,18 @@ class Standard_collection:
         is_group = False
         if type(cre).__name__ == cre_defs.CreGroup.__name__:
             is_group = True
+        if cre.id != None:
+            entry = self.session.query(CRE).filter(
+                CRE.name == cre.name, CRE.external_id == cre.id, CRE.is_group == is_group).first()
+        else:
+            entry = self.session.query(CRE).filter(
+                CRE.name == cre.name, CRE.is_group == is_group).first()
 
-        entry = self.session.query(CRE).filter(CRE.name == cre.name).first()
         if entry is not None:
             logger.debug("knew of %s ,skipping" % cre.name)
 
             if is_group:
-                pprint('knew of group %s:%s' % (cre.name, cre.id))
+                logger.debug('knew of group %s:%s' % (cre.name, cre.id))
 
             return entry
         else:
@@ -202,7 +215,7 @@ class Standard_collection:
         self.session.commit()
         return entry
 
-    def add_standard(self, standard: cre_defs.Standard)->Standard:
+    def add_standard(self, standard: cre_defs.Standard) -> Standard:
         entry = self.session.query(Standard).filter(and_(Standard.name == standard.name,
                                                          Standard.section == standard.section,
                                                          Standard.subsection == standard.subsection)).first()
@@ -221,16 +234,11 @@ class Standard_collection:
         return entry
 
     def add_internal_link(self, group: CRE, cre: CRE):
+
         if cre.id == None:
-            if cre.external_id == None:
-                cre = self.session.query(CRE).filter(
-                    and_(CRE.name == cre.name)).first()
-            else:
-                cre = self.session.query(CRE).filter(and_(CRE.name == cre.name,
-                                                          CRE.external_id == cre.external_id)).first()
+            cre = self.session.query(CRE).filter(and_(CRE.name == cre.name,
+                                                      CRE.external_id == cre.external_id, CRE.is_group == False)).first()
         if group.id == None:
-            print("group id is none? let's grab one for the external id %s" %
-                  group.external_id)
             if group.external_id == None:
                 group = self.session.query(CRE).filter(and_(CRE.name == group.name,
                                                             CRE.is_group == True)).first()
@@ -238,9 +246,6 @@ class Standard_collection:
                 group = self.session.query(CRE).filter(and_(CRE.name == group.name,
                                                             CRE.external_id == group.external_id,
                                                             CRE.is_group == True)).first()
-                print("result")
-                pprint(group)
-
         if cre == None or group == None:
             logger.fatal(
                 "Tried to insert internal mapping with element that doesn't exist in db, this looks like a bug")
@@ -253,6 +258,8 @@ class Standard_collection:
             logger.debug("did not know of internal link %s:%s == %s:%s ,adding" % (
                 group.external_id, group.name, cre.external_id, cre.name))
             self.session.add(InternalLinks(cre=cre.id, group=group.id))
+    
+
 
     def add_link(self, cre: CRE, standard: Standard):
         if cre.id == None:
@@ -296,4 +303,3 @@ def GroupfromDB(dbgroup: CRE):
     return cre_defs.CreGroup(version=cre_defs.CreVersions.V2,
                              name=dbgroup.name,
                              description=dbgroup.description, id=dbgroup.external_id)
-

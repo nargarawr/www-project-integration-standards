@@ -30,13 +30,13 @@ This script runs automatically, if you want to run it yourself against your own 
 Notes
 ===
 
-TODO: 
+TODO:
 add more edge cases in spreadsheet
 
 add tests
     defs --- Done
     db -- Done
-    parsers -- Done
+    parsers -- Done   --- needs edge cases 
     mapping_add -- Done for important methods, -- argparse logic only remains
     git_utils
     spreadsheet_utils

@@ -107,11 +107,11 @@ class TestMain(unittest.TestCase):
                                      'version': 1}], 'metadata': {},
                 'name': 'CREDENTIALS_MANAGEMENT_CRYPTOGRAPHIC_DIRECTIVES',
                 'tags': [], 'version': 2}
-        expected = CRE(version=2, doctype=defs.Credoctypes.CRE, id='001-005-073', description='Verify that approved cryptographic algorithms are used in the generation, seeding, and verification.', name='CREDENTIALS_MANAGEMENT_CRYPTOGRAPHIC_DIRECTIVES',
+        expected = defs.CRE(version=2, doctype=defs.Credoctypes.CRE, id='001-005-073', description='Verify that approved cryptographic algorithms are used in the generation, seeding, and verification.', name='CREDENTIALS_MANAGEMENT_CRYPTOGRAPHIC_DIRECTIVES',
                        links=[
-                           Standard(version=defs.CreVersions.V2, doctype=defs.Credoctypes.Standard, id='', description='', name='TOP10', links=[], tags=[], metadata={
+                           defs.Standard(version=defs.CreVersions.V2, doctype=defs.Credoctypes.Standard, id='', description='', name='TOP10', links=[], tags=[], metadata={
                            }, section='https://owasp.org/www-project-top-ten/2017/A5_2017-Broken_Access_Control', subsection='None', hyperlink='None'),
-                           Standard(version=defs.CreVersions.V1, doctype=defs.Credoctypes.Standard, id='', description='', name='ISO 25010', links=[], tags=[], metadata={}, section='Secure data storage', subsection='None', hyperlink='None')], tags=[], metadata={})
+                           defs.Standard(version=defs.CreVersions.V1, doctype=defs.Credoctypes.Standard, id='', description='', name='ISO 25010', links=[], tags=[], metadata={}, section='Secure data storage', subsection='None', hyperlink='None')], tags=[], metadata={})
 
         result = parse_file(file, self.collection)
         self.assertEqual(result, expected)
