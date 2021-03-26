@@ -149,6 +149,8 @@ Mappings from a Spreadsheet (Sheet Parser)
 Providing standards writers and community members the ability to submit a url linked to a Google spreadsheet and the application/parser import CRE mappings from there is a good idea, however care must be taken to ensure the spreadsheet is acutally parseable.
 In order for this to happen a robust template must be created and a parser from/to this template needs to be written.
 
+Since the design outlined in requirements.md is simple no more information is required at this stage.
+
 CRE WebApp & Query Engine
 ---
 
@@ -267,3 +269,7 @@ Submit/Add CRE
 [Future feature/non-mvp]
 Using pull requests to a repository would make a lot of sense, reviews are then public and the CRE files are always public and versioned.
 
+Search Based On Tags (connections implementation)
+---
+
+Given a url of `<domain>?tag=ops&tag=dfir&tag=encryption` the frontend returns all CREs and links that are tagged with all 3 tags.

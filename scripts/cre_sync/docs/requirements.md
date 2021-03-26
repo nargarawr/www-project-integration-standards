@@ -154,6 +154,7 @@ Any standard or cre link to either of `CRE 956-220` or `CRE 273-300` lead to a t
 
 [Requirement] Spreadsheet Management
 ---
+
 Given a table/spreadsheet with the following structure
 
 
@@ -194,7 +195,7 @@ The CRE MVP lets three sources refer to CRE pages that contain links to the sour
 5. Design the CRE parser that scans the source files for marked CRE id’s and creates a mapping file automatically.
 6. If the CRE parser is very hard to build: we go for MVP-noparse. Otherwise we go for MVP-parse.
 
-[Requirement] MVP-noparse
+[Requirement] Alternative A MVP-noparse
 ---
 
 Create the first Mapping file, say based on ASVS.
@@ -206,7 +207,7 @@ Do the same for the third mapping.
 Add the CRE hyperlinks to the referred sections in the corresponding sources.
 Build the webapp that shows a link page for a CRE, with references to the different sources.
 
-b) MVP-parse (preferred because zero maintenance)
+[Requirement] Alternative B MVP-parse (preferred because zero maintenance)
 
 Start adding CRE links in the original content of the first source, say the ASVS.
 Each CRE mentioned is new and needs a name specified. Do this for a small selection.
