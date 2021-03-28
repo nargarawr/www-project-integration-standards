@@ -9,16 +9,14 @@ This application needs to be easily deployable and also define a feature-complet
 
 Suggested Modifications:
 
-* Versioning: For CRE to be resilient, the files need to have an identifier that allows for the format to change without breaking compatibility, it is therefore recommended for files to include the Version of the CRE parser they are targetting. The parser can then parse the fields it knows about for the versions it is aware off.
-
 * Interoperability: the fiels need to be parseable easily by widely used libraries, while the example files listed in the requirements document are valid YAML, a slightly modified format is suggested. Please refer to the section "File Format" for rationale and more information.
 
-* Mapping files: Allowing standards writers to submit a file where they map to a specific CRE is a good idea, it would be good to expand this by allowing standards writers to link to other standards as well, within the same mapping file.
-This abstracts mapping files away from a single standard and instead allows standards writers to provide a document hierarchy that contains CREs and/or other standards.
+* Inter standard mapping: Allowing standards writers to submit a file where they map to a specific CRE is a good idea, it would be good to expand this by allowing standards writers to link to other standards as well, within the same mapping file.
+This abstracts mappings away from a single standard and instead allows standards writers to provide a document hierarchy that contains CREs and/or other standards.
 
 * The url for the refer use-case is of the form: `http://cre.com/refer?273-300` it is suggested to add a variable and thus transform it to:
-`http://cre.com/refer?cre=273-300` this would enable the addition of other variables for future use cases, e.g.:
-`http://cre.com/refer?cre=273-300&link=nist&link=asvs&link=top10-2017`
+`http://cre.com/273-300` this would enable the addition of other variables for future use cases, e.g.:
+`http://cre.com/273-300&link=nist&link=asvs&link=top10-2017`
 
 * Higher level concepts: TODO(Spyros): merge cregroups and cres, there is not point in making them different
 
@@ -33,7 +31,6 @@ A document is a parser input file and defines the information that an input file
 This information is
 
 ```Text
-    CREversion : [Optional] the version of the CRE parser being targetted
     doctype : what kind of document this is
     id : [Optional] an id for this specific document, can be a CRE id, needs to be unique for this type of document
     description : [Optional] human readable description
@@ -65,18 +62,16 @@ links:
     metadata: {}
     name: CRE-NAME
     tags: []
-    CREVersion: 2
 - type: 'SAM'
   tags: []
   document:
     description: 'Another description'
     doctype: CRE
-    id: 010-007 
+    id: 010-007
     links: []
     metadata: {}
     name: CRE007
     tags: []
-    CREVersion: 2
 - type: 'SAM'
   tags: []
   document:
@@ -89,7 +84,6 @@ links:
     links: []
     metadata: {}
     tags: []
-    version: 2
     hyperlink: "https://blahblah"
 ```
 
@@ -113,7 +107,6 @@ links:
     metadata: {}
     name: CRE-NAME
     tags: []
-    CREVersion: 2
 - type: 'SAM'
   tags: []
   document:
@@ -136,7 +129,6 @@ links:
     links: []
     metadata: {}
     tags: []
-    version: 2
     hyperlink: "https://blahblah"
 ```
 
@@ -230,11 +222,16 @@ Questions:
 * Per CRE?
 * Per Standard?
 
+Resolved after talks with Ellie: let's create an export version for everything
+
+
+```Text
 who's our main consumer for the exported files?
 
 * if it's standards writers -> per Standard
 * if it's for us or other CRE integrators who are likely to want to have the whole database then we could export per Group
 * if it's for a combination, perhaps we can export per CRE
+```
 
 * how dense we want the files to be? e.g. do we want to have standards->cres->all-groups  in one file? this could make the file very long. an alternative is to have a file per level of mapping such as:
 
@@ -272,4 +269,5 @@ Using pull requests to a repository would make a lot of sense, reviews are then 
 Search Based On Tags (connections implementation)
 ---
 
+[Future feature/non-mvp]
 Given a url of `<domain>?tag=ops&tag=dfir&tag=encryption` the frontend returns all CREs and links that are tagged with all 3 tags.
