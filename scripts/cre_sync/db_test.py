@@ -16,8 +16,7 @@ class TestDB(unittest.TestCase):
         collection = db.Standard_collection(cache_file=connection)
 
         dbcre = db.CRE(description="CREdesc", name="CREname")
-        dbgroup = db.CRE(description="Groupdesc",
-                         name="GroupName", is_group=True)
+        dbgroup = db.CRE(description="Groupdesc", name="GroupName")
         dbstandard = db.Standard(
             subsection="4.5.6", section="FooStand", name="BarStand", link="https://example.com")
 
@@ -39,9 +38,8 @@ class TestDB(unittest.TestCase):
         # ensure proper export
 
         loc = tempfile.mkdtemp()
-        result = [defs.CreGroup(doctype=defs.Credoctypes.Group, id='', description='Groupdesc',
-                                name='GroupName', links=[
-                                    defs.CRE(doctype=defs.Credoctypes.CRE, id='', description='CREdesc',
+        result = [defs.CRE(doctype=defs.Credoctypes.CRE, id='', description='Groupdesc',
+                                name='GroupName', links=[ defs.CRE(doctype=defs.Credoctypes.CRE, id='', description='CREdesc',
                                              name='CREname', links=[], tags=[], metadata=defs.Metadata(labels=[]))
                                 ],
                                 tags=[], metadata=defs.Metadata(labels=[])),
@@ -79,12 +77,6 @@ class TestDB(unittest.TestCase):
         self.assertEqual(c, db.CREfromDB(
             db.CRE(external_id="cid", description='CREdesc', name='CREname')))
 
-    def test_GroupfromDB(self):
-        g = defs.CreGroup(
-            name="g", description='gd', id='gid')
-        self.assertEqual(g, db.GroupfromDB(
-            db.CRE(external_id='gid', description='gd', name='g', is_group=True)))
-
     def test_add_group(self):
         original_desc = uuid.uuid4()
         name = uuid.uuid4()
@@ -93,7 +85,7 @@ class TestDB(unittest.TestCase):
         c = defs.CRE(id="cid", doctype=defs.Credoctypes.CRE,
                      description=original_desc, name=name, links=[])
 
-        g = defs.CreGroup(id="cid", doctype=defs.Credoctypes.Group,
+        g = defs.CRE(id="cid", doctype=defs.Credoctypes.CRE,
                           description=original_desc, name=gname, links=[])
 
         self.assertIsNone(self.collection.session.query(
@@ -118,8 +110,7 @@ class TestDB(unittest.TestCase):
             db.CRE.name == g.name).first()  # ensure transaction happened (commint() called)
         self.assertIsNotNone(dbcre.id)
         self.assertEqual(dbgroup.name, g.name)
-        self.assertEqual(dbgroup.is_group, True)
-        self.assertEqual(newGroup.is_group, True)
+        self.assertEqual(dbgroup.description, g.description)
 
         # ensure no accidental update (add only adds)
         c.description = "description2"
@@ -154,13 +145,13 @@ class TestDB(unittest.TestCase):
 
         # standards match on all of name,section, subsection <-- if you change even one of them it's a new entry
 
-    def test_find_groups_of_cre(self):
+    def find_cres_of_cre(self):
         dbcre = db.CRE(description="CREdesc1", name="CREname1")
         groupless_cre = db.CRE(description="CREdesc2", name="CREname2")
         dbgroup = db.CRE(description="Groupdesc1",
-                         name="GroupName1", is_group=True)
+                         name="GroupName1")
         dbgroup2 = db.CRE(description="Groupdesc2",
-                          name="GroupName2", is_group=True)
+                          name="GroupName2")
 
         only_one_group = db.CRE(description="CREdesc3", name="CREname3")
 
@@ -186,18 +177,18 @@ class TestDB(unittest.TestCase):
         self.assertEqual(groups, [dbgroup, dbgroup2])
 
         # find cre with 1 group
-        group = self.collection.find_groups_of_cre(only_one_group)
+        group = self.collection.find_cres_of_cre(only_one_group)
         self.assertEqual(len(group), 1)
         self.assertEqual(group, [dbgroup])
 
         # ensure that None is return if there are no groups
-        groups = self.collection.find_groups_of_cre(groupless_cre)
+        groups = self.collection.find_cres_of_cre(groupless_cre)
         self.assertIsNone(groups)
 
     def test_find_cres_of_standard(self):
         dbcre = db.CRE(description="CREdesc1", name="CREname1")
         dbgroup = db.CRE(description="CREdesc2",
-                         name="CREname2", is_group=True)
+                         name="CREname2")
         dbstandard1 = db.Standard(section="section1", name="standard1")
         group_standard = db.Standard(section="section2", name="standard2")
         lone_standard = db.Standard(section="section3", name="standard3")

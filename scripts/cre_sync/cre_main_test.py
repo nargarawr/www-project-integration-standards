@@ -30,7 +30,7 @@ class TestMain(unittest.TestCase):
         self.assertEqual(ret.section, 'Standard With Links')
 
         # assert db structure makes sense
-        # no links since our standards don't have a CRE or group to map to
+        # no links since our standards don't have a CRE to map to
         self.assertEqual(self.collection.session.query(db.Links).all(), [])
         # 3 cre-less standards in the db
         self.assertEqual(
@@ -56,30 +56,29 @@ class TestMain(unittest.TestCase):
         self.assertEqual(len(self.collection.session.query(
             db.CRE).all()), 1)  # 1 cre in the db
 
-    def test_register_standard_with_group_cre_links(self):
-        with_group_cre_links = defs.Standard( doctype=defs.Credoctypes.Standard, id='', description='', name='standard_with',
+    def test_register_standard_with_groupped_cre_links(self):
+        with_groupped_cre_links = defs.Standard( doctype=defs.Credoctypes.Standard, id='', description='', name='standard_with',
                                              links=[
-                                                 defs.CreGroup( id='', description='group desc', name='group name', links=[
-                                                 ], tags=[], metadata=defs.Metadata(labels=[])),
-                                                 defs.Standard( doctype=defs.Credoctypes.Standard, id='', description='', name='CWE', links=[
-                                                 ], tags=[], metadata=defs.Metadata(labels=[]), section='598'),
-                                                 defs.CRE( doctype=defs.Credoctypes.CRE, id='', description='cre desc', name='crename', links=[
-                                                 ], tags=[], metadata=defs.Metadata(labels=[])),
-                                                 defs.Standard( doctype=defs.Credoctypes.Standard, id='', description='', name='ASVS', links=[
-                                                 ], tags=[], metadata=defs.Metadata(labels=[]), section='SESSION-MGT-TOKEN-DIRECTIVES-DISCRETE-HANDLING'),
+                                                 defs.CRE( id='', description='group desc', name='group name', links=[
+                                                     defs.CRE( doctype=defs.Credoctypes.CRE, id='101-001', description='cre2 desc', name='crename2', links=[], tags=[], metadata=defs.Metadata(labels=[]))], tags=[], metadata=defs.Metadata(labels=[])),
+                                                 defs.Standard( doctype=defs.Credoctypes.Standard, id='', description='', name='CWE', links=[], tags=[], metadata=defs.Metadata(labels=[]), section='598'),
+                                                 defs.CRE( doctype=defs.Credoctypes.CRE, id='', description='cre desc', name='crename', links=[], tags=[], metadata=defs.Metadata(labels=[])),
+                                                 defs.Standard( doctype=defs.Credoctypes.Standard, id='', description='', name='ASVS', links=[], tags=[], metadata=defs.Metadata(labels=[]), section='SESSION-MGT-TOKEN-DIRECTIVES-DISCRETE-HANDLING'),
                                              ], tags=[], metadata=defs.Metadata(labels=[]), section='Session Management')
 
         ret = register_standard(
-            standard=with_group_cre_links, collection=self.collection)
+            standard=with_groupped_cre_links, collection=self.collection)
         # assert db structure makes sense
         self.assertEqual(len(self.collection.session.query(
             db.Links).all()), 5)  # 5 links in the db
+
         self.assertEqual(len(self.collection.session.query(
             db.InternalLinks).all()), 1)  # 1 internal link in the db
+
         self.assertEqual(len(self.collection.session.query(
             db.Standard).all()), 3)  # 3 standards in the db
         self.assertEqual(len(self.collection.session.query(
-            db.CRE).all()), 2)  # 2 cres in the db
+            db.CRE).all()), 3)  # 2 cres in the db
 
     def test_register_cre(self):
         standard = defs.Standard(doctype=defs.Credoctypes.Standard,

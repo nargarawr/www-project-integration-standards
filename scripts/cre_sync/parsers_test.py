@@ -120,7 +120,7 @@ class TestParsers(unittest.TestCase):
                   'NIST 800-63': 'None', 'OPC': 'C1', 'SIG ISO 25010': '@SDLC', 'Top10 2017': '', 'WSTG': '',
                   'cheat_sheets': 'https: // cheatsheetseries.owasp.org/cheatsheets/Threat_Modeling_Cheat_Sheet.html, https: // cheatsheetseries.owasp.org/cheatsheets/Abuse_Case_Cheat_Sheet.html, https: // cheatsheetseries.owasp.org/cheatsheets/Attack_Surface_Analysis_Cheat_Sheet.html'}]
 
-        expected = ({'REQUIREMENTS': defs.CreGroup(doctype=defs.Credoctypes.Group, id='654-390', description='', name='REQUIREMENTS',
+        expected = ({'REQUIREMENTS': defs.CRE(doctype=defs.Credoctypes.CRE, id='654-390', description='', name='REQUIREMENTS',
                                                    links=[
                                                        defs.CRE(doctype=defs.Credoctypes.CRE, id='002-036', description='Verify the use of a secure software development lifecycle that addresses security in all stages of development. (C1)', name='SDLC_APPLY_CONSISTENTLY',
                                                                 links=[
@@ -138,7 +138,7 @@ class TestParsers(unittest.TestCase):
                                                                     ], tags=[], section='C1'),
                                                                     defs.Standard(doctype=defs.Credoctypes.Standard, id='', description='', name='SIG ISO 25010', links=[], tags=[], section='@SDLC')],
                                                                 tags=[])], tags=[]),
-                     'RISK_ANALYSIS': defs.CreGroup(doctype=defs.Credoctypes.Group, id='533-658', description='', name='RISK_ANALYSIS',
+                     'RISK_ANALYSIS': defs.CRE(doctype=defs.Credoctypes.CRE, id='533-658', description='', name='RISK_ANALYSIS',
                                                     links=[
                                                         defs.CRE(doctype=defs.Credoctypes.CRE, id='002-036', description='Verify the use of a secure software development lifecycle that addresses security in all stages of development. (C1)', name='SDLC_APPLY_CONSISTENTLY',
                                                                  links=[
@@ -156,7 +156,7 @@ class TestParsers(unittest.TestCase):
                                                                      ], tags=[], section='C1'),
                                                                      defs.Standard(doctype=defs.Credoctypes.Standard, id='', description='', name='SIG ISO 25010', links=[], tags=[], section='@SDLC')],
                                                                  tags=[])], tags=[]),
-                    'SDLC_GUIDELINES_JUSTIFICATION': defs.CreGroup(doctype=defs.Credoctypes.Group, id='925-827', description='', name='SDLC_GUIDELINES_JUSTIFICATION',
+                    'SDLC_GUIDELINES_JUSTIFICATION': defs.CRE(doctype=defs.Credoctypes.CRE, id='925-827', description='', name='SDLC_GUIDELINES_JUSTIFICATION',
                                                                    links=[defs.CRE(doctype=defs.Credoctypes.CRE, id='000-001', description='desc', name='OTHER_CRE',
                                                                                    links=[defs.Standard(doctype=defs.Credoctypes.Standard, id='', description='', name='ASVS', links=[], tags=['L1', 'L2', 'L3'], metadata=defs.Metadata(labels=[]), section='V1.1.2', subsection='SDLC_GUIDELINES_JUSTIFICATION-REQUIREMENTS-RISK_ANALYSIS-THREAT_MODEL'),
                                                                                           defs.Standard(doctype=defs.Credoctypes.Standard, id='', description='', name='CWE', links=[
@@ -181,7 +181,7 @@ class TestParsers(unittest.TestCase):
                                                                                        ], tags=[], section='C1'),
                                                                                        defs.Standard(doctype=defs.Credoctypes.Standard, id='', description='', name='SIG ISO 25010', links=[], tags=[], section='@SDLC')],
                                                                                    tags=[])], tags=[]),
-                     'THREAT_MODEL': defs.CreGroup(doctype=defs.Credoctypes.Group, id='635-846', description='', name='THREAT_MODEL',
+                     'THREAT_MODEL': defs.CRE(doctype=defs.Credoctypes.CRE, id='635-846', description='', name='THREAT_MODEL',
                                                    links=[
                                                        defs.CRE(doctype=defs.Credoctypes.CRE, id='002-036', description='Verify the use of a secure software development lifecycle that addresses security in all stages of development. (C1)', name='SDLC_APPLY_CONSISTENTLY',
                                                                 links=[

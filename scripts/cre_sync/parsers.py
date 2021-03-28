@@ -125,7 +125,7 @@ def parse_v1_standards(cre_file: list) -> dict:
             gid = cre_mapping.pop("CRE Group %s Lookup" % i)
             if not is_empty(gname):
                 if gname not in groups.keys():
-                    group = defs.CreGroup(name=gname, id=gid)
+                    group = defs.CRE(name=gname, id=gid)
                 else:
                     group = groups.get(gname)
                 # elif id != groups.get(name).id:

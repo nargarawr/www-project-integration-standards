@@ -23,8 +23,7 @@ def register_standard(standard: defs.Standard, collection: db.Standard_collectio
     """
     linked_standard = collection.add_standard(standard)
     cre_less_standards = []
-    cres_added = []  # we need to know the cres added in case we encounter a group, then we get the group to link to these cres
-    groups_added = []
+    cres_added = []  # we need to know the cres added in case we encounter a higher level CRE, then we get the higher level CRE to link to these cres
     for link in standard.links:
         if type(link).__name__ == defs.Standard.__name__:
             # if a standard links another standard it is likely that a standards writer references something
@@ -51,20 +50,16 @@ def register_standard(standard: defs.Standard, collection: db.Standard_collectio
             dbcre = register_cre(link, collection)
             collection.add_link(dbcre, linked_standard)
             cres_added.append(dbcre)
-        elif type(link).__name__ == defs.CreGroup.__name__:
-            dbgroup = register_cre(link, collection)
-            collection.add_link(dbgroup, linked_standard)
-            groups_added.append(dbgroup)
-    for group in groups_added:
-        for cre in cres_added:
-            collection.add_internal_link(cre=cre, group=group)
     return linked_standard
 
 
 def register_cre(cre: defs.CRE, result: db.Standard_collection) -> db.CRE:
     dbcre = result.add_cre(cre)
     for link in cre.links:
-        result.add_link(dbcre, register_standard(link, result))
+        if type(link).__name__ == defs.CRE.__name__:
+            result.add_internal_link(dbcre, register_cre(link, result))
+        elif type(link).__name__ == defs.Standard.__name__:
+            result.add_link(dbcre, register_standard(link, result))
     return dbcre
 
 
@@ -73,10 +68,6 @@ def parse_cre_file_link(link: dict) -> (defs.Document, []):
         links = link.pop('links')
         cre = defs.CRE(**link)
         return cre, links
-    elif link.get('doctype') == defs.Credoctypes.Group.value:
-        links = link.pop('links')
-        group = defs.CreGroup(**link)
-        return group, links
     elif link.get('doctype') == defs.Credoctypes.Standard.value:
         links = link.pop('links')
         standard = defs.Standard(**link)
@@ -94,15 +85,6 @@ def parse_file(contents: dict, result: db.Standard_collection) -> defs.Document:
             cre.add_link(l)
         register_cre(cre, result=result)
         return cre
-    elif contents.get('doctype') == defs.Credoctypes.Group.value:
-        links = contents.get('links')
-        group = defs.CreGroup(contents)
-        for link in links:
-            # TODO: recurse and register potential links of links
-            l, _ = parse_cre_file_link(link)
-            group.add_link(l)
-        register_cre(group, result=result)
-        return group
     elif contents.get('doctype') == defs.Credoctypes.Standard.value:
         links = contents.get('links')
         standard = defs.Standard(contents)
@@ -117,10 +99,10 @@ def parse_file(contents: dict, result: db.Standard_collection) -> defs.Document:
 def parse_standards_from_spreadsheeet(cre_file: list, result: db.Standard_collection):
     """ given a yaml with standards, build a list of standards in the db
     """
-    groups = {}
+    hi_lvl_CREs = {}
     cres = {}
     if "CRE Group 1" in cre_file[0].keys():
-        groups, cres = parsers.parse_v1_standards(cre_file)
+        hi_lvl_CREs, cres = parsers.parse_v1_standards(cre_file)
     else:
         cres = parsers.parse_v0_standards(cre_file)
 
@@ -130,13 +112,10 @@ def parse_standards_from_spreadsheeet(cre_file: list, result: db.Standard_collec
 
 
     # groups
-    for group_name, group in groups.items():
+    for name, doc in hi_lvl_CREs.items():
+        dbgroup = result.add_cre(doc)
 
-
-
-        dbgroup = result.add_cre(group)
-
-        for document in group.links:
+        for document in doc.links:
             if type(document).__name__ == defs.CRE.__name__:
                 dbcre = register_cre(document, result)
                 result.add_internal_link(group=dbgroup, cre=dbcre)
@@ -298,7 +277,7 @@ def main():
 
 
 def create_spreadsheet(spreadsheet: list, title: str, share_with: str):
-    """ Reads cres and groups docs exported from a standards_collection.export()
+    """ Reads cre docs exported from a standards_collection.export()
         dumps each doc into a workbook"""
     createSpreadsheet(spreadsheet, title, share_with)
 

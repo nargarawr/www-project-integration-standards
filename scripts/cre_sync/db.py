@@ -39,15 +39,13 @@ class CRE(Base):
     description = Column(String, default='')
     name = Column(String)
 
-    is_group = Column(Boolean, default=False)
     __table_args__ = (UniqueConstraint(
-    name, external_id, name='unique_cre_fields'),)
-
+        name, external_id, name='unique_cre_fields'),)
 
 
 class InternalLinks(Base):
     # model cre-groups linking cres
-    __tablename__ = 'grouplinks'
+    __tablename__ = 'crelinks'
     group = Column(Integer, ForeignKey('cre.id'), primary_key=True)
     cre = Column(Integer, ForeignKey('cre.id'), primary_key=True)
 
@@ -100,8 +98,8 @@ class Standard_collection:
             internal_links.append((group, cre))
         return internal_links
 
-    def find_groups_of_cre(self, cre: CRE):
-        """ returns the CREGroups of all the cre groups or none if cre doesn't have groups"""
+    def find_cres_of_cre(self, cre: CRE):
+        """ returns the higher level CREs of the cre or none if no higher level cres link to it0000002"""
         cre_id = self.session.query(CRE).filter(
             CRE.name == cre.name).first().id
         links = self.session  .query(InternalLinks).filter(
@@ -117,7 +115,7 @@ class Standard_collection:
         db_standard = self.session.query(Standard).filter(and_(Standard.name == standard.name,
                                                                Standard.section == standard.section,
                                                                Standard.subsection == standard.subsection)).first()
-        """ returns the CRE or CREGroup of all cres or groups that link to this standard or none if none link to it"""
+        """ returns the CREs that link to this standard or none if none link to it"""
         if not db_standard:
             return
         links = self.session.query(Links).filter(
@@ -132,14 +130,11 @@ class Standard_collection:
 
     def export(self, dir):
         """ Exports the database to a CRE file collection on disk"""
-        # groups = {}
-        # groupless_cres = {}
         docs = {}
-        group, cre, standard = None, None, None
-        groups_written = {}
+        cre, standard = None, None
         cres_written = {}
 
-        # internal links are Group -> CRE
+        # internal links are Group/HigherLevelCRE -> CRE
         for link in self.__get_internal_links():
             group = link[0]
             cre = link[1]
@@ -147,29 +142,21 @@ class Standard_collection:
             if group.name in docs.keys():
                 grp = docs[group.name]
             else:
-                grp = GroupfromDB(group)
+                grp = CREfromDB(group)
             grp.add_link(CREfromDB(cre))
             docs[group.name] = grp
 
-        # external links are Group/CRE -> standard
+        # external links are CRE -> standard
         for link in self.__get_external_links():
 
             internal_doc = link[0]
             standard = link[1]
             cr = None
             grp = None
-            if internal_doc.is_group:  # Group -> standard
-                if internal_doc.name in docs.keys():
-                    grp = docs[internal_doc.name]
-                else:
-                    grp = GroupfromDB(internal_doc)
-                grp.add_link(StandardFromDB(standard))
-                docs[group.name] = grp
-            else:  # cre -> standard
-                if internal_doc.name in docs.keys():
-                    cr = docs[internal_doc.name]
-                else:
-                    cr = CREfromDB(internal_doc)
+            if internal_doc.name in docs.keys():
+                cr = docs[internal_doc.name]
+            else:
+                cr = CREfromDB(internal_doc)
             if len(standard.name) != 0:
                 cr.add_link(StandardFromDB(standard))
             docs[cr.name] = cr
@@ -178,7 +165,6 @@ class Standard_collection:
             file_utils.writeToDisk(file_title=title,
                                    file_content=yaml.safe_dump(doc.todict()), cres_loc=dir)
         return docs.values()
-        # return groups.values(), groupless_cres.values()
 
     def load(self):
         """ generator, loads db into memory
@@ -187,32 +173,23 @@ class Standard_collection:
         """
         pass
 
-    def add_cre(self, cre: cre_defs.Document):
-        is_group = False
-        if type(cre).__name__ == cre_defs.CreGroup.__name__:
-            is_group = True
+    def add_cre(self, cre: cre_defs.CRE):
         if cre.id != None:
             entry = self.session.query(CRE).filter(
-                CRE.name == cre.name, CRE.external_id == cre.id, CRE.is_group == is_group).first()
+                CRE.name == cre.name, CRE.external_id == cre.id).first()
         else:
             entry = self.session.query(CRE).filter(
-                CRE.name == cre.name, CRE.is_group == is_group).first()
+                CRE.name == cre.name, CRE.description == cre.description).first()
 
         if entry is not None:
             logger.debug("knew of %s ,skipping" % cre.name)
-
-            if is_group:
-                logger.debug('knew of group %s:%s' % (cre.name, cre.id))
-
             return entry
         else:
             logger.debug("did not know of %s ,adding" % cre.name)
             entry = CRE(description=cre.description,
-                        name=cre.name, external_id=cre.id,
-                        is_group=is_group)
+                        name=cre.name, external_id=cre.id)
             self.session.add(entry)
-
-        self.session.commit()
+            self.session.commit()
         return entry
 
     def add_standard(self, standard: cre_defs.Standard) -> Standard:
@@ -234,18 +211,14 @@ class Standard_collection:
         return entry
 
     def add_internal_link(self, group: CRE, cre: CRE):
-
         if cre.id == None:
-            cre = self.session.query(CRE).filter(and_(CRE.name == cre.name,
-                                                      CRE.external_id == cre.external_id, CRE.is_group == False)).first()
+            cre = self.session.query(CRE).filter(and_(CRE.name == cre.name, CRE.external_id == cre.external_id)).first()
         if group.id == None:
             if group.external_id == None:
-                group = self.session.query(CRE).filter(and_(CRE.name == group.name,
-                                                            CRE.is_group == True)).first()
+                group = self.session.query(CRE).filter(and_(CRE.name == group.name)).first()
             else:
                 group = self.session.query(CRE).filter(and_(CRE.name == group.name,
-                                                            CRE.external_id == group.external_id,
-                                                            CRE.is_group == True)).first()
+                                                            CRE.external_id == group.external_id)).first()
         if cre == None or group == None:
             logger.fatal(
                 "Tried to insert internal mapping with element that doesn't exist in db, this looks like a bug")
@@ -258,8 +231,6 @@ class Standard_collection:
             logger.debug("did not know of internal link %s:%s == %s:%s ,adding" % (
                 group.external_id, group.name, cre.external_id, cre.name))
             self.session.add(InternalLinks(cre=cre.id, group=group.id))
-    
-
 
     def add_link(self, cre: CRE, standard: Standard):
         if cre.id == None:
@@ -295,8 +266,3 @@ def CREfromDB(dbcre: CRE):
     return cre_defs.CRE(name=dbcre.name,
                         description=dbcre.description,
                         id=dbcre.external_id)
-
-
-def GroupfromDB(dbgroup: CRE):
-    return cre_defs.CreGroup(name=dbgroup.name,
-                             description=dbgroup.description, id=dbgroup.external_id)
