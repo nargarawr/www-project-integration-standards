@@ -16,11 +16,11 @@ class TestMain(unittest.TestCase):
         self.collection = collection
 
     def test_register_standard_with_links(self):
-        standard_with_links = defs.Standard(version=defs.CreVersions.V2, doctype=defs.Credoctypes.Standard, id='', description='', name='standard_with_links',
+        standard_with_links = defs.Standard( doctype=defs.Credoctypes.Standard, id='', description='', name='standard_with_links',
                                             links=[
-                                                defs.Standard(version=defs.CreVersions.V2, doctype=defs.Credoctypes.Standard, id='', description='', name='CWE', links=[
+                                                defs.Standard( doctype=defs.Credoctypes.Standard, id='', description='', name='CWE', links=[
                                                 ], tags=[], metadata=defs.Metadata(labels=[]), section='598'),
-                                                defs.Standard(version=defs.CreVersions.V2, doctype=defs.Credoctypes.Standard, id='', description='', name='ASVS', links=[
+                                                defs.Standard( doctype=defs.Credoctypes.Standard, id='', description='', name='ASVS', links=[
                                                 ], tags=[], metadata=defs.Metadata(labels=[]), section='SESSION-MGT-TOKEN-DIRECTIVES-DISCRETE-HANDLING'),
                                             ], tags=[], metadata=defs.Metadata(labels=[]), section='Standard With Links')
         ret = register_standard(
@@ -38,11 +38,11 @@ class TestMain(unittest.TestCase):
 
     def test_register_standard_with_cre(self):
 
-        standard_with_cre = defs.Standard(version=defs.CreVersions.V2, doctype=defs.Credoctypes.Standard, id='', description='', name='standard_with_cre',
+        standard_with_cre = defs.Standard( doctype=defs.Credoctypes.Standard, id='', description='', name='standard_with_cre',
                                           links=[
-                                              defs.CRE(version=defs.CreVersions.V2, doctype=defs.Credoctypes.CRE, id='', description='cre desc', name='crename', links=[
+                                              defs.CRE( doctype=defs.Credoctypes.CRE, id='', description='cre desc', name='crename', links=[
                                               ], tags=[], metadata=defs.Metadata(labels=[])),
-                                              defs.Standard(version=defs.CreVersions.V2, doctype=defs.Credoctypes.Standard, id='', description='', name='ASVS', links=[
+                                              defs.Standard( doctype=defs.Credoctypes.Standard, id='', description='', name='ASVS', links=[
                                               ], tags=[], metadata=defs.Metadata(labels=[]), section='SESSION-MGT-TOKEN-DIRECTIVES-DISCRETE-HANDLING'),
                                           ], tags=[], metadata=defs.Metadata(labels=[]), section='standard_with_cre')
 
@@ -57,15 +57,15 @@ class TestMain(unittest.TestCase):
             db.CRE).all()), 1)  # 1 cre in the db
 
     def test_register_standard_with_group_cre_links(self):
-        with_group_cre_links = defs.Standard(version=defs.CreVersions.V2, doctype=defs.Credoctypes.Standard, id='', description='', name='standard_with',
+        with_group_cre_links = defs.Standard( doctype=defs.Credoctypes.Standard, id='', description='', name='standard_with',
                                              links=[
-                                                 defs.CreGroup(version=defs.CreVersions.V2, id='', description='group desc', name='group name', links=[
+                                                 defs.CreGroup( id='', description='group desc', name='group name', links=[
                                                  ], tags=[], metadata=defs.Metadata(labels=[])),
-                                                 defs.Standard(version=defs.CreVersions.V2, doctype=defs.Credoctypes.Standard, id='', description='', name='CWE', links=[
+                                                 defs.Standard( doctype=defs.Credoctypes.Standard, id='', description='', name='CWE', links=[
                                                  ], tags=[], metadata=defs.Metadata(labels=[]), section='598'),
-                                                 defs.CRE(version=defs.CreVersions.V2, doctype=defs.Credoctypes.CRE, id='', description='cre desc', name='crename', links=[
+                                                 defs.CRE( doctype=defs.Credoctypes.CRE, id='', description='cre desc', name='crename', links=[
                                                  ], tags=[], metadata=defs.Metadata(labels=[])),
-                                                 defs.Standard(version=defs.CreVersions.V2, doctype=defs.Credoctypes.Standard, id='', description='', name='ASVS', links=[
+                                                 defs.Standard( doctype=defs.Credoctypes.Standard, id='', description='', name='ASVS', links=[
                                                  ], tags=[], metadata=defs.Metadata(labels=[]), section='SESSION-MGT-TOKEN-DIRECTIVES-DISCRETE-HANDLING'),
                                              ], tags=[], metadata=defs.Metadata(labels=[]), section='Session Management')
 
@@ -82,9 +82,9 @@ class TestMain(unittest.TestCase):
             db.CRE).all()), 2)  # 2 cres in the db
 
     def test_register_cre(self):
-        standard = defs.Standard(version=defs.CreVersions.V0, doctype=defs.Credoctypes.Standard,
+        standard = defs.Standard(doctype=defs.Credoctypes.Standard,
                                  name='ASVS', section='SESSION-MGT-TOKEN-DIRECTIVES-DISCRETE-HANDLING', subsection='3.1.1')
-        cre = defs.CRE(version=CreVersions.V0, id="100", description="CREdesc", name="CREname", links=[
+        cre = defs.CRE(id="100", description="CREdesc", name="CREname", links=[
                        standard], tags=['CREt1', 'CREt2'], metadata=defs.Metadata(labels=['CREl1', 'CREl2']))
         self.assertEqual(register_cre(cre, self.collection).name, cre.name)
         self.assertEqual(register_cre(
@@ -98,20 +98,18 @@ class TestMain(unittest.TestCase):
                     {'description': '', 'doctype': 'Standard', 'hyperlink': 'None',
                      'id': '', 'links': [], 'metadata': {},
                      'name': 'TOP10', 'section': 'https://owasp.org/www-project-top-ten/2017/A5_2017-Broken_Access_Control',
-                     'subsection': 'None', 'tags': [],
-                     'version': 2}, {'description': '',
+                     'subsection': 'None', 'tags': []}, {'description': '',
                                      'doctype': 'Standard', 'hyperlink': 'None',
                                      'id': '', 'links': [], 'metadata': {},
                                      'name': 'ISO 25010', 'section': 'Secure data storage',
-                                     'subsection': 'None', 'tags': [],
-                                     'version': 1}], 'metadata': {},
+                                     'subsection': 'None', 'tags': []}], 'metadata': {},
                 'name': 'CREDENTIALS_MANAGEMENT_CRYPTOGRAPHIC_DIRECTIVES',
-                'tags': [], 'version': 2}
-        expected = defs.CRE(version=2, doctype=defs.Credoctypes.CRE, id='001-005-073', description='Verify that approved cryptographic algorithms are used in the generation, seeding, and verification.', name='CREDENTIALS_MANAGEMENT_CRYPTOGRAPHIC_DIRECTIVES',
+                'tags': []}
+        expected = defs.CRE(doctype=defs.Credoctypes.CRE, id='001-005-073', description='Verify that approved cryptographic algorithms are used in the generation, seeding, and verification.', name='CREDENTIALS_MANAGEMENT_CRYPTOGRAPHIC_DIRECTIVES',
                        links=[
-                           defs.Standard(version=defs.CreVersions.V2, doctype=defs.Credoctypes.Standard, id='', description='', name='TOP10', links=[], tags=[], metadata={
+                           defs.Standard( doctype=defs.Credoctypes.Standard, id='', description='', name='TOP10', links=[], tags=[], metadata={
                            }, section='https://owasp.org/www-project-top-ten/2017/A5_2017-Broken_Access_Control', subsection='None', hyperlink='None'),
-                           defs.Standard(version=defs.CreVersions.V1, doctype=defs.Credoctypes.Standard, id='', description='', name='ISO 25010', links=[], tags=[], metadata={}, section='Secure data storage', subsection='None', hyperlink='None')], tags=[], metadata={})
+                           defs.Standard(doctype=defs.Credoctypes.Standard, id='', description='', name='ISO 25010', links=[], tags=[], metadata={}, section='Secure data storage', subsection='None', hyperlink='None')], tags=[], metadata={})
 
         result = parse_file(file, self.collection)
         self.assertEqual(result, expected)

@@ -285,21 +285,18 @@ class Standard_collection:
 
 
 def StandardFromDB(dbstandard: Standard):
-    return cre_defs.Standard(version=cre_defs.CreVersions.V2,
-                             name=dbstandard.name,
+    return cre_defs.Standard(name=dbstandard.name,
                              section=dbstandard.section,
                              subsection=dbstandard.subsection,
                              hyperlink=dbstandard.link)
 
 
 def CREfromDB(dbcre: CRE):
-    return cre_defs.CRE(version=cre_defs.CreVersions.V2,
-                        name=dbcre.name,
+    return cre_defs.CRE(name=dbcre.name,
                         description=dbcre.description,
                         id=dbcre.external_id)
 
 
 def GroupfromDB(dbgroup: CRE):
-    return cre_defs.CreGroup(version=cre_defs.CreVersions.V2,
-                             name=dbgroup.name,
+    return cre_defs.CreGroup(name=dbgroup.name,
                              description=dbgroup.description, id=dbgroup.external_id)

@@ -9,13 +9,6 @@ class Credoctypes(Enum):
     CRE = "CRE"
     Standard = "Standard"
 
-
-class CreVersions(Enum):
-    V0 = 0  # initial experiments, no groups, list of flat mappings
-    V1 = 1  # group introduction, still requires manual parsing
-    V2 = 2  # future
-
-
 @dataclass
 class Metadata():
     labels: list
@@ -29,7 +22,6 @@ class Metadata():
 
 @dataclass
 class Document():
-    version: CreVersions
     doctype: Credoctypes
     id: str
     description: str
@@ -41,7 +33,6 @@ class Document():
     def __eq__(self, other):
         return self.id == other.id and \
             self.name == other.name and \
-            self.version.value == other.version.value and \
             self.doctype.value == other.doctype.value and \
             self.description == other.description and \
             self.links == other.links and \
@@ -49,7 +40,7 @@ class Document():
             self.metadata == other.metadata
 
     def todict(self):
-        result = {'version': self.version.value,
+        result = {
                   'doctype': self.doctype.value,
                   'id': self.id,
                   'description': self.description,
@@ -71,15 +62,7 @@ class Document():
             self.links = []
         self.links.append(document)
 
-    def __init__(self, version, name, doctype=None, id="", description="", links=[], tags=[], metadata: Metadata = Metadata()):
-        if version == CreVersions.V0.value or version == CreVersions.V0:
-            self.version = CreVersions.V0
-        elif version == CreVersions.V1.value or version == CreVersions.V1:
-            self.version = CreVersions.V1
-        elif version == CreVersions.V2.value or version == CreVersions.V2:
-            self.version = CreVersions.V2
-        else:
-            raise MandatoryFieldException("Document version not defined for document %s" % name)
+    def __init__(self, name, doctype=None, id="", description="", links=[], tags=[], metadata: Metadata = Metadata()):
         self.description = str(description)
         self.name = str(name) or raise_MandatoryFieldException(
             "Document name not defined for document of doctype %s" % doctype)

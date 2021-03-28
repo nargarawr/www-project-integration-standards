@@ -39,15 +39,15 @@ class TestDB(unittest.TestCase):
         # ensure proper export
 
         loc = tempfile.mkdtemp()
-        result = [defs.CreGroup(version=defs.CreVersions.V2, doctype=defs.Credoctypes.Group, id='', description='Groupdesc',
+        result = [defs.CreGroup(doctype=defs.Credoctypes.Group, id='', description='Groupdesc',
                                 name='GroupName', links=[
-                                    defs.CRE(version=defs.CreVersions.V2, doctype=defs.Credoctypes.CRE, id='', description='CREdesc',
+                                    defs.CRE(doctype=defs.Credoctypes.CRE, id='', description='CREdesc',
                                              name='CREname', links=[], tags=[], metadata=defs.Metadata(labels=[]))
                                 ],
                                 tags=[], metadata=defs.Metadata(labels=[])),
-                  defs.CRE(version=defs.CreVersions.V2, doctype=defs.Credoctypes.CRE, id='', description='CREdesc', name='CREname',
+                  defs.CRE(doctype=defs.Credoctypes.CRE, id='', description='CREdesc', name='CREname',
                            links=[
-                               defs.Standard(version=defs.CreVersions.V2, doctype=defs.Credoctypes.Standard, id='', description='', name='BarStand', links=[], tags=[], metadata=defs.Metadata(labels=[]), section='FooStand', subsection='4.5.6', hyperlink='https://example.com')])
+                               defs.Standard(doctype=defs.Credoctypes.Standard, id='', description='', name='BarStand', links=[], tags=[], metadata=defs.Metadata(labels=[]), section='FooStand', subsection='4.5.6', hyperlink='https://example.com')])
                   ]
         self.collection.export(loc)
 
@@ -66,8 +66,7 @@ class TestDB(unittest.TestCase):
             self.assertDictEqual(cre, doc)
 
     def test_StandardFromDB(self):
-        expected = defs.Standard(version=defs.CreVersions.V2,
-                                 name='foo',
+        expected = defs.Standard(name='foo',
                                  section='bar',
                                  subsection='foobar',
                                  hyperlink='https://example.com/foo/bar')
@@ -75,14 +74,14 @@ class TestDB(unittest.TestCase):
             name='foo', section='bar', subsection='foobar', link='https://example.com/foo/bar')))
 
     def test_CREfromDB(self):
-        c = defs.CRE(id="cid", version=defs.CreVersions.V2, doctype=defs.Credoctypes.CRE,
+        c = defs.CRE(id="cid", doctype=defs.Credoctypes.CRE,
                      description='CREdesc', name='CREname', links=[])
         self.assertEqual(c, db.CREfromDB(
             db.CRE(external_id="cid", description='CREdesc', name='CREname')))
 
     def test_GroupfromDB(self):
-        g = defs.CreGroup(version=defs.CreVersions.V2,
-                          name="g", description='gd', id='gid')
+        g = defs.CreGroup(
+            name="g", description='gd', id='gid')
         self.assertEqual(g, db.GroupfromDB(
             db.CRE(external_id='gid', description='gd', name='g', is_group=True)))
 
@@ -91,10 +90,10 @@ class TestDB(unittest.TestCase):
         name = uuid.uuid4()
         gname = uuid.uuid4()
 
-        c = defs.CRE(id="cid", version=defs.CreVersions.V2, doctype=defs.Credoctypes.CRE,
+        c = defs.CRE(id="cid", doctype=defs.Credoctypes.CRE,
                      description=original_desc, name=name, links=[])
 
-        g = defs.CreGroup(id="cid", version=defs.CreVersions.V2, doctype=defs.Credoctypes.Group,
+        g = defs.CreGroup(id="cid", doctype=defs.Credoctypes.Group,
                           description=original_desc, name=gname, links=[])
 
         self.assertIsNone(self.collection.session.query(
@@ -136,7 +135,7 @@ class TestDB(unittest.TestCase):
         original_section = uuid.uuid4()
         name = uuid.uuid4()
 
-        s = defs.Standard(id="sid", version=defs.CreVersions.V2, doctype=defs.Credoctypes.Standard,
+        s = defs.Standard(id="sid", doctype=defs.Credoctypes.Standard,
                           section=original_section, subsection=original_section, name=name)
 
         self.assertIsNone(self.collection.session.query(
@@ -210,9 +209,12 @@ class TestDB(unittest.TestCase):
         self.collection.session.add(lone_standard)
         self.collection.session.commit()
 
-        self.collection.session.add(db.Links(cre=dbcre.id, standard=dbstandard1.id))
-        self.collection.session.add(db.Links(cre=dbgroup.id, standard=dbstandard1.id))
-        self.collection.session.add(db.Links(cre=dbgroup.id, standard=group_standard.id))
+        self.collection.session.add(
+            db.Links(cre=dbcre.id, standard=dbstandard1.id))
+        self.collection.session.add(
+            db.Links(cre=dbgroup.id, standard=dbstandard1.id))
+        self.collection.session.add(
+            db.Links(cre=dbgroup.id, standard=group_standard.id))
         self.collection.session.commit()
 
         # happy path, 1 group and 1 cre link to 1 standard

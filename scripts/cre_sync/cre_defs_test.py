@@ -8,32 +8,32 @@ from pprint import pprint
 class TestCreDefs(unittest.TestCase):
 
     def test_document_to_dict(self):
-        standard = defs.Standard(version=defs.CreVersions.V0, doctype=defs.Credoctypes.Standard, name='ASVS',
+        standard = defs.Standard( doctype=defs.Credoctypes.Standard, name='ASVS',
                                  section='SESSION-MGT-TOKEN-DIRECTIVES-DISCRETE-HANDLING', subsection='3.1.1')
-        standard_output = {'description': '','doctype': 'Standard','hyperlink': None,'id': '','links': [],'metadata': {},'name': 'ASVS','section': 'SESSION-MGT-TOKEN-DIRECTIVES-DISCRETE-HANDLING','subsection': '3.1.1','tags': [],'version': 0}
+        standard_output = {'description': '','doctype': 'Standard','hyperlink': None,'id': '','links': [],'metadata': {},'name': 'ASVS','section': 'SESSION-MGT-TOKEN-DIRECTIVES-DISCRETE-HANDLING','subsection': '3.1.1',
+        'tags': []}
 
         cre = defs.CRE(
-            version=CreVersions.V0, id="100", description="CREdesc", name="CREname", links=[standard], tags=['CREt1', 'CREt2'], metadata=defs.Metadata(labels=['CREl1', 'CREl2']))
+             id="100", description="CREdesc", name="CREname", links=[standard], tags=['CREt1', 'CREt2'], metadata=defs.Metadata(labels=['CREl1', 'CREl2']))
         cre_output = {'description': 'CREdesc','doctype': 'CRE','id': '100',
                       'links': [
-                          {'description': '','doctype': 'Standard','hyperlink': None,'id': '','links': [],'metadata': {},'name': 'ASVS','section': 'SESSION-MGT-TOKEN-DIRECTIVES-DISCRETE-HANDLING','subsection': '3.1.1','tags': [],'version': 0}],
-                      'metadata': {}, 'name': 'CREname', 'tags': ['CREt1', 'CREt2'], 'version': 0}
+                          {'description': '','doctype': 'Standard','hyperlink': None,'id': '','links': [],'metadata': {},'name': 'ASVS','section': 'SESSION-MGT-TOKEN-DIRECTIVES-DISCRETE-HANDLING','subsection': '3.1.1','tags': []}],
+                      'metadata': {}, 'name': 'CREname', 'tags': ['CREt1', 'CREt2']}
 
-        standard2 = defs.Standard(version=defs.CreVersions.V1, doctype=defs.Credoctypes.Standard, name='Standard',
+        standard2 = defs.Standard( doctype=defs.Credoctypes.Standard, name='Standard',
                                   section='StandardSection', subsection='3.1.1')
-        group = defs.CreGroup(version=CreVersions.V0, id="500", description="desc", name="name", links=[cre, standard2], tags=['tag1', 't2'],
+        group = defs.CreGroup(id="500", description="desc", name="name", links=[cre, standard2], tags=['tag1', 't2'],
                               metadata=defs.Metadata(labels=['l1', 'l2']))
         group_output = {'description': 'desc', 'doctype': 'Group', 'id': '500', 
                         'links': [
                                   {'description': 'CREdesc', 'doctype': 'CRE', 'id': '100', 
                                    'links': [
-                                            {'description': '', 'doctype': 'Standard', 'hyperlink': None, 'id': '', 'links': [], 'metadata': {}, 'name': 'ASVS', 'section': 'SESSION-MGT-TOKEN-DIRECTIVES-DISCRETE-HANDLING', 'subsection': '3.1.1', 'tags': [], 'version': 0}],
-                                   'metadata': {}, 'name': 'CREname', 'tags': ['CREt1', 'CREt2'], 'version': 0},
-                                  {'description': '', 'doctype': 'Standard', 'hyperlink': None, 'id': '', 'links': [], 'metadata': {}, 'name': 'Standard', 'section': 'StandardSection', 'subsection': '3.1.1', 'tags': [], 'version': 1}],
+                                            {'description': '', 'doctype': 'Standard', 'hyperlink': None, 'id': '', 'links': [], 'metadata': {}, 'name': 'ASVS', 'section': 'SESSION-MGT-TOKEN-DIRECTIVES-DISCRETE-HANDLING', 'subsection': '3.1.1', 'tags': []}],
+                                   'metadata': {}, 'name': 'CREname', 'tags': ['CREt1', 'CREt2'], },
+                                  {'description': '', 'doctype': 'Standard', 'hyperlink': None, 'id': '', 'links': [], 'metadata': {}, 'name': 'Standard', 'section': 'StandardSection', 'subsection': '3.1.1', 'tags': []}],
                         'metadata': {},
                         'name': 'name',
-                        'tags': ['tag1', 't2'],
-                        'version': 0}
+                        'tags': ['tag1', 't2']}
 
         self.assertEqual(standard.todict(),standard_output)
         self.assertEqual(cre.todict(),cre_output)
