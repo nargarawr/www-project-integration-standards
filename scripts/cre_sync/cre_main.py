@@ -3,7 +3,6 @@ import yaml
 import os
 import argparse
 import logging
-import uuid
 import tempfile
 import db
 import parsers
@@ -25,30 +24,36 @@ def register_standard(standard: defs.Standard, collection: db.Standard_collectio
     cre_less_standards = []
     cres_added = []  # we need to know the cres added in case we encounter a higher level CRE, then we get the higher level CRE to link to these cres
     for link in standard.links:
-        if type(link).__name__ == defs.Standard.__name__:
+        if type(link.document).__name__ == defs.Standard.__name__:
             # if a standard links another standard it is likely that a standards writer references something
             # in that case, find which of the two standards has at least one CRE attached to it and link both to the parent CRE
-            cres = collection.find_cres_of_standard(link)
+            cres = collection.find_cres_of_standard(link.document)
             if cres:
                 for cre in cres:
-                    collection.add_link(cre=cre, link=linked_standard)
+                    collection.add_link(
+                        cre=cre, link=linked_standard, type=link.ltype)
                     for unlinked_standard in cre_less_standards:  # if anything in this
-                        collection.add_link(cre=cre, link=unlinked_standard)
+                        collection.add_link(
+                            cre=cre, link=unlinked_standard, type=link.ltype)
             else:
                 cres = collection.find_cres_of_standard(linked_standard)
                 if cres:
                     for cre in cres:
                         collection.add_link(
-                            cre=cre, standard=collection.add_standard(link))
+                            cre=cre, standard=collection.add_standard(link.document), type=link.ltype)
                         for unlinked_standard in cre_less_standards:
                             collection.add_link(
-                                cre=cre, standard=unlinked_standard)
+                                cre=cre, standard=unlinked_standard, type=link.ltype)
                 else:  # if neither the root nor a linked standard has a CRE, add both as unlinked standards
-                    collection.add_standard(link)
-                    cre_less_standards.append(link)
-        elif type(link).__name__ == defs.CRE.__name__:
-            dbcre = register_cre(link, collection)
-            collection.add_link(dbcre, linked_standard)
+                    collection.add_standard(link.document)
+                    cre_less_standards.append(link.document)
+
+            if link.document.links and len(link.document.links) > 0:
+                register_standard(standard=link, collection=collection)
+
+        elif type(link.document).__name__ == defs.CRE.__name__:
+            dbcre = register_cre(link.document, collection)
+            collection.add_link(dbcre, linked_standard, type=link.ltype)
             cres_added.append(dbcre)
     return linked_standard
 
@@ -56,43 +61,32 @@ def register_standard(standard: defs.Standard, collection: db.Standard_collectio
 def register_cre(cre: defs.CRE, result: db.Standard_collection) -> db.CRE:
     dbcre = result.add_cre(cre)
     for link in cre.links:
-        if type(link).__name__ == defs.CRE.__name__:
-            result.add_internal_link(dbcre, register_cre(link, result))
-        elif type(link).__name__ == defs.Standard.__name__:
-            result.add_link(dbcre, register_standard(link, result))
+        if type(link.document).__name__ == defs.CRE.__name__:
+            result.add_internal_link(dbcre, register_cre(link.document, result),type=link.ltype)
+        elif type(link.document).__name__ == defs.Standard.__name__:
+            result.add_link(cre=dbcre,standard= register_standard(standard=link.document, collection=result), type=link.ltype)
     return dbcre
 
 
-def parse_cre_file_link(link: dict) -> (defs.Document, []):
-    if link.get('doctype') == defs.Credoctypes.CRE.value:
-        links = link.pop('links')
-        cre = defs.CRE(**link)
-        return cre, links
-    elif link.get('doctype') == defs.Credoctypes.Standard.value:
-        links = link.pop('links')
-        standard = defs.Standard(**link)
-        return standard, links
-
-
-def parse_file(contents: dict, result: db.Standard_collection) -> defs.Document:
-    """ given yaml from export format add standards to db"""
+def parse_file(contents: dict, scollection: db.Standard_collection) -> defs.Document:
+    """ given yaml from export format deserialise to internal standards format and add standards to db"""
     if contents.get('doctype') == defs.Credoctypes.CRE.value:
         links = contents.pop('links')
         cre = defs.CRE(**contents)
         for link in links:
-            # TODO: recurse and register potential links of links
-            l, _ = parse_cre_file_link(link)
-            cre.add_link(l)
-        register_cre(cre, result=result)
+            doclink = parse_file(contents=link.get('document'), scollection=scollection)
+            if doclink:
+                cre.add_link(defs.Link(document=doclink, ltype=link.get('type'), tags=link.get('tags')))
+        register_cre(cre, result=scollection)
         return cre
     elif contents.get('doctype') == defs.Credoctypes.Standard.value:
         links = contents.get('links')
-        standard = defs.Standard(contents)
+        standard = defs.Standard(**contents)
         for link in links:
-            # TODO: recurse and register potential links of links
-            l, _ = parse_cre_file_link(link)
-            standard.add_link(l)
-        register_standard(standard, result=result)
+            doclink = parse_file(contents=link.get('document'), scollection=scollection)
+            if doclink:
+                standard.add_link(defs.Link(document=doclink, ltype=link.get('type'), tags=link.get('tags')))
+        register_standard(standard=standard, collection=scollection)
         return standard
 
 
@@ -110,19 +104,18 @@ def parse_standards_from_spreadsheeet(cre_file: list, result: db.Standard_collec
     for cre_name, cre in cres.items():
         register_cre(cre, result)
 
-
     # groups
     for name, doc in hi_lvl_CREs.items():
         dbgroup = result.add_cre(doc)
 
-        for document in doc.links:
-            if type(document).__name__ == defs.CRE.__name__:
-                dbcre = register_cre(document, result)
-                result.add_internal_link(group=dbgroup, cre=dbcre)
+        for link in doc.links:
+            if type(link.document).__name__ == defs.CRE.__name__:
+                dbcre = register_cre(link.document, result)
+                result.add_internal_link(group=dbgroup, cre=dbcre,type=link.ltype)
 
-            elif type(document).__name__ == defs.Standard.__name__:
-                dbstandard = register_standard(document, result)
-                result.add_link(cre=dbgroup, standard=dbstandard)
+            elif type(link.document).__name__ == defs.Standard.__name__:
+                dbstandard = register_standard(link.document, result)
+                result.add_link(cre=dbgroup, standard=dbstandard,type=link.ltype)
 
 
 # # this is a library function to be used by other scripts written to specifically parse external mappings

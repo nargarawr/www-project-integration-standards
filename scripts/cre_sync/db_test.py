@@ -38,14 +38,12 @@ class TestDB(unittest.TestCase):
         # ensure proper export
 
         loc = tempfile.mkdtemp()
-        result = [defs.CRE(doctype=defs.Credoctypes.CRE, id='', description='Groupdesc',
-                                name='GroupName', links=[ defs.CRE(doctype=defs.Credoctypes.CRE, id='', description='CREdesc',
-                                             name='CREname', links=[], tags=[], metadata=defs.Metadata(labels=[]))
-                                ],
-                                tags=[], metadata=defs.Metadata(labels=[])),
+        result = [defs.CRE(doctype=defs.Credoctypes.CRE, description='Groupdesc',
+                           name='GroupName', links=[defs.Link(document=defs.CRE(doctype=defs.Credoctypes.CRE, description='CREdesc',
+                                                                                name='CREname'))],),
                   defs.CRE(doctype=defs.Credoctypes.CRE, id='', description='CREdesc', name='CREname',
                            links=[
-                               defs.Standard(doctype=defs.Credoctypes.Standard, id='', description='', name='BarStand', links=[], tags=[], metadata=defs.Metadata(labels=[]), section='FooStand', subsection='4.5.6', hyperlink='https://example.com')])
+                               defs.Link(document=defs.Standard(doctype=defs.Credoctypes.Standard, name='BarStand', section='FooStand', subsection='4.5.6', hyperlink='https://example.com'))])
                   ]
         self.collection.export(loc)
 
@@ -73,20 +71,20 @@ class TestDB(unittest.TestCase):
 
     def test_CREfromDB(self):
         c = defs.CRE(id="cid", doctype=defs.Credoctypes.CRE,
-                     description='CREdesc', name='CREname', links=[])
+                     description='CREdesc', name='CREname')
         self.assertEqual(c, db.CREfromDB(
             db.CRE(external_id="cid", description='CREdesc', name='CREname')))
 
     def test_add_group(self):
-        original_desc = uuid.uuid4()
-        name = uuid.uuid4()
-        gname = uuid.uuid4()
+        original_desc = str(uuid.uuid4())
+        name = str(uuid.uuid4())
+        gname = str(uuid.uuid4())
 
         c = defs.CRE(id="cid", doctype=defs.Credoctypes.CRE,
-                     description=original_desc, name=name, links=[])
+                     description=original_desc, name=name)
 
         g = defs.CRE(id="cid", doctype=defs.Credoctypes.CRE,
-                          description=original_desc, name=gname, links=[])
+                     description=original_desc, name=gname)
 
         self.assertIsNone(self.collection.session.query(
             db.CRE).filter(db.CRE.name == c.name).first())
@@ -123,8 +121,8 @@ class TestDB(unittest.TestCase):
         self.assertEqual(newCRE.description, str(original_desc))
 
     def test_add_standard(self):
-        original_section = uuid.uuid4()
-        name = uuid.uuid4()
+        original_section = str(uuid.uuid4())
+        name = str(uuid.uuid4())
 
         s = defs.Standard(id="sid", doctype=defs.Credoctypes.Standard,
                           section=original_section, subsection=original_section, name=name)

@@ -4,19 +4,61 @@ from enum import Enum
 import json
 # used for serialising and deserialising yaml CRE documents
 
+
 class Credoctypes(Enum):
     CRE = "CRE"
     Standard = "Standard"
 
+
+class LinkTypes(Enum):
+    Same = "SAM"
+
+    @classmethod
+    def from_str(cls, name):
+        if name == "SAM":
+            return LinkTypes.Same
+        raise ValueError('{} is not a valid link type'.format(name))
+
+
 @dataclass
 class Metadata():
-    labels: list
+    labels: {}
 
-    def __init__(self, labels=[]):
+    def __init__(self, labels={}):
         self.labels = labels
 
     def todict(self):
-        return json.dump(self.labels)
+        return self.labels
+
+
+@dataclass
+class Link():
+    ltype: LinkTypes
+    tags: list
+    document = None
+
+    def __init__(self, ltype=LinkTypes.Same, tags=[], document=None):
+        if document is None:
+            raise_MandatoryFieldException('Links need to link to a Document')
+        self.document = document
+        if type(ltype) == str:
+            self.ltype = LinkTypes.from_str(ltype)
+        else:
+            self.ltype = ltype
+        self.tags = tags
+
+    def __eq__(self, other):
+        return self.ltype == other.ltype and \
+            self.tags == other.tags and \
+            self.document == other.document
+
+    def todict(self):
+        res = {'type': self.ltype.value}
+        if self.document:
+            res['document'] = self.document.todict()
+        if len(self.tags):
+            res['tags'] = self.tags
+        return res
 
 
 @dataclass
@@ -40,28 +82,32 @@ class Document():
 
     def todict(self):
         result = {
-                  'doctype': self.doctype.value,
-                  'id': self.id,
-                  'description': self.description,
-                  'name': self.name,
-                  'links': [],
-                  'tags': [],
-                  'metadata': {}
-                  }
+            'doctype': self.doctype.value,
+            'name': self.name,
+        }
+        if self.description:
+            result['description'] = self.description
+        if self.id:
+            result['id'] = self.id
         if self.links:
+            result['links'] = []
             for link in self.links:
                 result['links'].append(link.todict())
         if self.tags:
-            for tag in self.tags:
-                result['tags'].append(str(tag))
+            result['tags'] = self.tags
+        if self.metadata:
+            result['metadata'] = self.metadata.todict()
         return result
 
-    def add_link(self, document):
+    def add_link(self, link: Link):
         if not self.links:
             self.links = []
-        self.links.append(document)
+        if type(link).__name__ != Link.__name__:
+            raise ValueError("add_link only takes Link() types")
 
-    def __init__(self, name, doctype=None, id="", description="", links=[], tags=[], metadata: Metadata = Metadata()):
+        self.links.append(link)
+
+    def __init__(self, name, doctype=None, id="", description="", links=[], tags=[], metadata: Metadata = None):
         self.description = str(description)
         self.name = str(name) or raise_MandatoryFieldException(
             "Document name not defined for document of doctype %s" % doctype)
@@ -99,17 +145,13 @@ class Standard(Document):
             self.subsection == other.subsection and \
             self.hyperlink == other.hyperlink
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, section=None, subsection=None, hyperlink=None, *args, **kwargs):
         self.doctype = Credoctypes.Standard
-        self.section = str(kwargs.pop('section'))
-        if 'subsection' in kwargs.keys():
-            self.subsection = str(kwargs.pop('subsection'))
-        else:
-            self.subsection = None
-        if 'hyperlink' in kwargs.keys():
-            self.hyperlink = str(kwargs.pop('hyperlink'))
-        else:
-            self.hyperlink = None
+        if section is None or section=='':
+            raise MandatoryFieldException("you can't register an entire standard at once, it needs to have sections")
+        self.section = section
+        self.subsection = subsection
+        self.hyperlink = hyperlink
         super().__init__(*args, **kwargs)
 
 

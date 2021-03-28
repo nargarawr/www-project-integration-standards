@@ -38,8 +38,9 @@ def parse_uknown_key_val_spreadsheet(link_file: list) -> dict:
 
         for key, value in mapping.items():
             if not is_empty(value) and not is_empty(key):
-                linked_standard = defs.Standard(name=key, section=mapping.get(key))
-                primary_standard.add_link(linked_standard)
+                linked_standard = defs.Standard(
+                    name=key, section=mapping.get(key))
+                primary_standard.add_link(defs.Link(document=linked_standard))
         if primary_standard:
             standards[primary_standard.name+"-" +
                       primary_standard.section] = primary_standard
@@ -57,9 +58,9 @@ def parse_v1_standards(cre_file: list) -> dict:
         id = cre_mapping.pop('CORE-CRE-ID').strip()
         if name in cres.keys():
             cre = cres[name]
-            # if name is not None and id != cre.id:
-            #     raise EnvironmentError(
-            #         "same cre name %s different id? %s %s" % (cre.name, cre.id, id))
+            if name is not None and id != cre.id:
+                raise EnvironmentError(
+                    "same cre name %s different id? %s %s" % (cre.name, cre.id, id))
         else:
             cre = defs.CRE(description=cre_mapping.pop("Description"),
                            name=name,
@@ -73,49 +74,52 @@ def parse_v1_standards(cre_file: list) -> dict:
             asvs_tags.append("L3")
 
         if not is_empty(cre_mapping.get("ID-taxonomy-lookup-from-ASVS-mapping")):
-            cre.add_link(defs.Standard(name='ASVS',
-                                       section=cre_mapping.pop('ASVS Item'),
-                                       subsection=cre_mapping.pop(
-                                           "ID-taxonomy-lookup-from-ASVS-mapping"),
-                                       tags=asvs_tags))
+            cre.add_link(defs.Link(document=defs.Standard(name='ASVS',
+                                                          section=cre_mapping.pop(
+                                                              'ASVS Item'),
+                                                          subsection=cre_mapping.pop(
+                                                              "ID-taxonomy-lookup-from-ASVS-mapping"),
+                                                          tags=asvs_tags)))
         if not is_empty(cre_mapping.get('CWE')):
-            cre.add_link(defs.Standard(name='CWE',
-                                       section=cre_mapping.pop('CWE')))
+            cre.add_link(defs.Link(document=defs.Standard(
+                name='CWE', section=cre_mapping.pop('CWE'))))
 
         if not is_empty(cre_mapping.get('Cheat Sheet')) and not is_empty(cre_mapping.get('cheat_sheets')):
-            cre.add_link(defs.Standard(name='Cheatsheet',
-                                       section=cre_mapping.pop('Cheat Sheet'),
-                                       hyperlink=cre_mapping.pop(
-                                           'cheat_sheets')))
+            cre.add_link(defs.Link(document=defs.Standard(name='Cheatsheet',
+                                                          section=cre_mapping.pop(
+                                                              'Cheat Sheet'),
+                                                          hyperlink=cre_mapping.pop(
+                                                              'cheat_sheets'))))
 
         nist_items = cre_mapping.pop('NIST 800-53 - IS RELATED TO')
         if not is_empty(nist_items):
             if '\n' in nist_items:
                 for element in nist_items.split('\n'):
-                    cre.add_link(defs.Standard(name='NIST 800-53',
-                                               section=element,
-                                               tags="is related to"))
+                    if element:
+                        cre.add_link(defs.Link(document=defs.Standard(name='NIST 800-53',
+                                                                      section=element,
+                                                                      tags="is related to")))
             else:
-                cre.add_link(defs.Standard(name='NIST 800-53',
-                                           section=nist_items,
-                                           tags="is related to"))
+                cre.add_link(defs.Link(document=defs.Standard(name='NIST 800-53',
+                                                              section=nist_items,
+                                                              tags="is related to")))
         if not is_empty(cre_mapping.get('NIST 800-63')):
-            cre.add_link(defs.Standard(name='NIST 800-63',
-                                       section=cre_mapping.pop('NIST 800-63')))
+            cre.add_link(defs.Link(document=defs.Standard(name='NIST 800-63',
+                                                          section=cre_mapping.pop('NIST 800-63'))))
 
         if not is_empty(cre_mapping.get('OPC')):
-            cre.add_link(defs.Standard(name='OPC',
-                                       section=cre_mapping.pop('OPC')))
+            cre.add_link(defs.Link(document=defs.Standard(name='OPC',
+                                                          section=cre_mapping.pop('OPC'))))
 
         if not is_empty(cre_mapping.get('Top10 2017')):
-            cre.add_link(defs.Standard(name='TOP10',
-                                       section=cre_mapping.pop('Top10 2017')))
+            cre.add_link(defs.Link(document=defs.Standard(name='TOP10',
+                                                          section=cre_mapping.pop('Top10 2017'))))
         if not is_empty(cre_mapping.get('WSTG')):
-            cre.add_link(defs.Standard(name='WSTG',
-                                       section=cre_mapping.pop('WSTG')))
+            cre.add_link(defs.Link(document=defs.Standard(name='WSTG',
+                                                          section=cre_mapping.pop('WSTG'))))
         if not is_empty(cre_mapping.get('SIG ISO 25010')):
-            cre.add_link(defs.Standard(name='SIG ISO 25010',
-                                       section=cre_mapping.pop('SIG ISO 25010')))
+            cre.add_link(defs.Link(document=defs.Standard(name='SIG ISO 25010',
+                                                          section=cre_mapping.pop('SIG ISO 25010'))))
         cres[cre.name] = cre
         # group mapping
         is_in_group = False
@@ -124,15 +128,17 @@ def parse_v1_standards(cre_file: list) -> dict:
             gname = cre_mapping.pop("CRE Group %s" % i)
             gid = cre_mapping.pop("CRE Group %s Lookup" % i)
             if not is_empty(gname):
+
                 if gname not in groups.keys():
                     group = defs.CRE(name=gname, id=gid)
+                elif groups.get(name) and id != groups.get(name).id:
+                    raise Exception("Group %s has two different ids %s and %s" % (
+                        name, id, groups.get('name')))
                 else:
                     group = groups.get(gname)
-                # elif id != groups.get(name).id:
-                #     raise Exception("Group %s has two different ids %s and %s" % (
-                #         name, id, groups.get('name')))
+
                 is_in_group = True
-                group.add_link(cre)
+                group.add_link(defs.Link(document=cre))
                 groups[group.name] = group
         if not is_in_group:
             groupless_cres[cre.name] = cre
@@ -162,19 +168,19 @@ def parse_v0_standards(cre_file: list) -> dict:
         # parse ASVS, the v0 docs have a human-friendly but non-standard way of doing asvs
         if cre_mapping.get("ID-taxonomy-lookup-from-ASVS-mapping"):
             linked_standard = defs.Standard(name="ASVS",
-                section=cre_mapping.pop(
-                    "ID-taxonomy-lookup-from-ASVS-mapping"),
-                subsection=cre_mapping.pop("Item")
-            )
+                                            section=cre_mapping.pop(
+                                                "ID-taxonomy-lookup-from-ASVS-mapping"),
+                                            subsection=cre_mapping.pop("Item")
+                                            )
 
-            cre.add_link(linked_standard)
+            cre.add_link(defs.Link(document=linked_standard))
 
         for key, value in cre_mapping.items():
             if not is_empty(value) and not is_empty(key):
                 linked_standard = defs.Standard(name=key,
-                    section=value
-                )
-                cre.add_link(linked_standard)
+                                                section=value
+                                                )
+                cre.add_link(defs.Link(document=linked_standard))
         if cre:
             cres[cre.name] = cre
     return cres

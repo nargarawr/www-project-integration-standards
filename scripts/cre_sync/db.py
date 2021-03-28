@@ -46,12 +46,14 @@ class CRE(Base):
 class InternalLinks(Base):
     # model cre-groups linking cres
     __tablename__ = 'crelinks'
+    type = Column(String, default='SAM')
     group = Column(Integer, ForeignKey('cre.id'), primary_key=True)
     cre = Column(Integer, ForeignKey('cre.id'), primary_key=True)
 
 
 class Links(Base):
     __tablename__ = 'links'
+    type = Column(String, default='SAM')
     cre = Column(Integer, ForeignKey('cre.id'), primary_key=True)
     standard = Column(Integer, ForeignKey('standard.id'), primary_key=True)
 
@@ -84,9 +86,8 @@ class Standard_collection:
         all_links = self.session.query(Links).all()
         for link in all_links:
             cre = self.session.query(CRE).filter(CRE.id == link.cre).first()
-            standard = self.session.query(Standard).filter(
-                Standard.id == link.standard).first()
-            external_links.append((cre, standard))
+            standard = self.session.query(Standard).filter(Standard.id == link.standard).first()
+            external_links.append((cre, standard, link.type))
         return external_links
 
     def __get_internal_links(self):
@@ -95,7 +96,7 @@ class Standard_collection:
         for il in all_internal_links:
             group = self.session.query(CRE).filter(CRE.id == il.group).first()
             cre = self.session.query(CRE).filter(CRE.id == il.cre).first()
-            internal_links.append((group, cre))
+            internal_links.append((group, cre, il.type))
         return internal_links
 
     def find_cres_of_cre(self, cre: CRE):
@@ -138,19 +139,20 @@ class Standard_collection:
         for link in self.__get_internal_links():
             group = link[0]
             cre = link[1]
+            type = link[2]
             grp = None
             if group.name in docs.keys():
                 grp = docs[group.name]
             else:
                 grp = CREfromDB(group)
-            grp.add_link(CREfromDB(cre))
+            grp.add_link(cre_defs.Link(ltype=type, document=CREfromDB(cre)))
             docs[group.name] = grp
 
         # external links are CRE -> standard
         for link in self.__get_external_links():
-
             internal_doc = link[0]
             standard = link[1]
+            type = link[2]
             cr = None
             grp = None
             if internal_doc.name in docs.keys():
@@ -158,7 +160,7 @@ class Standard_collection:
             else:
                 cr = CREfromDB(internal_doc)
             if len(standard.name) != 0:
-                cr.add_link(StandardFromDB(standard))
+                cr.add_link(cre_defs.Link(ltype=type, document=StandardFromDB(standard)))
             docs[cr.name] = cr
         for _, doc in docs.items():
             title = doc.name.replace("/", "-")+'.yaml'
@@ -210,12 +212,17 @@ class Standard_collection:
         self.session.commit()
         return entry
 
-    def add_internal_link(self, group: CRE, cre: CRE):
+    def add_internal_link(self, group: CRE, cre: CRE, type: cre_defs.LinkTypes):
         if cre.id == None:
-            cre = self.session.query(CRE).filter(and_(CRE.name == cre.name, CRE.external_id == cre.external_id)).first()
+            if cre.external_id == None:
+                cre = self.session.query(CRE).filter(
+                    and_(CRE.name == cre.name, CRE.description == cre.description)).first()
+            else:
+                cre = self.session.query(CRE).filter(
+                    and_(CRE.name == cre.name, CRE.external_id == cre.external_id)).first()
         if group.id == None:
             if group.external_id == None:
-                group = self.session.query(CRE).filter(and_(CRE.name == group.name)).first()
+                group = self.session.query(CRE).filter(and_(CRE.name == group.name, CRE.description==group.description)).first()
             else:
                 group = self.session.query(CRE).filter(and_(CRE.name == group.name,
                                                             CRE.external_id == group.external_id)).first()
@@ -223,16 +230,19 @@ class Standard_collection:
             logger.fatal(
                 "Tried to insert internal mapping with element that doesn't exist in db, this looks like a bug")
             return
-        if self.session.query(InternalLinks).filter(and_(InternalLinks.cre == cre.id, InternalLinks.group == group.id)).count() != 0:
-            logger.debug("knew of internal link %s == %s ,skipping" %
+        entry = self.session.query(InternalLinks).filter(and_(InternalLinks.cre == cre.id, InternalLinks.group == group.id)).first()
+        if  entry != None:
+            logger.debug("knew of internal link %s == %s ,updating" %
                          (cre.name, group.name))
+            entry.type = type.value
+            self.session.commit()
             return
         else:
             logger.debug("did not know of internal link %s:%s == %s:%s ,adding" % (
                 group.external_id, group.name, cre.external_id, cre.name))
-            self.session.add(InternalLinks(cre=cre.id, group=group.id))
+            self.session.add(InternalLinks(type=type.value, cre=cre.id, group=group.id))
 
-    def add_link(self, cre: CRE, standard: Standard):
+    def add_link(self, cre: CRE, standard: Standard, type: cre_defs.LinkTypes):
         if cre.id == None:
             cre = self.session.query(CRE).filter(
                 and_(CRE.name == cre.name)).first()
@@ -242,16 +252,19 @@ class Standard_collection:
                 Standard.section == standard.section,
                 Standard.subsection == standard.subsection)).first()
 
-        cache_entry = self.session.query(Links).filter(
-            and_(Links.cre == cre.id, Links.standard == standard.id)).count()
-        if cache_entry != 0:
+        entry = self.session.query(Links).filter(
+            and_(Links.cre == cre.id, Links.standard == standard.id)).first()
+        if entry:
             logger.debug("knew of link %s:%s==%s ,updating" % (
                 standard.name, standard.section, cre.name))
+            entry.type = type.value
+            self.session.commit()
             return
         else:
             logger.debug("did not know of link %s)%s:%s==%s)%s ,adding" % (
                 standard.id, standard.name, standard.section, cre.id, cre.name))
-            self.session.add(Links(cre=cre.id, standard=standard.id))
+            self.session.add(
+                Links(type=type.value, cre=cre.id, standard=standard.id))
         self.session.commit()
 
 
