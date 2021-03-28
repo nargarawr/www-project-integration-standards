@@ -118,6 +118,7 @@ class Document():
         if not doctype and not self.doctype:
             raise_MandatoryFieldException("You need to set doctype")
 
+
 @dataclass
 class CRE(Document):
     def __init__(self, *args, **kwargs):
