@@ -7,7 +7,7 @@ from pprint import pprint
 
 def is_empty(value: str):
     value = str(value)
-    return value is None or value == 'None' or value == "" or "N/A" in value.upper()
+    return value is None or value == 'None' or value == "" or "N/A" in value.upper() or value == 'nan'
 
 
 def parse_review_standards(cre_file: list) -> dict:
@@ -58,9 +58,9 @@ def parse_v1_standards(cre_file: list) -> dict:
         id = cre_mapping.pop('CORE-CRE-ID').strip()
         if name in cres.keys():
             cre = cres[name]
-            if name is not None and id != cre.id:
-                raise EnvironmentError(
-                    "same cre name %s different id? %s %s" % (cre.name, cre.id, id))
+            # if name is not None and id != cre.id:
+            #     raise EnvironmentError(
+            #         "same cre name %s different id? %s %s" % (cre.name, cre.id, id))
         else:
             cre = defs.CRE(description=cre_mapping.pop("Description"),
                            name=name,
@@ -131,7 +131,7 @@ def parse_v1_standards(cre_file: list) -> dict:
 
                 if gname not in groups.keys():
                     group = defs.CRE(name=gname, id=gid)
-                elif groups.get(name) and id != groups.get(name).id:
+                elif groups.get(name) and id != groups.get(name).id and not is_empty(groups.get('name')):
                     raise Exception("Group %s has two different ids %s and %s" % (
                         name, id, groups.get('name')))
                 else:

@@ -148,8 +148,9 @@ class Standard(Document):
 
     def __init__(self, section=None, subsection=None, hyperlink=None, *args, **kwargs):
         self.doctype = Credoctypes.Standard
-        if section is None or section=='':
-            raise MandatoryFieldException("you can't register an entire standard at once, it needs to have sections")
+        if section is None or section == '':
+            raise MandatoryFieldException("%s:%s is an invalid standard entry,"
+                                          "you can't register an entire standard at once, it needs to have sections" % (kwargs.get('name'),section))
         self.section = section
         self.subsection = subsection
         self.hyperlink = hyperlink
