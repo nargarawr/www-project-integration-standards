@@ -33,11 +33,12 @@ TODO:
 add more edge cases in spreadsheet
 
 add tests
-    defs --- Done
-    db -- Done
-    parsers -- Done   --- needs edge cases 
+   ~ defs --- Done
+   ~ db -- Done
+   ~ parsers -- Done   --- needs edge cases
     mapping_add -- Done for important methods, -- argparse logic only remains
-    spreadsheet_utils
+   ~ spreadsheet_utils ~ -- Done
+   
 
 ~ add parse from export format ~ Done
 ~ add parse from export format where the root doc is a standard and it links to cres or groups ~ Done
@@ -45,13 +46,16 @@ add tests
 ~ merge spreadsheet to yaml and mapping add, they do the same thing ~ Done
 ~ add the ability for standards to link other standards, then you can handle assigning CREs yourself ~ Done
 ~ support importing yaml export files of more than 1 levels deep ~ Done
+~ add export for Standards unmapped to CREs as lone standards (useful for visibility) ~ Done
+~ add sparse_spreadsheet_export functionality one level of mapping per row, either everything that maps to standard X or everything that maps to CRE x ~ Done
 
 make library out of file format and spreadsheet template parsers
-add sparse_spreadsheet_export functionality one level of mapping per row, either everything that maps to standard X or everything that maps to CRE x
 add the ability for a mapping document to have multiple yamls in it
-add export for Standards unmapped to CREs as lone standards (useful for visibility)
 add conditional export (select the standards you want exported and if you want to see the CRE ids or not, get spreadsheet with mappings)
 write docs and record usage gif
 add db integration of tags and metadata
 add dockerfile???
 make into flask rest api
+write frontend
+make frontend show Graph
+

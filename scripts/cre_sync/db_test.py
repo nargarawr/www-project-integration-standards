@@ -20,9 +20,13 @@ class TestDB(unittest.TestCase):
         dbstandard = db.Standard(
             subsection="4.5.6", section="FooStand", name="BarStand", link="https://example.com")
 
+        unlinked = db.Standard(
+            subsection="4.5.6", section="Unlinked", name="Unlinked", link="https://example.com")
+
         collection.session.add(dbcre)
         collection.session.add(dbgroup)
         collection.session.add(dbstandard)
+        collection.session.add(unlinked)
         collection.session.commit()
 
         externalLink = db.Links(cre=dbcre.id, standard=dbstandard.id)
@@ -32,18 +36,33 @@ class TestDB(unittest.TestCase):
         collection.session.commit()
         self.collection = collection
 
-    def test_export(self):
-        # add an internal link, an external link a cre and a standard
-        # to simulate group -> cre -> standard connection
-        # ensure proper export
+    def test_get_standards_names(self):
+        result = self.collection.get_standards_names()
+        expected = ['BarStand', 'Unlinked']
+        self.assertEqual(expected, result)
 
+    def test_get_max_internal_connections(self):
+        result = self.collection.get_max_internal_connections()
+        self.assertEqual(result, 1)
+
+    def test_export(self):
+        """ 
+
+        Given: 
+            A CRE "CREname" that links to a CRE "GroupName" and a Standard "BarStand"
+        Expect: 
+            2 documents on disk, one for "CREname"
+            with a link to "BarStand" and "GroupName" and one for "GroupName" with a link to "CREName"
+        """
         loc = tempfile.mkdtemp()
-        result = [defs.CRE(doctype=defs.Credoctypes.CRE, description='Groupdesc',
-                           name='GroupName', links=[defs.Link(document=defs.CRE(doctype=defs.Credoctypes.CRE, description='CREdesc',
-                                                                                name='CREname'))],),
-                  defs.CRE(doctype=defs.Credoctypes.CRE, id='', description='CREdesc', name='CREname',
+        result = [defs.CRE(description='Groupdesc', name='GroupName',
+                    links=[defs.Link(document=defs.CRE(description='CREdesc', name='CREname'))]),
+                  defs.CRE(id='', description='CREdesc', name='CREname',
                            links=[
-                               defs.Link(document=defs.Standard(doctype=defs.Credoctypes.Standard, name='BarStand', section='FooStand', subsection='4.5.6', hyperlink='https://example.com'))])
+                               defs.Link(document=defs.CRE(description='Groupdesc', name='GroupName')),
+                               defs.Link(document=defs.Standard(name='BarStand', section='FooStand', subsection='4.5.6', hyperlink='https://example.com'))]),
+                  defs.Standard(subsection="4.5.6", section="Unlinked",
+                                name="Unlinked", hyperlink="https://example.com")
                   ]
         self.collection.export(loc)
 

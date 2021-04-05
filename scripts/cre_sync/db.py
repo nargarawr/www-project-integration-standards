@@ -1,6 +1,7 @@
 import cre_defs
-from sqlalchemy import UniqueConstraint, ForeignKey, Column, Integer, String, Boolean, create_engine, orm, and_
+from sqlalchemy import UniqueConstraint, ForeignKey, Column, Integer, String, Boolean, create_engine, orm, and_, func
 from sqlalchemy.ext.declarative import declarative_base
+import sqlalchemy.sql.operators
 from sqlalchemy.orm import sessionmaker, relationship
 from enum import Enum
 from collections import namedtuple
@@ -101,8 +102,35 @@ class Standard_collection:
             internal_links.append((group, cre, il.type))
         return internal_links
 
+    def __get_unlinked_standards(self):
+        standards = []
+        linked_standards = self.session.query(Standard.id).join(Links).filter(Standard.id==Links.standard)
+        return self.session.query(Standard).filter(Standard.id.notin_(linked_standards)).all()
+
+    def get_standards_names(self):
+        q = self.session.query(Standard.name).distinct().all() # this returns a tuple of (str,nothing)
+        res = [i[0] for i in q]
+        return res
+
+    def get_max_internal_connections(self):
+        count = {}
+        q = self.session.query(InternalLinks).all() # TODO: (spyros) this should be made into a count(*) query
+        for il in q:
+            if il.group in count:
+                count[il.group] += 1
+            else:
+                count[il.group] = 1
+            if il.cre in count:
+                count[il.cre] += 1
+            else: 
+                count[il.cre] = 1
+        if count:
+            return max(count.values())
+        else:
+            return 0
+
     def find_cres_of_cre(self, cre: CRE):
-        """ returns the higher level CREs of the cre or none if no higher level cres link to it0000002"""
+        """ returns the higher level CREs of the cre or none if no higher level cres link to it"""
         cre_id = self.session.query(CRE).filter(
             CRE.name == cre.name).first().id
         links = self.session  .query(InternalLinks).filter(
@@ -132,6 +160,7 @@ class Standard_collection:
             return result
 
     def export(self, dir):
+        
         """ Exports the database to a CRE file collection on disk"""
         docs = {}
         cre, standard = None, None
@@ -143,12 +172,22 @@ class Standard_collection:
             cre = link[1]
             type = link[2]
             grp = None
+            # when cres link to each other it's a two way link
+            # so handle cre1(group) -> cre2 link first
             if group.name in docs.keys():
                 grp = docs[group.name]
             else:
                 grp = CREfromDB(group)
             grp.add_link(cre_defs.Link(ltype=type, document=CREfromDB(cre)))
             docs[group.name] = grp
+
+            # then handle cre2 -> cre1 link 
+            if cre.name in docs.keys():
+                c = docs[cre.name]
+            else:
+                c = CREfromDB(cre)
+            docs[cre.name] = c
+            c.add_link(cre_defs.Link(ltype=type,document=CREfromDB(group))) # this cannot be grp, grp already has a link to cre2
 
         # external links are CRE -> standard
         for link in self.__get_external_links():
@@ -165,6 +204,12 @@ class Standard_collection:
                 cr.add_link(cre_defs.Link(
                     ltype=type, document=StandardFromDB(standard)))
             docs[cr.name] = cr
+
+        # unlinked standards last
+        for ustandard in self.__get_unlinked_standards():
+            ustand = StandardFromDB(ustandard)
+            docs["%s-%s:%s"%(ustand.name,ustand.section,ustand.subsection)] = ustand
+
         for _, doc in docs.items():
             title = doc.name.replace("/", "-")+'.yaml'
             file_utils.writeToDisk(file_title=title,

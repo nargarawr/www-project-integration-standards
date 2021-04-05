@@ -9,7 +9,7 @@ import parsers
 import cre_defs as defs
 from collections import namedtuple
 from pprint import pprint
-from spreadsheet_utils import readSpreadsheet, createSpreadsheet
+import spreadsheet_utils as sheet_utils
 
 logging.basicConfig()
 logger = logging.getLogger(__name__)
@@ -190,19 +190,18 @@ def review_from_spreadsheet(cache: str, spreadsheet_url: str, share_with: str):
         export db to tmp dir
         create new spreadsheet of the new CRE landscape for review 
     """
-    # last one is TODO:
     loc, cache = prepare_for_review(cache)
     database = db.Standard_collection(cache=True, cache_file=cache)
-    spreadsheet = readSpreadsheet(url=spreadsheet_url,
+    spreadsheet = sheet_utils.readSpreadsheet(url=spreadsheet_url,
                                   cres_loc=loc, alias="new spreadsheet", validate=False)
     for worksheet, contents in spreadsheet.items():
         parse_standards_from_spreadsheeet(contents, database)
     docs = database.export(loc)
-    spreadsheet = []
-    spreadsheet.extend(docs)
 
-    # create_spreadsheet(spreadsheet, title='cre_review', share_with=args.email)
+
+    sheet_url = create_spreadsheet(collection=database, exported_documents=docs, title='cre_review', share_with=[share_with])
     logger.info("Stored temporary files and database in %s if you want to use them next time, set cache to the location of the database in that dir" % loc)
+    logger.info("A spreadsheet view is at %s"%sheet_url)
 
 
 def review_from_disk(cache: str, cre_file_loc: str, share_with: str):
@@ -212,7 +211,6 @@ def review_from_disk(cache: str, cre_file_loc: str, share_with: str):
         export db to tmp dir
         create new spreadsheet of the new CRE landscape for review 
     """
-   # last one is TODO:
     loc, cache = prepare_for_review(cache)
     database = db.Standard_collection(cache=True, cache_file=cache)
     for file in get_standards_files_from_disk(cre_file_loc):
@@ -220,11 +218,9 @@ def review_from_disk(cache: str, cre_file_loc: str, share_with: str):
             parse_file(yaml.safe_load(standard), database)
 
     docs = database.export(loc)
-    spreadsheet = []
-    spreadsheet.extend(docs)
-    # create_spreadsheet(spreadsheet, title='cre_review', share_with=args.email)
+    sheet_url = create_spreadsheet(collection=database, exported_documents=docs, title='cre_review', share_with=[share_with])
     logger.info("Stored temporary files and database in %s if you want to use them next time, set cache to the location of the database in that dir" % loc)
-
+    logger.info("A spreadsheet view is at %s"%sheet_url)
 
 def print_graph():
     """export db to single json object, pass to visualise.html so it can be shown in browser"""
@@ -269,10 +265,11 @@ def main():
         print_graph()
 
 
-def create_spreadsheet(spreadsheet: list, title: str, share_with: str):
+def create_spreadsheet(collection:db.Standard_collection,exported_documents: list, title: str, share_with: list):
     """ Reads cre docs exported from a standards_collection.export()
         dumps each doc into a workbook"""
-    createSpreadsheet(spreadsheet, title, share_with)
+    flat_dicts = sheet_utils.prepare_spreadsheet(collection=collection,docs=exported_documents)
+    return sheet_utils.write_spreadsheet(title=title,docs=flat_dicts, emails=share_with)
 
 
 def prepare_for_review(cache):
