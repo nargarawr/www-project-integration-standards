@@ -47,7 +47,6 @@ class TestDB(unittest.TestCase):
 
     def test_export(self):
         """ 
-
         Given: 
             A CRE "CREname" that links to a CRE "GroupName" and a Standard "BarStand"
         Expect: 
@@ -56,10 +55,11 @@ class TestDB(unittest.TestCase):
         """
         loc = tempfile.mkdtemp()
         result = [defs.CRE(description='Groupdesc', name='GroupName',
-                    links=[defs.Link(document=defs.CRE(description='CREdesc', name='CREname'))]),
+                           links=[defs.Link(document=defs.CRE(description='CREdesc', name='CREname'))]),
                   defs.CRE(id='', description='CREdesc', name='CREname',
                            links=[
-                               defs.Link(document=defs.CRE(description='Groupdesc', name='GroupName')),
+                               defs.Link(document=defs.CRE(
+                                   description='Groupdesc', name='GroupName')),
                                defs.Link(document=defs.Standard(name='BarStand', section='FooStand', subsection='4.5.6', hyperlink='https://example.com'))]),
                   defs.Standard(subsection="4.5.6", section="Unlinked",
                                 name="Unlinked", hyperlink="https://example.com")
@@ -238,6 +238,60 @@ class TestDB(unittest.TestCase):
         # no links = None
         cres = self.collection.find_cres_of_standard(lone_standard)
         self.assertIsNone(cres)
+
+    def test_get_CRE(self):
+        """ Given: a cre 'C1' that links to cres both as a group and a cre and other standards 
+        return the CRE in Document format"""
+        collection = db.Standard_collection(cache_file="")
+        dbc1 = db.CRE(external_id='123', description="CD1", name="C1")
+        dbc2 = db.CRE(description="CD2", name="C2")
+        dbc3 = db.CRE(description="CD3", name="C3")
+        dbs1 = db.Standard(name="S2", section='1', subsection='2', link='3')
+
+        collection.session.add(dbc1)
+        collection.session.add(dbc2)
+        collection.session.add(dbc3)
+        collection.session.add(dbs1)
+        collection.session.commit()
+        collection.session.add(db.InternalLinks(group=dbc1.id, cre=dbc2.id))
+        collection.session.add(db.InternalLinks(group=dbc3.id, cre=dbc1.id))
+        collection.session.add(db.Links(cre=dbc1.id, standard=dbs1.id))
+        collection.session.commit()
+
+        expected = defs.CRE(id='123', description='CD1', name='C1', links=[defs.Link(document=defs.Standard(name='S2', section='1', subsection='2', hyperlink='3')),
+                            defs.Link(document=defs.CRE(description='CD2', name='C2')), defs.Link(document=defs.CRE(description='CD3', name='C3'))])
+
+        res = collection.get_CRE(name='C1')
+        self.assertEqual(expected, res)
+
+    def test_get_standard(self):
+        """ Given: a Standard 'S1' that links to cres
+        return the Standard in Document format"""
+        collection = db.Standard_collection(cache_file="")
+        dbc1 = db.CRE(external_id='123', description="CD1", name="C1")
+        dbc2 = db.CRE(description="CD2", name="C2")
+        dbc3 = db.CRE(description="CD3", name="C3")
+        dbs1 = db.Standard(name="S1", section='1', subsection='2', link='3')
+
+        collection.session.add(dbc1)
+        collection.session.add(dbc2)
+        collection.session.add(dbc3)
+        collection.session.add(dbs1)
+        collection.session.commit()
+        collection.session.add(db.Links(cre=dbc1.id, standard=dbs1.id))
+        collection.session.add(db.Links(cre=dbc2.id, standard=dbs1.id))
+        collection.session.add(db.Links(cre=dbc3.id, standard=dbs1.id))
+        collection.session.commit()
+
+        expected = [defs.Standard(name='S1', section="1", subsection="2", hyperlink='3', links=[
+            defs.Link(document=defs.CRE(
+                name='C1', description="CD1", id='123')),
+            defs.Link(document=defs.CRE(name='C2', description="CD2")),
+            defs.Link(document=defs.CRE(name='C3', description="CD3")),
+        ])]
+
+        res = collection.get_standard(name='S1')
+        self.assertEqual(expected, res)
 
 
 if __name__ == '__main__':

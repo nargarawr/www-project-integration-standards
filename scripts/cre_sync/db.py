@@ -1,5 +1,5 @@
 import cre_defs
-from sqlalchemy import UniqueConstraint, ForeignKey, Column, Integer, String, Boolean, create_engine, orm, and_, or_,func
+from sqlalchemy import UniqueConstraint, ForeignKey, Column, Integer, String, Boolean, create_engine, orm, and_, or_, func
 from sqlalchemy.ext.declarative import declarative_base
 import sqlalchemy.sql.operators
 from sqlalchemy.orm import sessionmaker, relationship
@@ -104,17 +104,20 @@ class Standard_collection:
 
     def __get_unlinked_standards(self):
         standards = []
-        linked_standards = self.session.query(Standard.id).join(Links).filter(Standard.id==Links.standard)
+        linked_standards = self.session.query(Standard.id).join(
+            Links).filter(Standard.id == Links.standard)
         return self.session.query(Standard).filter(Standard.id.notin_(linked_standards)).all()
 
     def get_standards_names(self):
-        q = self.session.query(Standard.name).distinct().all() # this returns a tuple of (str,nothing)
+        # this returns a tuple of (str,nothing)
+        q = self.session.query(Standard.name).distinct().all()
         res = [i[0] for i in q]
         return res
 
     def get_max_internal_connections(self):
         count = {}
-        q = self.session.query(InternalLinks).all() # TODO: (spyros) this should be made into a count(*) query
+        # TODO: (spyros) this should be made into a count(*) query
+        q = self.session.query(InternalLinks).all()
         for il in q:
             if il.group in count:
                 count[il.group] += 1
@@ -122,7 +125,7 @@ class Standard_collection:
                 count[il.group] = 1
             if il.cre in count:
                 count[il.cre] += 1
-            else: 
+            else:
                 count[il.cre] = 1
         if count:
             return max(count.values())
@@ -159,8 +162,70 @@ class Standard_collection:
                 result.append(cre)
             return result
 
+    def get_standard(self, name: str, section=None, subsection=None, link=None):
+        standards = []
+        query = self.session.query(Standard).filter(Standard.name == name)
+        if section:
+            query = query.filter(Standard.section == section)
+        if subsection:
+            query = query.filter(Standard.subsection == subsection)
+        if link:
+            query = query.filter(Standard.link == link)
+        dbstands = query.all()
+        if dbstands:
+            for dbstandard in dbstands:
+                stand = StandardFromDB(dbstandard=dbstandard)
+                linked_cres = self.session.query(Links).filter(
+                    Links.standard == dbstandard.id).all()
+                for dbcre_link in linked_cres:
+                    stand.add_link(cre_defs.Link(ltype=dbcre_link.type,
+                                   document=CREfromDB(self.session.query(CRE).filter(CRE.id == dbcre_link.cre).first())))
+                standards.append(stand)
+        else:
+            logger.fatal("Standard %s does not exist in the db" % (name))
+            return
+        return standards
+
+    def get_CRE(self, id: str = None, name: str = None) -> cre_defs.CRE:
+        cre = None
+        query = self.session.query(CRE)
+        if id:
+            query = query.filter(CRE.external_id == id)
+        if name:
+            query = query.filter(CRE.name == name)
+
+        dbcre = query.first()
+        if dbcre:
+            cre = CREfromDB(dbcre)
+        else:
+            logger.fatal("CRE %s:%s does not exist in the db" %
+                         (id, name))
+            return
+
+        # todo figure a way to return both the Standard and the link_type for that link
+        linked_standards = self.session.query(
+            Links).filter(Links.cre == dbcre.id).all()
+        for ls in linked_standards:
+            cre.add_link(cre_defs.Link(document=StandardFromDB(self.session.query(Standard).filter(Standard.id == ls.standard).first()),
+                                       ltype=cre_defs.LinkTypes.from_str(ls.type)))
+
+        # todo figure the query to merge the following two
+        internal_links = self.session.query(InternalLinks).filter(
+            or_(InternalLinks.cre == dbcre.id, InternalLinks.group == dbcre.id)).all()
+        for il in internal_links:
+            # pprint(cre)
+            q = self.session.query(CRE)
+            res = None
+            if il.cre == dbcre.id:
+                res = q.filter(CRE.id == il.group).first()
+            elif il.group == dbcre.id:
+                res = q.filter(CRE.id == il.cre).first()
+            cre.add_link(cre_defs.Link(document=CREfromDB(res),
+                         ltype=cre_defs.LinkTypes.from_str(il.type)))
+
+        return cre
+
     def export(self, dir):
-        
         """ Exports the database to a CRE file collection on disk"""
         docs = {}
         cre, standard = None, None
@@ -181,13 +246,14 @@ class Standard_collection:
             grp.add_link(cre_defs.Link(ltype=type, document=CREfromDB(cre)))
             docs[group.name] = grp
 
-            # then handle cre2 -> cre1 link 
+            # then handle cre2 -> cre1 link
             if cre.name in docs.keys():
                 c = docs[cre.name]
             else:
                 c = CREfromDB(cre)
             docs[cre.name] = c
-            c.add_link(cre_defs.Link(ltype=type,document=CREfromDB(group))) # this cannot be grp, grp already has a link to cre2
+            # this cannot be grp, grp already has a link to cre2
+            c.add_link(cre_defs.Link(ltype=type, document=CREfromDB(group)))
 
         # external links are CRE -> standard
         for link in self.__get_external_links():
@@ -208,7 +274,8 @@ class Standard_collection:
         # unlinked standards last
         for ustandard in self.__get_unlinked_standards():
             ustand = StandardFromDB(ustandard)
-            docs["%s-%s:%s"%(ustand.name,ustand.section,ustand.subsection)] = ustand
+            docs["%s-%s:%s" % (ustand.name, ustand.section,
+                               ustand.subsection)] = ustand
 
         for _, doc in docs.items():
             title = doc.name.replace("/", "-")+'.yaml'

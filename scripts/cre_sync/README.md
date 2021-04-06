@@ -38,7 +38,6 @@ add tests
    ~ parsers -- Done   --- needs edge cases
     mapping_add -- Done for important methods, -- argparse logic only remains
    ~ spreadsheet_utils ~ -- Done
-   
 
 ~ add parse from export format ~ Done
 ~ add parse from export format where the root doc is a standard and it links to cres or groups ~ Done
@@ -50,7 +49,9 @@ add tests
 ~ add sparse_spreadsheet_export functionality one level of mapping per row, either everything that maps to standard X or everything that maps to CRE x ~ Done
 ~ add parse from export format ~ Done
 
-make into flask rest api
+~ make into flask rest api ~ Done
+~   refer use case (search by cre) ~ Done
+~   search by standard ~ Done
 write frontend
 make frontend show Graph
 
