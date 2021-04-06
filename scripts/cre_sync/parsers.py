@@ -1,8 +1,15 @@
+import copy
+import re
+import logging
 import cre_defs as defs
-from enum import Enum
 from pprint import pprint
 # collection of methods to parse different versions of spreadsheet standards
 # each method returns a list of cre_defs documents
+
+
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.INFO)
+logging.basicConfig()
 
 
 def is_empty(value: str):
@@ -10,8 +17,115 @@ def is_empty(value: str):
     return value is None or value == 'None' or value == "" or "N/A" in value.upper() or value == 'nan'
 
 
-def parse_review_standards(cre_file: list) -> dict:
-    raise NotImplementedError
+def recurse_print_links(cre):
+    for link in cre.links:
+        pprint(link.document)
+        recurse_print_links(link.document)
+
+
+def get_linked_standards(mapping: dict) -> [defs.Link]:
+    standards = []
+    names = set([k.split(defs.ExportFormat.separator.value)[0] for k, v in mapping.items()
+                 if not is_empty(v) and defs.ExportFormat.section_key("") in k])
+
+    for sname in names:
+        name = sname
+        section = mapping.pop(defs.ExportFormat.section_key(name))
+        subsection = mapping.pop(defs.ExportFormat.subsection_key(name))
+        hyperlink = mapping.pop(defs.ExportFormat.hyperlink_key(name))
+        link_type = mapping.pop(defs.ExportFormat.link_type_key(name))
+        standard = defs.Standard(
+            name=sname, section=section, subsection=subsection, hyperlink=hyperlink)
+        lt = None
+        if not is_empty(link_type):
+            lt = defs.LinkTypes.from_str(link_type)
+        standards.append(defs.Link(document=standard, ltype=lt))
+    return standards
+
+
+def parse_export_format(lfile: list) -> [defs.Document]:
+    """ Given: a spreadsheet written by prepare_spreadsheet() 
+        return a list of CRE docs
+        cases: 
+            standard
+            standard -> standard
+            cre -> other cres
+            cre -> standards
+            cre -> standards, other cres
+    """
+    cre = None
+    internal_mapping = None
+    cres = {}
+    lone_standards = {}
+    link_types_regexp = re.compile(
+        defs.ExportFormat.linked_cre_name_key("(\d+)"))
+    max_internal_cre_links = len(
+        set([k for k, v in lfile[0].items() if link_types_regexp.match(k)]))
+
+ 
+    # input()
+    for mapping in lfile:
+        # if the line does not register a CRE
+        if not mapping.get(defs.ExportFormat.cre_name_key()):
+            # standard -> nothing | standard
+            for st in get_linked_standards(mapping):
+                lone_standards[st.document.name+":" +
+                               st.document.section] = st.document
+        else:  # cre -> standards, other cres
+            name = mapping.pop(defs.ExportFormat.cre_name_key())
+            id = mapping.pop(defs.ExportFormat.cre_id_key())
+            description = mapping.pop(defs.ExportFormat.cre_description_key())
+
+            if name not in cres.keys():  # register new cre
+                cre = defs.CRE(name=name, id=id, description=description)
+            else:  # it's a conflict mapping so we've seen this before, just retrive so we can add the new info
+                
+                cre = cres.get(name)
+                if cre.id != id:
+                    if is_empty(id):
+                        id = cre.id
+                    else:
+                        logger.fatal("id from sheet %s does not match already parsed id %s for cre %s, this looks like a bug" %
+                                     (id, cre.id, name))
+                        continue
+                if is_empty(cre.description) and not is_empty(description):
+                    # might have seen the particular name/id as an internal mapping, in which case just update the description and continue
+                    cre.description = description
+
+            # register the standards part
+            
+            for standard in get_linked_standards(mapping):
+                # cre.links.append(standard)
+                cre.add_link(standard)
+                    
+            # add the CRE links
+            for i in range(0, max_internal_cre_links):
+                name = mapping.pop(defs.ExportFormat.linked_cre_name_key(i))
+                if not is_empty(name):
+                    id = mapping.pop(defs.ExportFormat.linked_cre_id_key(i))
+                    link_type = mapping.pop(
+                        defs.ExportFormat.linked_cre_link_type_key(i))
+                    if name in cres:
+                        internal_mapping = cres.get(name)
+                        if internal_mapping.id != id:
+                            if is_empty(id):
+                                id = internal_mapping.id
+                            else:
+                                logger.fatal("id from sheet %s does not match already parsed id %s for cre/group %s, this looks like a bug" %
+                                            (id, internal_mapping.id, name))
+                                continue
+                    else:
+                        internal_mapping = defs.CRE(name=name, id=id)
+                        internal_mapping.add_link(defs.Link(document=defs.CRE(  # add a link to the original without the links
+                            name=cre.name, id=cre.id, description=cre.description), ltype=defs.LinkTypes.from_str(link_type)))
+                        cres[name] = internal_mapping
+
+                    if name not in [l.document.name for l in cre.links]:
+                        cre.add_link(defs.Link(document=defs.CRE(name=internal_mapping.name, id=internal_mapping.id,
+                                     description=internal_mapping.description), ltype=defs.LinkTypes.from_str(link_type)))
+            cres[cre.name] = cre
+    cres.update(lone_standards)
+    return cres
 
 
 def parse_uknown_key_val_spreadsheet(link_file: list) -> dict:

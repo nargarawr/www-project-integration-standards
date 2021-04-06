@@ -62,9 +62,11 @@ def register_cre(cre: defs.CRE, result: db.Standard_collection) -> db.CRE:
     dbcre = result.add_cre(cre)
     for link in cre.links:
         if type(link.document).__name__ == defs.CRE.__name__:
-            result.add_internal_link(dbcre, register_cre(link.document, result),type=link.ltype)
+            result.add_internal_link(dbcre, register_cre(
+                link.document, result), type=link.ltype)
         elif type(link.document).__name__ == defs.Standard.__name__:
-            result.add_link(cre=dbcre,standard= register_standard(standard=link.document, collection=result), type=link.ltype)
+            result.add_link(cre=dbcre, standard=register_standard(
+                standard=link.document, collection=result), type=link.ltype)
     return dbcre
 
 
@@ -74,18 +76,22 @@ def parse_file(contents: dict, scollection: db.Standard_collection) -> defs.Docu
         links = contents.pop('links')
         cre = defs.CRE(**contents)
         for link in links:
-            doclink = parse_file(contents=link.get('document'), scollection=scollection)
+            doclink = parse_file(contents=link.get(
+                'document'), scollection=scollection)
             if doclink:
-                cre.add_link(defs.Link(document=doclink, ltype=link.get('type'), tags=link.get('tags')))
+                cre.add_link(defs.Link(document=doclink,
+                             ltype=link.get('type'), tags=link.get('tags')))
         register_cre(cre, result=scollection)
         return cre
     elif contents.get('doctype') == defs.Credoctypes.Standard.value:
         links = contents.get('links')
         standard = defs.Standard(**contents)
         for link in links:
-            doclink = parse_file(contents=link.get('document'), scollection=scollection)
+            doclink = parse_file(contents=link.get(
+                'document'), scollection=scollection)
             if doclink:
-                standard.add_link(defs.Link(document=doclink, ltype=link.get('type'), tags=link.get('tags')))
+                standard.add_link(
+                    defs.Link(document=doclink, ltype=link.get('type'), tags=link.get('tags')))
         register_standard(standard=standard, collection=scollection)
         return standard
 
@@ -97,55 +103,31 @@ def parse_standards_from_spreadsheeet(cre_file: list, result: db.Standard_collec
     cres = {}
     if "CRE Group 1" in cre_file[0].keys():
         hi_lvl_CREs, cres = parsers.parse_v1_standards(cre_file)
+    elif "CRE:name" in cre_file[0].keys():
+        cres = parsers.parse_export_format(cre_file)
+
     else:
         cres = parsers.parse_v0_standards(cre_file)
 
     # register groupless cres first
-    for cre_name, cre in cres.items():
+    for _, cre in cres.items():
         register_cre(cre, result)
 
     # groups
+    # TODO :(spyros) merge with register_cre above
     for name, doc in hi_lvl_CREs.items():
         dbgroup = result.add_cre(doc)
 
         for link in doc.links:
             if type(link.document).__name__ == defs.CRE.__name__:
                 dbcre = register_cre(link.document, result)
-                result.add_internal_link(group=dbgroup, cre=dbcre,type=link.ltype)
+                result.add_internal_link(
+                    group=dbgroup, cre=dbcre, type=link.ltype)
 
             elif type(link.document).__name__ == defs.Standard.__name__:
                 dbstandard = register_standard(link.document, result)
-                result.add_link(cre=dbgroup, standard=dbstandard,type=link.ltype)
-
-
-# # this is a library function to be used by other scripts written to specifically parse external mappings
-# # due to external mappings having special structure, custom parsing will always be needed
-# def suggest_mapping(known_standard: db.Standard, new_standard: db.Standard, collection: db.Standard_collection):
-#     """if known_standard in db, find which CRE it's mapped to and add standard b as a link"""
-#     known_standard = collection.session.query(defs.Standard).filter(_and(defs.Standard.name == known_standard.name,
-#                                                                     defs.Standard.section == known_standard.section,
-#                                                                     defs.Standard.subsection == known_standard.subsection)).first()
-#     new_standard = collection.session.query(defs.Standard).filter(_and(defs.Standard.name == new_standard.name,
-#                                                                   defs.Standard.section == new_standard.section,
-#                                                                   defs.Standard.subsection == new_standard.subsection)).first()
-#     if known_standard and not new_standard:
-#         collection.add_standard(new_standard)
-#         new_standard = collection.session.query(defs.Standard).filter(_and(defs.Standard.name == new_standard.name,
-#                                                                       defs.Standard.section == new_standard.section,
-#                                                                       defs.Standard.subsection == new_standard.subsection)).first()
-
-#         links = collection.session.query(db.Links).filter(
-#             and_(Links.standard == known_standard.id))
-#         for link in links:
-#             cre = collection.session.query(db.CRE).filter(
-#                 _and(CRE.id == link.cre.first()))
-#             collection.add_link(cre=cre, standard=new_standard)
-
-#     elif new_standard and not known_standard:
-#         suggest_mapping(known_standard=new_standard,
-#                         new_standard=known_standard, collection=collection)
-#     else:
-#         logger.fatal("Neither standards exist in the db")
+                result.add_link(
+                    cre=dbgroup, standard=dbstandard, type=link.ltype)
 
 
 def get_standards_files_from_disk(cre_loc: str):
@@ -163,11 +145,13 @@ def add_from_spreadsheet(spreadsheet_url: str, cache_loc: str, cre_loc: str):
         export db to ../../cres/
     """
     database = db.Standard_collection(cache=True, cache_file=cache_loc)
-    spreadsheet = readSpreadsheet(
+    spreadsheet = sheet_utils.readSpreadsheet(
         url=spreadsheet_url, cres_loc=cre_loc, alias="new spreadsheet", validate=False)
     for worksheet, contents in spreadsheet.items():
         parse_standards_from_spreadsheeet(contents, database)
     docs = database.export(cre_loc)
+    logger.info("Db located at %s got updated, files extracted at %s" %
+                (cache_loc, cre_loc))
 
 
 def add_from_disk(cache_loc: str, cre_loc: str):
@@ -193,15 +177,15 @@ def review_from_spreadsheet(cache: str, spreadsheet_url: str, share_with: str):
     loc, cache = prepare_for_review(cache)
     database = db.Standard_collection(cache=True, cache_file=cache)
     spreadsheet = sheet_utils.readSpreadsheet(url=spreadsheet_url,
-                                  cres_loc=loc, alias="new spreadsheet", validate=False)
+                                              cres_loc=loc, alias="new spreadsheet", validate=False)
     for worksheet, contents in spreadsheet.items():
         parse_standards_from_spreadsheeet(contents, database)
     docs = database.export(loc)
 
-
-    sheet_url = create_spreadsheet(collection=database, exported_documents=docs, title='cre_review', share_with=[share_with])
+    sheet_url = create_spreadsheet(
+        collection=database, exported_documents=docs, title='cre_review', share_with=[share_with])
     logger.info("Stored temporary files and database in %s if you want to use them next time, set cache to the location of the database in that dir" % loc)
-    logger.info("A spreadsheet view is at %s"%sheet_url)
+    logger.info("A spreadsheet view is at %s" % sheet_url)
 
 
 def review_from_disk(cache: str, cre_file_loc: str, share_with: str):
@@ -218,9 +202,11 @@ def review_from_disk(cache: str, cre_file_loc: str, share_with: str):
             parse_file(yaml.safe_load(standard), database)
 
     docs = database.export(loc)
-    sheet_url = create_spreadsheet(collection=database, exported_documents=docs, title='cre_review', share_with=[share_with])
+    sheet_url = create_spreadsheet(
+        collection=database, exported_documents=docs, title='cre_review', share_with=[share_with])
     logger.info("Stored temporary files and database in %s if you want to use them next time, set cache to the location of the database in that dir" % loc)
-    logger.info("A spreadsheet view is at %s"%sheet_url)
+    logger.info("A spreadsheet view is at %s" % sheet_url)
+
 
 def print_graph():
     """export db to single json object, pass to visualise.html so it can be shown in browser"""
@@ -257,7 +243,7 @@ def main():
         review_from_disk(cache=args.cache_file,
                          cre_file_loc=args.cre_loc, share_with=args.email)
     elif args.add and args.from_spreadsheet:
-        add_from_spreadsheet(spreadsheet_url=args.spreadsheet,
+        add_from_spreadsheet(spreadsheet_url=args.from_spreadsheet,
                              cache_loc=args.cache_file, cre_loc=args.cre_loc)
     elif args.add and args.cre_loc and not args.from_spreadsheet:
         add_from_disk(cache_loc=args.cache_file, cre_loc=args.cre_loc)
@@ -265,11 +251,12 @@ def main():
         print_graph()
 
 
-def create_spreadsheet(collection:db.Standard_collection,exported_documents: list, title: str, share_with: list):
+def create_spreadsheet(collection: db.Standard_collection, exported_documents: list, title: str, share_with: list):
     """ Reads cre docs exported from a standards_collection.export()
         dumps each doc into a workbook"""
-    flat_dicts = sheet_utils.prepare_spreadsheet(collection=collection,docs=exported_documents)
-    return sheet_utils.write_spreadsheet(title=title,docs=flat_dicts, emails=share_with)
+    flat_dicts = sheet_utils.prepare_spreadsheet(
+        collection=collection, docs=exported_documents)
+    return sheet_utils.write_spreadsheet(title=title, docs=flat_dicts, emails=share_with)
 
 
 def prepare_for_review(cache):

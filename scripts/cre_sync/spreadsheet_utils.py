@@ -44,36 +44,33 @@ def __add_cre_to_spreadsheet(document: defs.Document, header: dict, cresheet: li
     working_array = cresheet[-1]
     conflicts = []
     if document.doctype == defs.Credoctypes.CRE:
-        working_array['CRE:name'] = document.name
-        working_array['CRE:id'] = document.id
-        working_array['CRE:description'] = document.description
-    elif document.doctype == defs.Credoctypes.Standard: # case where a lone standard is displayed without any CRE links
-        working_array[document.name+':section'] = document.section
-        working_array[document.name+':subsection'] = document.subsection
-        working_array[document.name+':hyperlink'] = document.hyperlink
+        working_array[defs.ExportFormat.cre_name_key()] = document.name
+        working_array[defs.ExportFormat.cre_id_key()] = document.id
+        working_array[defs.ExportFormat.cre_description_key()] = document.description
+    # case where a lone standard is displayed without any CRE links
+    elif document.doctype == defs.Credoctypes.Standard:
+        working_array[defs.ExportFormat.section_key(document.name)] = document.section
+        working_array[defs.ExportFormat.subsection_key(document.name)] = document.subsection
+        working_array[defs.ExportFormat.hyperlink_key(document.name)] = document.hyperlink
 
     for link in document.links:
         if link.document.doctype == defs.Credoctypes.Standard:  # linking to normal standard
             # a single CRE can link to multiple standards hence we can have conflicts
-            if working_array[link.document.name+":section"]:
+            if working_array[defs.ExportFormat.section_key(link.document.name)]:
                 conflicts.append(link)
             else:
-                working_array[link.document.name +
-                              ":section"] = link.document.section
-                working_array[link.document.name +
-                              ":subsection"] = link.document.subsection
-                working_array[link.document.name +
-                              ":hyperlink"] = link.document.hyperlink
-                working_array[link.document.name +
-                              ":link_type"] = link.ltype.value
+                working_array[defs.ExportFormat.section_key(link.document.name)] = link.document.section
+                working_array[defs.ExportFormat.subsection_key(link.document.name)] = link.document.subsection
+                working_array[defs.ExportFormat.hyperlink_key(link.document.name)] = link.document.hyperlink
+                working_array[defs.ExportFormat.link_type_key(link.document.name)] = link.ltype.value
         elif link.document.doctype == defs.Credoctypes.CRE:  # linking to another CRE
             grp_added = False
             for i in range(0, maxgroups):
-                if not working_array['Linked_CRE_%s:id' % i]:
+                if not working_array[defs.ExportFormat.linked_cre_id_key(i)]:
                     grp_added = True
-                    working_array['Linked_CRE_%s:id' % i] = link.document.id
-                    working_array['Linked_CRE_%s:name' % i] = link.document.name
-                    working_array['Linked_CRE_%s:link_type' % i] = link.ltype.value
+                    working_array[defs.ExportFormat.linked_cre_id_key(i)] = link.document.id
+                    working_array[defs.ExportFormat.linked_cre_name_key(i)] = link.document.name
+                    working_array[defs.ExportFormat.linked_cre_link_type_key(i)] = link.ltype.value
                     break
             if not grp_added:
                 logger.fatal("Tried to add Group %s but all of the %s group slots are filled. This must be a bug" % (
@@ -83,7 +80,8 @@ def __add_cre_to_spreadsheet(document: defs.Document, header: dict, cresheet: li
     if len(conflicts):
         new_cre = deepcopy(document)
         new_cre.links = conflicts
-        cresheet = __add_cre_to_spreadsheet(new_cre, header, cresheet, maxgroups)
+        cresheet = __add_cre_to_spreadsheet(
+            new_cre, header, cresheet, maxgroups)
     return cresheet
 
 
@@ -92,18 +90,18 @@ def prepare_spreadsheet(collection: db.Standard_collection, docs: list) -> str:
         Given a list of cre_defs.Document will create a list of key,value dict representing the mappings
     """
     standard_names = collection.get_standards_names()  # get header from db (cheap enough)
-    header = {'CRE:name': None, 'CRE:id': None, 'CRE:description': None}
+    header = {defs.ExportFormat.cre_name_key(): None, defs.ExportFormat.cre_id_key(): None, defs.ExportFormat.cre_description_key(): None}
     groups = {}
     for name in standard_names:
-        header["%s:section" % name] = None
-        header["%s:subsection" % name] = None
-        header["%s:hyperlink" % name] = None
-        header["%s:link_type" % name] = None
+        header[defs.ExportFormat.section_key(name)] = None
+        header[defs.ExportFormat.subsection_key(name)] = None
+        header[defs.ExportFormat.hyperlink_key(name)] = None
+        header[defs.ExportFormat.link_type_key(name)] = None
     maxgroups = collection.get_max_internal_connections()
     for i in range(0, maxgroups):
-        header["Linked_CRE_%s:id" % i] = None
-        header["Linked_CRE_%s:name" % i] = None
-        header["Linked_CRE_%s:link_type" % i] = None
+        header[defs.ExportFormat.linked_cre_id_key(i)] = None
+        header[defs.ExportFormat.linked_cre_name_key(i)] = None
+        header[defs.ExportFormat.linked_cre_link_type_key(i)] = None
 
     logger.debug(header)
 
@@ -116,21 +114,16 @@ def prepare_spreadsheet(collection: db.Standard_collection, docs: list) -> str:
     return result
 
 
-def write_spreadsheet(title:str, docs:list, emails:list):
+def write_spreadsheet(title: str, docs: list, emails: list):
     """ upload local array of flat yamls to url, share with email list"""
-    gc = gspread.oauth() # oauth config, TODO (northdpole): make this configurable
-    sh = gc.create(title)
-    worksheet = sh.add_worksheet(title="0."+title, rows="1000", cols="200")
+    gc = gspread.oauth()  # oauth config, TODO (northdpole): make this configurable
+    sh = gc.create("0."+title)
     data = io.StringIO()
     fieldnames = docs[0].keys()
-    writer = csv.DictWriter(data,fieldnames=fieldnames)
+    writer = csv.DictWriter(data, fieldnames=fieldnames)
     writer.writeheader()
     writer.writerows(docs)
-    pprint(data.getvalue())
-    input()
     gc.import_csv(sh.id, data.getvalue().encode('utf-8'))
     for email in emails:
         sh.share(email, perm_type='user', role='writer')
     return "https://docs.google.com/spreadsheets/d/%s" % sh.id
-
-

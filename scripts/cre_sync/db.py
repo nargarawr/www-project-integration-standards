@@ -1,5 +1,5 @@
 import cre_defs
-from sqlalchemy import UniqueConstraint, ForeignKey, Column, Integer, String, Boolean, create_engine, orm, and_, func
+from sqlalchemy import UniqueConstraint, ForeignKey, Column, Integer, String, Boolean, create_engine, orm, and_, or_,func
 from sqlalchemy.ext.declarative import declarative_base
 import sqlalchemy.sql.operators
 from sqlalchemy.orm import sessionmaker, relationship
@@ -282,7 +282,8 @@ class Standard_collection:
                 "Tried to insert internal mapping with element that doesn't exist in db, this looks like a bug")
             return
         entry = self.session.query(InternalLinks).filter(
-            and_(InternalLinks.cre == cre.id, InternalLinks.group == group.id)).first()
+            or_(and_(InternalLinks.cre == group.id, InternalLinks.group == cre.id),
+                and_(InternalLinks.cre == cre.id, InternalLinks.group == group.id))).first()
         if entry != None:
             logger.debug("knew of internal link %s == %s ,updating" %
                          (cre.name, group.name))

@@ -5,6 +5,69 @@ import json
 # used for serialising and deserialising yaml CRE documents
 
 
+class ExportFormat(Enum):
+    separator = ":"
+    section = "section"
+    subsection = "subsection"
+    hyperlink = "hyperlink"
+    link_type = "link_type"
+    name = "name"
+    id = "id"
+    description = "description"
+    cre_link = "Linked_CRE_"
+    cre = "CRE"
+
+    @staticmethod
+    def section_key(sname: str):
+        "returns <sname>:section"
+        return "%s%s%s" % (sname, ExportFormat.separator.value, ExportFormat.section.value)
+    
+    @staticmethod
+    def subsection_key(sname: str):
+        "returns <sname>:subsection"
+        return "%s%s%s" % (sname, ExportFormat.separator.value, ExportFormat.subsection.value)
+    
+    @staticmethod
+    def hyperlink_key(sname: str):
+        "returns <sname>:hyperlink"
+        return "%s%s%s" % (sname, ExportFormat.separator.value, ExportFormat.hyperlink.value)
+
+    @staticmethod
+    def link_type_key(sname: str):
+        "returns <sname>:link_type"
+        return "%s%s%s" % (sname, ExportFormat.separator.value, ExportFormat.link_type.value)
+
+    @staticmethod
+    def linked_cre_id_key(name: str):
+        "returns Linked_CRE_<name>:id"
+        return "%s%s%s%s" % (ExportFormat.cre_link.value, name, ExportFormat.separator.value, ExportFormat.id.value)
+    
+    @staticmethod
+    def linked_cre_name_key(name: str):
+        "returns Linked_CRE_<name>:name"
+        return "%s%s%s%s" % (ExportFormat.cre_link.value, name, ExportFormat.separator.value, ExportFormat.name.value)
+    
+    @staticmethod
+    def linked_cre_link_type_key(name: str):
+        "returns Linked_CRE_<name>:link_type"
+        return "%s%s%s%s" % (ExportFormat.cre_link.value, name, ExportFormat.separator.value, ExportFormat.link_type.value)
+    
+    @staticmethod
+    def cre_id_key():
+        "returns CRE:id"
+        return "%s%s%s" % (ExportFormat.cre.value, ExportFormat.separator.value, ExportFormat.id.value)
+    
+    @staticmethod
+    def cre_name_key():
+        "returns CRE:name"
+        return "%s%s%s" % (ExportFormat.cre.value, ExportFormat.separator.value, ExportFormat.name.value)
+    
+    @staticmethod
+    def cre_description_key():
+        "returns CRE:description"
+        return "%s%s%s" % (ExportFormat.cre.value, ExportFormat.separator.value, ExportFormat.description.value)
+
+
 class Credoctypes(Enum):
     CRE = "CRE"
     Standard = "Standard"
@@ -13,11 +76,11 @@ class Credoctypes(Enum):
 class LinkTypes(Enum):
     Same = "SAM"
 
-    @classmethod
-    def from_str(cls, name):
+    @staticmethod
+    def from_str(name):
         if name == "SAM":
             return LinkTypes.Same
-        raise ValueError('{} is not a valid link type'.format(name))
+        raise ValueError('"{}" is not a valid link type'.format(name))
 
 
 @dataclass
@@ -46,6 +109,9 @@ class Link():
         else:
             self.ltype = ltype
         self.tags = tags
+   
+    def __hash__(self):
+        return hash(json.dumps(self.todict()))
 
     def __eq__(self, other):
         return self.ltype == other.ltype and \
@@ -79,6 +145,8 @@ class Document():
             self.links == other.links and \
             self.tags == other.tags and \
             self.metadata == other.metadata
+    def __hash__(self):
+        return hash(json.dumps(self.todict()))
 
     def todict(self):
         result = {
@@ -111,7 +179,7 @@ class Document():
         self.description = str(description)
         self.name = str(name) or raise_MandatoryFieldException(
             "Document name not defined for document of doctype %s" % doctype)
-        self.links = links
+        self.links = links or []
         self.tags = tags
         self.id = id
         self.metadata = metadata
@@ -150,7 +218,7 @@ class Standard(Document):
         self.doctype = Credoctypes.Standard
         if section is None or section == '':
             raise MandatoryFieldException("%s:%s is an invalid standard entry,"
-                                          "you can't register an entire standard at once, it needs to have sections" % (kwargs.get('name'),section))
+                                          "you can't register an entire standard at once, it needs to have sections" % (kwargs.get('name'), section))
         self.section = section
         self.subsection = subsection
         self.hyperlink = hyperlink

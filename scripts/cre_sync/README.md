@@ -48,6 +48,11 @@ add tests
 ~ support importing yaml export files of more than 1 levels deep ~ Done
 ~ add export for Standards unmapped to CREs as lone standards (useful for visibility) ~ Done
 ~ add sparse_spreadsheet_export functionality one level of mapping per row, either everything that maps to standard X or everything that maps to CRE x ~ Done
+~ add parse from export format ~ Done
+
+make into flask rest api
+write frontend
+make frontend show Graph
 
 make library out of file format and spreadsheet template parsers
 add the ability for a mapping document to have multiple yamls in it
@@ -55,8 +60,6 @@ add conditional export (select the standards you want exported and if you want t
 write docs and record usage gif
 add db integration of tags and metadata
 add dockerfile???
-make into flask rest api
-write frontend
-make frontend show Graph
+
 add github actions ci/cd
 
