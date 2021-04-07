@@ -1,31 +1,35 @@
 import json
 import db
-from flask import Flask, jsonify, Blueprint
-from flask import request
+from flask import Flask, jsonify, render_template,request
+from jinja2 import Template
 from pprint import pprint
+from jinja2  import TemplateNotFound
+
 app = Flask(__name__)
 
 cache_loc = 'standards_cache.sqlite'
 database = db.Standard_collection(cache=True, cache_file=cache_loc)
 
-# cre = Blueprint('cres', __name__)
-# app.register_blueprint(cre, url_prefix='/cre')
+@app.route('/', methods=["GET"])
+def index():
+       return render_template("index.html")
 
-@app.route('/id/<creid>', methods=["GET"])
+
+@app.route('/rest/v1/id/<creid>', methods=["GET"])
 def find_by_id(creid): # refer
     cre = database.get_CRE(id=creid)
     if cre:
         pprint(cre.todict())
         return jsonify(cre.todict())
 
-@app.route('/name/<crename>', methods=["GET"])
+@app.route('/rest/v1/name/<crename>', methods=["GET"])
 def find_by_name(crename):
     cre = database.get_CRE(name=crename)
     if cre:
         pprint(cre.todict())
         return jsonify(cre.todict())
 
-@app.route('/standard/<sname>', methods=["GET"])
+@app.route('/rest/v1/standard/<sname>', methods=["GET"])
 def find_standard_by_name(sname):
     opt_section = request.args.get('section')
     opt_subsection = request.args.get('subsection')
