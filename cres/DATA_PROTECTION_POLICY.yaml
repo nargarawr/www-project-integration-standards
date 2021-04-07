@@ -1,0 +1,12 @@
+doctype: CRE
+id: 859-451
+links:
+- document:
+    description: Verify that all sensitive data created and processed by the application
+      has been identified, and ensure that a policy is in place on how to deal with
+      sensitive data. (C8)
+    doctype: CRE
+    id: 005-044-044
+    name: DATA_PROTECTION_IDENTIFY_SENSITIVE_DATA_POLICY
+  type: SAM
+name: DATA_PROTECTION_POLICY

@@ -1,0 +1,22 @@
+doctype: CRE
+id: 444-374
+links:
+- document:
+    description: Verify that secure notifications are sent to users after updates
+      to authentication details, such as credential resets, email or address changes,
+      logging in from unknown or risky locations. The use of push notifications -
+      rather than SMS or email - is preferred, but in the absence of push notifications,
+      SMS or email is acceptable as long as no sensitive information is disclosed
+      in the notification.
+    doctype: CRE
+    id: 001-005-074
+    name: CREDENTIALS_MANAGEMENT_DETECT_ANOMALIES_NOTIFY_USER
+  type: SAM
+- document:
+    description: Verify that if an authentication factor is changed or replaced, that
+      the user is notified of this event.
+    doctype: CRE
+    id: 001-002-056
+    name: AUTHENTICATION_FACTOR_CHANGE_NOTIFY_USER
+  type: SAM
+name: NOTIFY_USER

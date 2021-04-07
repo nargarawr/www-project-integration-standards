@@ -1,0 +1,19 @@
+doctype: CRE
+id: 101-893
+links:
+- document:
+    description: Verify the application can detect and alert on abnormal numbers of
+      requests, such as by IP, user, total per hour or day, or whatever makes sense
+      for the application.
+    doctype: CRE
+    id: 009-003
+    name: LOG_ALERTING_ANOMALIES
+  type: SAM
+- document:
+    description: Verify the application has configurable alerting when automated attacks
+      or unusual activity is detected.
+    doctype: CRE
+    id: 009-003
+    name: LOG_ALERTING_ANOMALIES_CONFIGURABLE
+  type: SAM
+name: ALLOW_MONITORING

@@ -1,0 +1,20 @@
+doctype: CRE
+id: 229-653
+links:
+- document:
+    description: Verify that trusted enforcement points such as at access control
+      gateways, servers, and serverless functions enforce access controls. Never enforce
+      access controls on the client.
+    doctype: CRE
+    id: 007-042-059
+    name: ACCESS_CONTROL_ENFORCE_CONSISTENTLY_SERVERSIDE
+  type: SAM
+- document:
+    description: Verify that the application enforces access control rules on a trusted
+      service layer, especially if client-side access control is present and could
+      be bypassed.
+    doctype: CRE
+    id: 001-024
+    name: ACCESS_CONTROL_ENFORCE_TRUSTED_LAYER
+  type: SAM
+name: ENFORCE_TRUSTED_COMPONENT

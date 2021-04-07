@@ -1,0 +1,69 @@
+description: Verify that data stored in client side storage (such as HTML5 local storage,
+  session storage, IndexedDB, regular cookies or Flash cookies) does not contain sensitive
+  data or PII.
+doctype: CRE
+id: 005-038-028
+links:
+- document:
+    doctype: CRE
+    id: 365-239
+    name: DATA_PROTECTION
+  type: SAM
+- document:
+    doctype: CRE
+    id: 822-331
+    name: SENSITIVE
+  type: SAM
+- document:
+    doctype: CRE
+    id: 213-506
+    name: PII
+  type: SAM
+- document:
+    doctype: CRE
+    id: 401-754
+    name: DO_NOT_CACHE_CLIENT
+  type: SAM
+- document:
+    doctype: Standard
+    hyperlink: ''
+    name: SIG ISO 25010
+    section: Secure data storage
+    subsection: ''
+  type: SAM
+- document:
+    doctype: Standard
+    hyperlink: ''
+    name: ASVS
+    section: V8.2.2
+    subsection: DATA_PROTECTION-SENSITIVE-DO_NOT_CACHE_CLIENT-PII
+  type: SAM
+- document:
+    doctype: Standard
+    hyperlink: ''
+    name: WSTG
+    section: WSTG-CLNT-12
+    subsection: ''
+  type: SAM
+- document:
+    doctype: Standard
+    hyperlink: ''
+    name: TOP10
+    section: https://owasp.org/www-project-top-ten/2017/A5_2017-Broken_Access_Control
+    subsection: ''
+  type: SAM
+- document:
+    doctype: Standard
+    hyperlink: ''
+    name: CWE
+    section: '922'
+    subsection: ''
+  type: SAM
+- document:
+    doctype: Standard
+    hyperlink: ''
+    name: NIST 800-53
+    section: SI-14 NON-PERSISTENCE
+    subsection: ''
+  type: SAM
+name: DATA_PROTECTION_SENSITIVE_NO_CACHING_CLIENTSIDE

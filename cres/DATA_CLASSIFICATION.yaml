@@ -1,0 +1,12 @@
+doctype: CRE
+id: 698-155
+links:
+- document:
+    description: Verify that sensitive personal information is subject to data retention
+      classification, such that old or out of date data is deleted automatically,
+      on a schedule, or as the situation requires.
+    doctype: CRE
+    id: 005-038-054
+    name: DATA_PROTECTION_SENSITIVE_CLASSIFY_PURGE
+  type: SAM
+name: DATA_CLASSIFICATION

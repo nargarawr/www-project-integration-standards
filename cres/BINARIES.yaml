@@ -1,0 +1,11 @@
+doctype: CRE
+id: 453-478
+links:
+- document:
+    description: Verify that if deploying binaries to untrusted devices makes use
+      of binary signatures, trusted connections, and verified endpoints.
+    doctype: CRE
+    id: 009-027
+    name: CONFIGURATION_DEPLOY_UNTRUSTED_DEVICES_VALIDATE_BINARY_ENDPOINTS_INTEGRITY
+  type: SAM
+name: BINARIES

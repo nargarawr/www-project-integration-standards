@@ -1,0 +1,80 @@
+doctype: CRE
+id: 822-331
+links:
+- document:
+    description: Verify that regulated private data is stored encrypted while at rest,
+      such as personally identifiable information (PII), sensitive personal information,
+      or data assessed likely to be subject to EU's GDPR.
+    doctype: CRE
+    id: 005-021-063
+    name: ENCRYPT_SENSITIVE_DATA_AT_REST
+  type: SAM
+- document:
+    description: Verify the application protects sensitive data from being cached
+      in server components such as load balancers and application caches.
+    doctype: CRE
+    id: 005-038-029
+    name: DATA_PROTECTION_SENSITIVE_NO_CACHING_SERVERSIDE
+  type: SAM
+- document:
+    description: Verify that all cached or temporary copies of sensitive data stored
+      on the server are protected from unauthorized access or purged/invalidated after
+      the authorized user accesses the sensitive data.
+    doctype: CRE
+    id: 005-038-016
+    name: DATA_PROTECTION_SENSITIVE_AUTHORIZE_AND_PURGE_TEMPORARY_DATA
+  type: SAM
+- document:
+    description: Verify the application sets sufficient anti-caching headers so that
+      sensitive data is not cached in modern browsers.
+    doctype: CRE
+    id: 005-038-028
+    name: DATA_PROTECTION_SENSITIVE_NO_CACHING_CLIENTSIDE_HEADERS
+  type: SAM
+- document:
+    description: Verify that data stored in client side storage (such as HTML5 local
+      storage, session storage, IndexedDB, regular cookies or Flash cookies) does
+      not contain sensitive data or PII.
+    doctype: CRE
+    id: 005-038-028
+    name: DATA_PROTECTION_SENSITIVE_NO_CACHING_CLIENTSIDE
+  type: SAM
+- document:
+    description: Verify that authenticated data is cleared from client storage, such
+      as the browser DOM, after the client or session is terminated.
+    doctype: CRE
+    id: 005-038-015
+    name: DATA_PROTECTION_SENSITIVE_PURGE_CLIENTSIDE
+  type: SAM
+- document:
+    description: Verify accessing sensitive data is audited (without logging the sensitive
+      data itself), if the data is collected under relevant data protection directives
+      or where logging of access is required.
+    doctype: CRE
+    id: 005-038-009
+    name: DATA_PROTECTION_SENSITIVE_LOG_ACCESS_EVENTS
+  type: SAM
+- document:
+    description: Verify that sensitive information contained in memory is overwritten
+      as soon as it is no longer required to mitigate memory dumping attacks, using
+      zeroes or random data.
+    doctype: CRE
+    id: 005-038-054
+    name: DATA_PROTECTION_SENSITIVE_PURGE_MEMORY
+  type: SAM
+- document:
+    description: Verify that sensitive personal information is subject to data retention
+      classification, such that old or out of date data is deleted automatically,
+      on a schedule, or as the situation requires.
+    doctype: CRE
+    id: 005-038-054
+    name: DATA_PROTECTION_SENSITIVE_CLASSIFY_PURGE
+  type: SAM
+- document:
+    description: Verify API URLs do not expose sensitive information, such as the
+      API key, session tokens etc.
+    doctype: CRE
+    id: 008-038-027
+    name: API_URLS_NO_SENSITIVE_DATA
+  type: SAM
+name: SENSITIVE

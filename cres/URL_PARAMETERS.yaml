@@ -1,0 +1,11 @@
+doctype: CRE
+id: 975-936
+links:
+- document:
+    description: Verify the application never reveals session tokens in URL parameters
+      or error messages.
+    doctype: CRE
+    id: 011-040-026
+    name: SESSION_MANAGEMENT_PROTECT/NOT_EXPOSE_SESSION_TOKENS
+  type: SAM
+name: URL_PARAMETERS

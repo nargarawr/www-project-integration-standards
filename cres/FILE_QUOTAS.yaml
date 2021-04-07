@@ -1,0 +1,12 @@
+doctype: CRE
+id: 501-360
+links:
+- document:
+    description: Verify that a file size quota and maximum number of files per user
+      is enforced to ensure that a single user cannot fill up the storage with too
+      many files, or excessively large files.
+    doctype: CRE
+    id: 007-042-058
+    name: FILE_HANDLING_UPLOADED_FILES_SET_USER_MAXIMA
+  type: SAM
+name: FILE_QUOTAS

@@ -1,0 +1,12 @@
+doctype: CRE
+id: 216-179
+links:
+- document:
+    description: Verify that the principle of deny by default exists whereby new users/roles
+      start with minimal or no permissions and users/roles do not receive access to
+      new features until access is explicitly assigned. (C7)
+    doctype: CRE
+    id: 001-023
+    name: ACCESS_CONTROL_LEAST_PRIVILEGE_DENY_BY_DEFAULT_NEW_USER
+  type: SAM
+name: DENY_BY_DEFAULT

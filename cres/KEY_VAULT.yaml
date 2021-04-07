@@ -1,0 +1,11 @@
+doctype: CRE
+id: 455-516
+links:
+- document:
+    description: Verify that consumers of cryptographic services protect key material
+      and other secrets by using key vaults or API based alternatives.
+    doctype: CRE
+    id: 002-005-051
+    name: ENCRYPT_DATA_AT_REST_KEY/SECRET_MANAGEMENT_VAULT
+  type: SAM
+name: KEY_VAULT

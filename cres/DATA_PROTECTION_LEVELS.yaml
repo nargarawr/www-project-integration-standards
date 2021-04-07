@@ -1,0 +1,11 @@
+doctype: CRE
+id: 504-455
+links:
+- document:
+    description: Verify that all sensitive data is identified and classified into
+      protection levels.
+    doctype: CRE
+    id: 001-023
+    name: SENSITIVE_DATA_CLASSIFICATION_ENFORCE_DIRECTIVES
+  type: SAM
+name: DATA_PROTECTION_LEVELS

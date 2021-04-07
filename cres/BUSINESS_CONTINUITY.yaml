@@ -1,0 +1,18 @@
+doctype: CRE
+id: 638-377
+links:
+- document:
+    description: Verify the application sets sufficient anti-caching headers so that
+      sensitive data is not cached in modern browsers.
+    doctype: CRE
+    id: 005-038-028
+    name: DATA_PROTECTION_SENSITIVE_NO_CACHING_CLIENTSIDE_HEADERS
+  type: SAM
+- document:
+    description: Verify that backups are stored securely to prevent data from being
+      stolen or corrupted.
+    doctype: CRE
+    id: 005-032-053
+    name: ENCRYPT_DATA_AT_REST_BACKUP_PROTECTION
+  type: SAM
+name: BUSINESS_CONTINUITY

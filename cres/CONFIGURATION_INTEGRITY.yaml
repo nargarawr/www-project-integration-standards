@@ -1,0 +1,11 @@
+doctype: CRE
+id: 270-945
+links:
+- document:
+    description: Verify that authorized administrators can verify the integrity of
+      all security-relevant configurations to detect tampering.
+    doctype: CRE
+    id: 004-006-018
+    name: CONFIGURATION_CODE_INTEGRITY
+  type: SAM
+name: CONFIGURATION_INTEGRITY

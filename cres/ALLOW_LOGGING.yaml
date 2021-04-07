@@ -1,0 +1,12 @@
+doctype: CRE
+id: 446-562
+links:
+- document:
+    description: Verify that the application uses a single vetted authentication mechanism
+      that is known to be secure, can be extended to include strong authentication,
+      and has sufficient logging and monitoring to detect account abuse or breaches.
+    doctype: CRE
+    id: 004-012-061
+    name: ARCHITECTURE_AUTHENTICATE_CONSISTENTLY_EXTENDABLE_ALLOW_LOGGING
+  type: SAM
+name: ALLOW_LOGGING

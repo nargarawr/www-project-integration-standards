@@ -1,0 +1,26 @@
+doctype: CRE
+id: 872-296
+links:
+- document:
+    description: Verify the use of unique or special low-privilege operating system
+      accounts for all application components, services, and servers. (C3)
+    doctype: CRE
+    id: 004-006-012
+    name: COMPONENTS_LEAST_PRIVILEGE_OS_ACCOUNTS
+  type: SAM
+- document:
+    description: Verify that communications between application components, including
+      APIs, middleware and data layers, are authenticated. Components should have
+      the least necessary privileges needed. (C3)
+    doctype: CRE
+    id: 002-010-046
+    name: ARCHITECTURE_AUTHENTICATE_CONSISTENTLY_LEAST_PRIVILEGE
+  type: SAM
+- document:
+    description: Verify that files obtained from untrusted sources are stored outside
+      the web root, with limited permissions, preferably with strong validation.
+    doctype: CRE
+    id: 007-042-059
+    name: FILE_HANDLING_UNTRUSTED_ORIGIN_UNPRIVILEGED_STORAGE
+  type: SAM
+name: LEAST_PRIVILEGE

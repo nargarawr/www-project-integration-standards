@@ -1,0 +1,20 @@
+doctype: CRE
+id: 187-334
+links:
+- document:
+    description: Verify that data selection or database queries (e.g. SQL, HQL, ORM,
+      NoSQL) use parameterized queries, ORMs, entity frameworks, or are otherwise
+      protected from database injection attacks. (C3)
+    doctype: CRE
+    id: 012-045-011
+    name: VALIDATE_PARAMETERIZATION_DATABASE_INJECTION
+  type: SAM
+- document:
+    description: Verify that where parameterized or safer mechanisms are not present,
+      context-specific output encoding is used to protect against injection attacks,
+      such as the use of SQL escaping to protect against SQL injection. (C3, C4)
+    doctype: CRE
+    id: 012-045-010
+    name: VALIDATE_CONTEXT_DEPENDENT_ENCODING_SQLI
+  type: SAM
+name: SQLI/DATABASE_INJECTION

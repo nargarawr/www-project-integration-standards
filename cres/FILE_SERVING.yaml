@@ -1,0 +1,31 @@
+doctype: CRE
+id: 153-188
+links:
+- document:
+    description: Verify that user-uploaded files - if required to be displayed or
+      downloaded from the application - are served by either octet stream downloads,
+      or from an unrelated domain, such as a cloud file storage bucket. Implement
+      a suitable content security policy to reduce the risk from XSS vectors or other
+      attacks from the uploaded file.
+    doctype: CRE
+    id: 001-005-020
+    name: FILE_HANDLING_UPLOADED_FILES_SERVE_ONLY_OCTET_STREAM_OR_SEPARATE_DOMAIN
+  type: SAM
+- document:
+    description: Verify that the web tier is configured to serve only files with specific
+      file extensions to prevent unintentional information and source code leakage.
+      For example, backup files (e.g. .bak), temporary working files (e.g. .swp),
+      compressed files (.zip, .tar.gz, etc) and other extensions commonly used by
+      editors should be blocked unless required.
+    doctype: CRE
+    id: 007-042-066
+    name: FILE_HANDLING_AVOID_INFO_DISCLOSURE_SERVING_FILES
+  type: SAM
+- document:
+    description: Verify that direct requests to uploaded files will never be executed
+      as HTML/JavaScript content.
+    doctype: CRE
+    id: 007-042-066
+    name: FILE_HANDLING_DENY_EXECUTION_UPLOADED_FILES
+  type: SAM
+name: FILE_SERVING

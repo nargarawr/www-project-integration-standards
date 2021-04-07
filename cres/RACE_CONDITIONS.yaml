@@ -1,0 +1,11 @@
+doctype: CRE
+id: 292-759
+links:
+- document:
+    description: Verify that all high-value business logic flows, including authentication,
+      session management and access control, do not share unsynchronized state.
+    doctype: CRE
+    id: 005-021-047
+    name: VALIDATE_BUSINESS_LOGIC_RACE_CONDITIONS_TOCTOU
+  type: SAM
+name: RACE_CONDITIONS

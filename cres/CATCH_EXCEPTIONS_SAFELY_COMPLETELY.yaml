@@ -1,0 +1,19 @@
+doctype: CRE
+id: 216-450
+links:
+- document:
+    description: Verify that exception handling (or a functional equivalent) is used
+      across the codebase to account for expected and unexpected error conditions.
+      (C10)
+    doctype: CRE
+    id: 006-011-062
+    name: EXCEPTION_HANDLING_CATCH_COMPLETELY
+  type: SAM
+- document:
+    description: Verify that a "last resort" error handler is defined which will catch
+      all unhandled exceptions. (C10)
+    doctype: CRE
+    id: 006-011-062
+    name: EXCEPTION_HANDLING_CATCH_UNHANDLED_EXCEPTIONS
+  type: SAM
+name: CATCH_EXCEPTIONS_SAFELY_COMPLETELY

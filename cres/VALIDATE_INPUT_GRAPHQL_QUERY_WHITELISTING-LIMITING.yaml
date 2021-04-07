@@ -1,0 +1,65 @@
+description: Verify that query whitelisting or a combination of depth limiting and
+  amount limiting should be used to prevent GraphQL or data layer expression denial
+  of service (DoS) as a result of expensive, nested queries. For more advanced scenarios,
+  query cost analysis should be used.
+doctype: CRE
+id: 008-048-077
+links:
+- document:
+    doctype: CRE
+    id: 769-181
+    name: INTERFACE/API
+  type: SAM
+- document:
+    doctype: CRE
+    id: 971-474
+    name: VALIDATE_QUERY
+  type: SAM
+- document:
+    doctype: CRE
+    id: 714-476
+    name: API_WHITELIST_LOGIC_QUERY_INTENSITY
+  type: SAM
+- document:
+    doctype: Standard
+    hyperlink: ''
+    name: NIST 800-53
+    section: AC-4 INFORMATION FLOW ENFORCEMENT
+    subsection: ''
+  type: SAM
+- document:
+    doctype: Standard
+    hyperlink: ''
+    name: ASVS
+    section: V13.4.1
+    subsection: INTERFACE/API-VALIDATE_QUERY-API_WHITELIST_LOGIC_QUERY_INTENSITY
+  type: SAM
+- document:
+    doctype: Standard
+    hyperlink: ''
+    name: SIG ISO 25010
+    section: Input and output verification
+    subsection: ''
+  type: SAM
+- document:
+    doctype: Standard
+    hyperlink: ''
+    name: TOP10
+    section: https://owasp.org/www-project-top-ten/2017/A5_2017-Broken_Access_Control
+    subsection: ''
+  type: SAM
+- document:
+    doctype: Standard
+    hyperlink: ''
+    name: NIST 800-53
+    section: SC-5 DENIAL-OF-SERVICE PROTECTION,
+    subsection: ''
+  type: SAM
+- document:
+    doctype: Standard
+    hyperlink: ''
+    name: CWE
+    section: '770'
+    subsection: ''
+  type: SAM
+name: VALIDATE_INPUT_GRAPHQL_QUERY_WHITELISTING/LIMITING

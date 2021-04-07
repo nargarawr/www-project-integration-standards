@@ -1,0 +1,11 @@
+doctype: CRE
+id: 758-427
+links:
+- document:
+    description: Verify that regular backups of important data are performed and that
+      test restoration of data is performed.
+    doctype: CRE
+    id: 005-032-071
+    name: ENCRYPT_DATA_AT_REST_BACKUP_REGULARLY
+  type: SAM
+name: DATA_RECOVERY_TEST

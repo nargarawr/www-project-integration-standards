@@ -1,0 +1,36 @@
+doctype: CRE
+id: 252-320
+links:
+- document:
+    description: Verify that data selection or database queries (e.g. SQL, HQL, ORM,
+      NoSQL) use parameterized queries, ORMs, entity frameworks, or are otherwise
+      protected from database injection attacks. (C3)
+    doctype: CRE
+    id: 012-045-011
+    name: VALIDATE_PARAMETERIZATION_DATABASE_INJECTION
+  type: SAM
+- document:
+    description: Verify that where parameterized or safer mechanisms are not present,
+      context-specific output encoding is used to protect against injection attacks,
+      such as the use of SQL escaping to protect against SQL injection. (C3, C4)
+    doctype: CRE
+    id: 012-045-010
+    name: VALIDATE_CONTEXT_DEPENDENT_ENCODING_SQLI
+  type: SAM
+- document:
+    description: Verify that the application protects against LDAP Injection vulnerabilities,
+      or that specific security controls to prevent LDAP Injection have been implemented.
+      (C4)
+    doctype: CRE
+    id: 012-045-010
+    name: VALIDATE_LDAP_INJECTION
+  type: SAM
+- document:
+    description: Verify that the application protects against OS command injection
+      and that operating system calls use parameterized OS queries or use contextual
+      command line output encoding. (C4)
+    doctype: CRE
+    id: 012-045-010
+    name: VALIDATE_OS_COMMAND_INJECTION
+  type: SAM
+name: PARAMETERIZED_QUERIES

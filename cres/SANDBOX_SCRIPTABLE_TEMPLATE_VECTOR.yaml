@@ -1,0 +1,19 @@
+doctype: CRE
+id: 911-159
+links:
+- document:
+    description: Verify that the application protects against template injection attacks
+      by ensuring that any user input being included is sanitized or sandboxed.
+    doctype: CRE
+    id: 010-034
+    name: VALIDATE_INPUT_SANITIZE_ISOLATE_SCRIPTABLE_TEMPLATES
+  type: SAM
+- document:
+    description: Verify that the application sanitizes, disables, or sandboxes user-supplied
+      SVG scriptable content, especially as they relate to XSS resulting from inline
+      scripts, and foreignObject.
+    doctype: CRE
+    id: 010-034
+    name: VALIDATE_INPUT_SANITIZE_ISOLATE_SCRIPTABLE_TEMPLATES_SVG
+  type: SAM
+name: SANDBOX_SCRIPTABLE_TEMPLATE_VECTOR

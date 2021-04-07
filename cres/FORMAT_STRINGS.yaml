@@ -1,0 +1,11 @@
+doctype: CRE
+id: 746-757
+links:
+- document:
+    description: Verify that format strings do not take potentially hostile input,
+      and are constant.
+    doctype: CRE
+    id: 012-035
+    name: VALIDATE_FORMAT_STRINGS_CONSTANT
+  type: SAM
+name: FORMAT_STRINGS

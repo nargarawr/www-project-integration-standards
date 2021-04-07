@@ -1,0 +1,11 @@
+doctype: CRE
+id: 110-616
+links:
+- document:
+    description: Verify that unstructured data is sanitized to enforce safety measures
+      such as allowed characters and length.
+    doctype: CRE
+    id: 010-007
+    name: VALIDATE_INPUT_SANITIZE_UNSTRUCTURED_DATA
+  type: SAM
+name: SANITIZATION

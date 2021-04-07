@@ -1,0 +1,67 @@
+description: Verify that sensitive personal information is subject to data retention
+  classification, such that old or out of date data is deleted automatically, on a
+  schedule, or as the situation requires.
+doctype: CRE
+id: 005-038-054
+links:
+- document:
+    doctype: CRE
+    id: 365-239
+    name: DATA_PROTECTION
+  type: SAM
+- document:
+    doctype: CRE
+    id: 822-331
+    name: SENSITIVE
+  type: SAM
+- document:
+    doctype: CRE
+    id: 213-506
+    name: PII
+  type: SAM
+- document:
+    doctype: CRE
+    id: 698-155
+    name: DATA_CLASSIFICATION
+  type: SAM
+- document:
+    doctype: CRE
+    id: 224-425
+    name: DATA_REMOVAL
+  type: SAM
+- document:
+    doctype: Standard
+    hyperlink: ''
+    name: SIG ISO 25010
+    section: Secure data storage
+    subsection: ''
+  type: SAM
+- document:
+    doctype: Standard
+    hyperlink: ''
+    name: ASVS
+    section: V8.3.8
+    subsection: DATA_PROTECTION-SENSITIVE-DATA_CLASSIFICATION-DATA_REMOVAL-PII
+  type: SAM
+- document:
+    doctype: Standard
+    hyperlink: ''
+    name: TOP10
+    section: https://owasp.org/www-project-top-ten/2017/A5_2017-Broken_Access_Control
+    subsection: ''
+  type: SAM
+- document:
+    doctype: Standard
+    hyperlink: ''
+    name: CWE
+    section: '285'
+    subsection: ''
+  type: SAM
+- document:
+    doctype: Standard
+    hyperlink: ''
+    name: NIST 800-53
+    section: AC-16 SECURITY AND PRIVACY ATTRIBUTES
+    subsection: ''
+  type: SAM
+name: DATA_PROTECTION_SENSITIVE_CLASSIFY_PURGE

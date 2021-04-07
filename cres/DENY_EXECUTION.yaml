@@ -1,0 +1,33 @@
+doctype: CRE
+id: 556-870
+links:
+- document:
+    description: Verify that files obtained from untrusted sources are validated to
+      be of expected type based on the file's content.
+    doctype: CRE
+    id: 007-042-023
+    name: FILE_HANDLING_VALIDATE_TYPE_BASED_ON_CONTENT
+  type: SAM
+- document:
+    description: Verify that untrusted file metadata is not used directly with system
+      API or libraries, to protect against OS command injection.
+    doctype: CRE
+    id: 007-042-023
+    name: FILE_HANDLING_UNTRUSTED_ORIGIN_IGNORE_FILE_METADATA
+  type: SAM
+- document:
+    description: Verify that the application does not include and execute functionality
+      from untrusted sources, such as unverified content distribution networks, JavaScript
+      libraries, node npm libraries, or server-side DLLs.
+    doctype: CRE
+    id: 007-042-023
+    name: FILE_HANDLING_UNTRUSTED_ORIGIN_DENY_EXECUTION
+  type: SAM
+- document:
+    description: Verify that direct requests to uploaded files will never be executed
+      as HTML/JavaScript content.
+    doctype: CRE
+    id: 007-042-066
+    name: FILE_HANDLING_DENY_EXECUTION_UPLOADED_FILES
+  type: SAM
+name: DENY_EXECUTION

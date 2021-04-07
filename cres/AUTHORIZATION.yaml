@@ -1,0 +1,12 @@
+doctype: CRE
+id: 829-603
+links:
+- document:
+    description: Verify that communications between application components, including
+      APIs, middleware and data layers, are authenticated. Components should have
+      the least necessary privileges needed. (C3)
+    doctype: CRE
+    id: 002-010-046
+    name: ARCHITECTURE_AUTHENTICATE_CONSISTENTLY_LEAST_PRIVILEGE
+  type: SAM
+name: AUTHORIZATION

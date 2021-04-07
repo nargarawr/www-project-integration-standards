@@ -1,0 +1,11 @@
+doctype: CRE
+id: 760-809
+links:
+- document:
+    description: Verify that the build pipeline warns of out-of-date or insecure components
+      and takes appropriate actions.
+    doctype: CRE
+    id: 002-018
+    name: CONFIGURATION_THIRD_PARTY_DEPENDENCIES_FRESHNESS_ALERTING_PIPELINE
+  type: SAM
+name: BUILD_PIPELINE

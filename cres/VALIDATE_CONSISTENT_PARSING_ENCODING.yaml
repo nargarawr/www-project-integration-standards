@@ -1,0 +1,83 @@
+description: Verify that all application components use the same encodings and parsers
+  to avoid parsing attacks that exploit different URI or file parsing behavior that
+  could be used in SSRF and RFI attacks.
+doctype: CRE
+id: 008-016
+links:
+- document:
+    doctype: CRE
+    id: 769-181
+    name: INTERFACE/API
+  type: SAM
+- document:
+    doctype: CRE
+    id: 426-195
+    name: SSRF
+  type: SAM
+- document:
+    doctype: CRE
+    id: 484-943
+    name: RFI
+  type: SAM
+- document:
+    doctype: CRE
+    id: 600-564
+    name: CONSISTENT_PARSING_DECODING
+  type: SAM
+- document:
+    doctype: Standard
+    hyperlink: ''
+    name: NIST 800-53
+    section: AC-4 INFORMATION FLOW ENFORCEMENT
+    subsection: ''
+  type: SAM
+- document:
+    doctype: Standard
+    hyperlink: ''
+    name: ASVS
+    section: V13.1.1
+    subsection: INTERFACE/API-CONSISTENT_PARSING_DECODING-SSRF-RFI
+  type: SAM
+- document:
+    doctype: Standard
+    hyperlink: ''
+    name: SIG ISO 25010
+    section: Input and output verification
+    subsection: ''
+  type: SAM
+- document:
+    doctype: Standard
+    hyperlink: ''
+    name: TOP10
+    section: https://owasp.org/www-project-top-ten/2017/A5_2017-Broken_Access_Control
+    subsection: ''
+  type: SAM
+- document:
+    doctype: Standard
+    hyperlink: ''
+    name: NIST 800-53
+    section: CM-6 CONFIGURATION SETTINGS,
+    subsection: ''
+  type: SAM
+- document:
+    doctype: Standard
+    hyperlink: ''
+    name: CWE
+    section: '116'
+    subsection: ''
+  type: SAM
+- document:
+    doctype: Standard
+    hyperlink: https://cheatsheetseries.owasp.org/cheatsheets/XML_Security_Cheat_Sheet.html
+    name: Cheatsheet
+    section: API and Web Service Verification Requirements
+    subsection: ''
+  type: SAM
+- document:
+    doctype: Standard
+    hyperlink: ''
+    name: NIST 800-53
+    section: SI-15 Information Output Filtering,
+    subsection: ''
+  type: SAM
+name: VALIDATE_CONSISTENT_PARSING_ENCODING

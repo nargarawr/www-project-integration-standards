@@ -1,0 +1,95 @@
+description: Verify implementation of centralized, simple (economy of design), vetted,
+  secure, and reusable security controls to avoid duplicate, missing, ineffective,
+  or insecure controls. (C10)
+doctype: CRE
+id: 002-037-014
+links:
+- document:
+    doctype: CRE
+    id: 269-400
+    name: THREAT_MODEL
+  type: SAM
+- document:
+    doctype: CRE
+    id: 113-149
+    name: ARCHITECTURE
+  type: SAM
+- document:
+    doctype: CRE
+    id: 463-146
+    name: SECURITY_COMPONENTS
+  type: SAM
+- document:
+    doctype: CRE
+    id: 422-151
+    name: CENTRALIZED
+  type: SAM
+- document:
+    doctype: CRE
+    id: 169-568
+    name: ECONOMY_OF_DESIGN
+  type: SAM
+- document:
+    doctype: Standard
+    hyperlink: ''
+    name: NIST 800-53
+    section: SA-17 DEVELOPER SECURITY AND PRIVACY ARCHITECTURE AND DESIGN
+    subsection: ''
+  type: SAM
+- document:
+    doctype: Standard
+    hyperlink: ''
+    name: ASVS
+    section: V1.1.6
+    subsection: ARCHITECTURE-SECURITY_COMPONENTS-CENTRALIZED-ECONOMY_OF_DESIGN-THREAT_MODEL
+  type: SAM
+- document:
+    doctype: Standard
+    hyperlink: ''
+    name: SIG ISO 25010
+    section: Authorized access
+    subsection: ''
+  type: SAM
+- document:
+    doctype: Standard
+    hyperlink: ''
+    name: OPC
+    section: C10
+    subsection: ''
+  type: SAM
+- document:
+    doctype: Standard
+    hyperlink: ''
+    name: NIST 800-53
+    section: PL-8 SECURITY AND PRIVACY ARCHITECTURES,
+    subsection: ''
+  type: SAM
+- document:
+    doctype: Standard
+    hyperlink: ''
+    name: CWE
+    section: '637'
+    subsection: ''
+  type: SAM
+- document:
+    doctype: Standard
+    hyperlink: https://cheatsheetseries.owasp.org/cheatsheets/Abuse_Case_Cheat_Sheet.html
+    name: Cheatsheet
+    section: Architecture, Design and Threat Modeling Requirements
+    subsection: ''
+  type: SAM
+- document:
+    doctype: Standard
+    hyperlink: ''
+    name: NIST 800-53
+    section: SC-3 SECURITY FUNCTION ISOLATION,
+    subsection: ''
+  type: SAM
+- document:
+    doctype: Standard
+    hyperlink: ''
+    name: NIST 800-53
+    section: AC-24 ACCESS CONTROL DECISIONS,
+    subsection: ''
+  type: SAM
+name: ARCHITECTURE_CENTRALIZE_SECURITY_FUNCTIONALITY

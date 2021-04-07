@@ -1,0 +1,12 @@
+doctype: CRE
+id: 600-564
+links:
+- document:
+    description: Verify that all application components use the same encodings and
+      parsers to avoid parsing attacks that exploit different URI or file parsing
+      behavior that could be used in SSRF and RFI attacks.
+    doctype: CRE
+    id: 008-016
+    name: VALIDATE_CONSISTENT_PARSING_ENCODING
+  type: SAM
+name: CONSISTENT_PARSING_DECODING

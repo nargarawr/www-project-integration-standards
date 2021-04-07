@@ -1,0 +1,62 @@
+description: Verify that users have a method to remove or export their data on demand.
+doctype: CRE
+id: 005-044
+links:
+- document:
+    doctype: CRE
+    id: 365-239
+    name: DATA_PROTECTION
+  type: SAM
+- document:
+    doctype: CRE
+    id: 213-506
+    name: PII
+  type: SAM
+- document:
+    doctype: CRE
+    id: 406-125
+    name: USER_CONTROL
+  type: SAM
+- document:
+    doctype: Standard
+    hyperlink: ''
+    name: NIST 800-53
+    section: AC-16 SECURITY AND PRIVACY ATTRIBUTES
+    subsection: ''
+  type: SAM
+- document:
+    doctype: Standard
+    hyperlink: ''
+    name: ASVS
+    section: V8.3.2
+    subsection: DATA_PROTECTION-USER_CONTROL-PII
+  type: SAM
+- document:
+    doctype: Standard
+    hyperlink: ''
+    name: SIG ISO 25010
+    section: User management
+    subsection: ''
+  type: SAM
+- document:
+    doctype: Standard
+    hyperlink: ''
+    name: TOP10
+    section: https://owasp.org/www-project-top-ten/2017/A5_2017-Broken_Access_Control
+    subsection: ''
+  type: SAM
+- document:
+    doctype: Standard
+    hyperlink: ''
+    name: NIST 800-53
+    section: CA-1 POLICY AND PROCEDURES,
+    subsection: ''
+  type: SAM
+- document:
+    doctype: Standard
+    hyperlink: ''
+    name: CWE
+    section: '212'
+    subsection: ''
+  type: SAM
+name: DATA_PROTECTION_PII_USER_REMOVAL_FUNCTIONALITY

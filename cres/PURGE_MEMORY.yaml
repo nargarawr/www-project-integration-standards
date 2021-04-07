@@ -1,0 +1,12 @@
+doctype: CRE
+id: 692-469
+links:
+- document:
+    description: Verify that sensitive information contained in memory is overwritten
+      as soon as it is no longer required to mitigate memory dumping attacks, using
+      zeroes or random data.
+    doctype: CRE
+    id: 005-038-054
+    name: DATA_PROTECTION_SENSITIVE_PURGE_MEMORY
+  type: SAM
+name: PURGE_MEMORY

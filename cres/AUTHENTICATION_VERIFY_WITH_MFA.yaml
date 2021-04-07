@@ -1,0 +1,110 @@
+description: Verify replay resistance through the mandated use of OTP devices, cryptographic
+  authenticators, or lookup codes.
+doctype: CRE
+id: 001-005-020
+links:
+- document:
+    doctype: CRE
+    id: 914-688
+    name: AUTHENTICATION
+  type: SAM
+- document:
+    doctype: CRE
+    id: 528-757
+    name: UNIQUENESS
+  type: SAM
+- document:
+    doctype: CRE
+    id: 507-618
+    name: OTP/MFA
+  type: SAM
+- document:
+    doctype: CRE
+    id: 725-285
+    name: REPLAY_RESISTANCE
+  type: SAM
+- document:
+    doctype: Standard
+    hyperlink: ''
+    name: NIST 800-53
+    section: IA-4 IDENTIFIER MANAGEMENT
+    subsection: ''
+  type: SAM
+- document:
+    doctype: Standard
+    hyperlink: ''
+    name: ASVS
+    section: V2.2.6
+    subsection: AUTHENTICATION-UNIQUENESS-REPLAY_RESISTANCE-OTP/MFA
+  type: SAM
+- document:
+    doctype: Standard
+    hyperlink: ''
+    name: NIST 800-63
+    section: 5.2.8
+    subsection: ''
+  type: SAM
+- document:
+    doctype: Standard
+    hyperlink: ''
+    name: SIG ISO 25010
+    section: Authentication strength
+    subsection: ''
+  type: SAM
+- document:
+    doctype: Standard
+    hyperlink: ''
+    name: TOP10
+    section: https://owasp.org/www-project-top-ten/2017/A2_2017-Broken_Authentication
+    subsection: ''
+  type: SAM
+- document:
+    doctype: Standard
+    hyperlink: ''
+    name: NIST 800-53
+    section: IA-2 IDENTIFICATION AND AUTHENTICATION (ORGANIZATIONAL USERS),
+    subsection: ''
+  type: SAM
+- document:
+    doctype: Standard
+    hyperlink: ''
+    name: CWE
+    section: '308'
+    subsection: ''
+  type: SAM
+- document:
+    doctype: Standard
+    hyperlink: https://cheatsheetseries.owasp.org/cheatsheets/Authentication_Cheat_Sheet.html,https://cheatsheetseries.owasp.org/cheatsheets/Transport_Layer_Protection_Cheat_Sheet.html,https://cheatsheetseries.owasp.org/cheatsheets/TLS_Cipher_String_Cheat_Sheet.html
+    name: Cheatsheet
+    section: Authentication Verification Requirements
+    subsection: ''
+  type: SAM
+- document:
+    doctype: Standard
+    hyperlink: ''
+    name: ASVS
+    section: V2.2.7
+    subsection: AUTHENTICATION-UNIQUENESS-REPLAY_RESISTANCE-OTP/MFA
+  type: SAM
+- document:
+    doctype: Standard
+    hyperlink: ''
+    name: NIST 800-63
+    section: 5.2.9
+    subsection: ''
+  type: SAM
+- document:
+    doctype: Standard
+    hyperlink: ''
+    name: NIST 800-53
+    section: IA-5 AUTHENTICATOR MANAGEMENT
+    subsection: ''
+  type: SAM
+- document:
+    doctype: Standard
+    hyperlink: ''
+    name: NIST 800-53
+    section: IA-5 AUTHENTICATOR MANAGEMENT,
+    subsection: ''
+  type: SAM
+name: AUTHENTICATION_VERIFY_WITH_MFA

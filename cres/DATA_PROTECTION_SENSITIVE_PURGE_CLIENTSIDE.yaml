@@ -1,0 +1,68 @@
+description: Verify that authenticated data is cleared from client storage, such as
+  the browser DOM, after the client or session is terminated.
+doctype: CRE
+id: 005-038-015
+links:
+- document:
+    doctype: CRE
+    id: 365-239
+    name: DATA_PROTECTION
+  type: SAM
+- document:
+    doctype: CRE
+    id: 756-104
+    name: SESSION_TERMINATION
+  type: SAM
+- document:
+    doctype: CRE
+    id: 822-331
+    name: SENSITIVE
+  type: SAM
+- document:
+    doctype: CRE
+    id: 486-706
+    name: CLEAN_CACHE_CLIENT
+  type: SAM
+- document:
+    doctype: Standard
+    hyperlink: ''
+    name: SIG ISO 25010
+    section: Secure data storage
+    subsection: ''
+  type: SAM
+- document:
+    doctype: Standard
+    hyperlink: ''
+    name: ASVS
+    section: V8.2.3
+    subsection: DATA_PROTECTION-SENSITIVE-CLEAN_CACHE_CLIENT-SESSION_TERMINATION
+  type: SAM
+- document:
+    doctype: Standard
+    hyperlink: ''
+    name: WSTG
+    section: WSTG-CLNT-12
+    subsection: ''
+  type: SAM
+- document:
+    doctype: Standard
+    hyperlink: ''
+    name: TOP10
+    section: https://owasp.org/www-project-top-ten/2017/A5_2017-Broken_Access_Control
+    subsection: ''
+  type: SAM
+- document:
+    doctype: Standard
+    hyperlink: ''
+    name: CWE
+    section: '922'
+    subsection: ''
+  type: SAM
+- document:
+    doctype: Standard
+    hyperlink: ''
+    name: NIST 800-53
+    section: SI-14 NON-PERSISTENCE
+    subsection: ''
+  type: SAM
+name: DATA_PROTECTION_SENSITIVE_PURGE_CLIENTSIDE

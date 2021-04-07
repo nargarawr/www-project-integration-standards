@@ -1,0 +1,11 @@
+doctype: CRE
+id: 812-842
+links:
+- document:
+    description: Verify that a code analysis tool is in use that can detect potentially
+      malicious code, such as time functions, unsafe file operations and network connections.
+    doctype: CRE
+    id: 004-012-013
+    name: CONFIGURATION_CODE_SCAN_MALICIOUS_CONTENT
+  type: SAM
+name: BUILD_INTEGRITY

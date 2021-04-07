@@ -1,0 +1,11 @@
+doctype: CRE
+id: 891-754
+links:
+- document:
+    description: Verify that GraphQL or other data layer authorization logic should
+      be implemented at the business logic layer instead of the GraphQL layer.
+    doctype: CRE
+    id: 008-048-001
+    name: VALIDATE_INPUT_GRAPHQL_AUTHORIZATION
+  type: SAM
+name: API_ACCESS_CONTROL

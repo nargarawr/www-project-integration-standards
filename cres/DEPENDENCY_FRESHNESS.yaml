@@ -1,0 +1,19 @@
+doctype: CRE
+id: 166-250
+links:
+- document:
+    description: Verify that the build pipeline warns of out-of-date or insecure components
+      and takes appropriate actions.
+    doctype: CRE
+    id: 002-018
+    name: CONFIGURATION_THIRD_PARTY_DEPENDENCIES_FRESHNESS_ALERTING_PIPELINE
+  type: SAM
+- document:
+    description: Verify the application does not use unsupported, insecure, or deprecated
+      client-side technologies such as NSAPI plugins, Flash, Shockwave, ActiveX, Silverlight,
+      NACL, or client-side Java applets.
+    doctype: CRE
+    id: 005-022-025
+    name: CONFIGURATION_THIRD_PARTY_DEPENDENCIES_NO_DEPRECATED/INSECURE_CLIENTSIDE_TECHNOLOGIES
+  type: SAM
+name: DEPENDENCY_FRESHNESS

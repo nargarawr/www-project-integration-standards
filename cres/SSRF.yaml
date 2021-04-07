@@ -1,0 +1,27 @@
+doctype: CRE
+id: 426-195
+links:
+- document:
+    description: Verify that the application protects against SSRF attacks, by validating
+      or sanitizing untrusted data or HTTP file metadata, such as filenames and URL
+      input fields, use whitelisting of protocols, domains, paths and ports.
+    doctype: CRE
+    id: 010-049-043
+    name: VALIDATE_INPUT_SANITIZE_OUTPUT_SSRF_METADATA
+  type: SAM
+- document:
+    description: Verify that user-submitted filename metadata is not used directly
+      with system or framework file and URL API to protect against path traversal.
+    doctype: CRE
+    id: 007-042-023
+    name: FILE_HANDLING_UPLOADED_FILES_IGNORE_USER_SUBMITTED_FILE_METADATA
+  type: SAM
+- document:
+    description: Verify that all application components use the same encodings and
+      parsers to avoid parsing attacks that exploit different URI or file parsing
+      behavior that could be used in SSRF and RFI attacks.
+    doctype: CRE
+    id: 008-016
+    name: VALIDATE_CONSISTENT_PARSING_ENCODING
+  type: SAM
+name: SSRF

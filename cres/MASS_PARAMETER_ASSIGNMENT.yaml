@@ -1,0 +1,12 @@
+doctype: CRE
+id: 737-661
+links:
+- document:
+    description: Verify that frameworks protect against mass parameter assignment
+      attacks, or that the application has countermeasures to protect against unsafe
+      parameter assignment, such as marking fields private or similar. (C5)
+    doctype: CRE
+    id: 012-009
+    name: VALIDATE_MASS_PARAMETER_ASSIGNMENT
+  type: SAM
+name: MASS_PARAMETER_ASSIGNMENT

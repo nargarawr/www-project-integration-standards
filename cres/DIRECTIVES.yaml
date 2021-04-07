@@ -1,0 +1,41 @@
+doctype: CRE
+id: 918-739
+links:
+- document:
+    description: Verify the application encrypts communications between components,
+      particularly when these components are in different containers, systems, sites,
+      or cloud providers. (C3)
+    doctype: CRE
+    id: 002-026-057
+    name: PROTECT_DATA_IN_TRANSIT_BETWEEN_COMPONENTS
+  type: SAM
+- document:
+    description: Verify that proper certification revocation, such as Online Certificate
+      Status Protocol (OCSP) Stapling, is enabled and configured.
+    doctype: CRE
+    id: 005-022-025
+    name: PROTECT_DATA_IN_TRANSIT_TLS_CERTIFICATE_REVOCATION
+  type: SAM
+- document:
+    description: Verify that application components verify the authenticity of each
+      side in a communication link to prevent person-in-the-middle attacks. For example,
+      application components should validate TLS certificates and chains.
+    doctype: CRE
+    id: 012-030-024
+    name: PROTECT_DATA_IN_TRANSIT_VERIFY_TLS_AUTHENTICITY
+  type: SAM
+- document:
+    description: Verify that secured TLS is used for all client connectivity, and
+      does not fall back to insecure or unencrypted protocols. (C8)
+    doctype: CRE
+    id: 005-022-025
+    name: PROTECT_DATA_IN_TRANSIT_TLS_ALL_CONNECTIONS_NO_FALLBACK
+  type: SAM
+- document:
+    description: Verify that all encrypted connections to external systems that involve
+      sensitive information or functions are authenticated.
+    doctype: CRE
+    id: 005-022-025
+    name: PROTECT_DATA_IN_TRANSIT_AUTHENTICATE_EXTERNAL_CONNECTIONS
+  type: SAM
+name: DIRECTIVES

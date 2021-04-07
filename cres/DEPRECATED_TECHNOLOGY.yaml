@@ -1,0 +1,12 @@
+doctype: CRE
+id: 637-518
+links:
+- document:
+    description: Verify the application does not use unsupported, insecure, or deprecated
+      client-side technologies such as NSAPI plugins, Flash, Shockwave, ActiveX, Silverlight,
+      NACL, or client-side Java applets.
+    doctype: CRE
+    id: 005-022-025
+    name: CONFIGURATION_THIRD_PARTY_DEPENDENCIES_NO_DEPRECATED/INSECURE_CLIENTSIDE_TECHNOLOGIES
+  type: SAM
+name: DEPRECATED_TECHNOLOGY

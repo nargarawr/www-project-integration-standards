@@ -1,0 +1,12 @@
+doctype: CRE
+id: 933-161
+links:
+- document:
+    description: Verify that the application does not ask for unnecessary or excessive
+      permissions to privacy related features or sensors, such as contacts, cameras,
+      microphones, or location.
+    doctype: CRE
+    id: 004-012-050
+    name: CONFIGURATION_VERIFY_PRIVACY_PERMISSIONS
+  type: SAM
+name: PRIVACY_PERMISSIONS

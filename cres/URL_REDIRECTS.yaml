@@ -1,0 +1,11 @@
+doctype: CRE
+id: 241-181
+links:
+- document:
+    description: Verify that URL redirects and forwards only allow whitelisted destinations,
+      or show a warning when redirecting to potentially untrusted content.
+    doctype: CRE
+    id: 012-035
+    name: VALIDATE_URL_REDIRECTS/FORWARDS_WHITELISTING
+  type: SAM
+name: URL_REDIRECTS

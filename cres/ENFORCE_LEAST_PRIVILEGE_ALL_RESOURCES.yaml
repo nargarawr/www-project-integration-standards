@@ -1,0 +1,53 @@
+doctype: CRE
+id: 906-218
+links:
+- document:
+    description: Verify that sensitive data and APIs are protected against direct
+      object attacks targeting creation, reading, updating and deletion of records,
+      such as creating or updating someone else's record, viewing everyone's records,
+      or deleting all records.
+    doctype: CRE
+    id: 001-023
+    name: PROTECT_SENSITIVE_DATA_DIRECT_OBJECT_ATTACKS
+  type: SAM
+- document:
+    description: Verify enforcement of the principle of least privilege in functions,
+      data files, URLs, controllers, services, and other resources. This implies protection
+      against spoofing and elevation of privilege.
+    doctype: CRE
+    id: 002-014-072
+    name: ACCESS_CONTROL_LEAST_PRIVILEGE_ALL_RESOURCES
+  type: SAM
+- document:
+    description: Verify that attribute or feature-based access control is used whereby
+      the code checks the user's authorization for a feature/data item rather than
+      just their role. Permissions should still be allocated using roles. (C7)
+    doctype: CRE
+    id: 004-019-032
+    name: ACCESS_CONTROL_AUTHORIZE_DATA_ITEM_LEVEL_ABAC_RBAC
+  type: SAM
+- document:
+    description: Verify that all user and data attributes and policy information used
+      by access controls cannot be manipulated by end users unless specifically authorized.
+    doctype: CRE
+    id: 001-023
+    name: ACCESS_CONTROL_ADMINISTER_PROPERLY
+  type: SAM
+- document:
+    description: Verify that the principle of least privilege exists - users should
+      only be able to access functions, data files, URLs, controllers, services, and
+      other resources, for which they possess specific authorization. This implies
+      protection against spoofing and elevation of privilege. (C7)
+    doctype: CRE
+    id: 001-023
+    name: ACCESS_CONTROL_LEAST_PRIVILEGE_DENY_BY_DEFAULT
+  type: SAM
+- document:
+    description: Verify that the principle of deny by default exists whereby new users/roles
+      start with minimal or no permissions and users/roles do not receive access to
+      new features until access is explicitly assigned. (C7)
+    doctype: CRE
+    id: 001-023
+    name: ACCESS_CONTROL_LEAST_PRIVILEGE_DENY_BY_DEFAULT_NEW_USER
+  type: SAM
+name: ENFORCE_LEAST_PRIVILEGE_ALL_RESOURCES

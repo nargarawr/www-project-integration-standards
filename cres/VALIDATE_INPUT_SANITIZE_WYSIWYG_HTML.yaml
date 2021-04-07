@@ -1,0 +1,94 @@
+description: Verify that all untrusted HTML input from WYSIWYG editors or similar
+  is properly sanitized with an HTML sanitizer library or framework feature. (C5)
+doctype: CRE
+id: 010-008
+links:
+- document:
+    doctype: CRE
+    id: 432-100
+    name: SANITIZE_OUTPUT_USER_SUPPLIED
+  type: SAM
+- document:
+    doctype: CRE
+    id: 183-276
+    name: SCHEMA_AND_TYPING
+  type: SAM
+- document:
+    doctype: CRE
+    id: 714-871
+    name: VALIDATE_BEFORE_RETURNING
+  type: SAM
+- document:
+    doctype: CRE
+    id: 904-835
+    name: HTML_SANITIZATION
+  type: SAM
+- document:
+    doctype: CRE
+    id: 125-671
+    name: WYSIWYG_EDITORS
+  type: SAM
+- document:
+    doctype: Standard
+    hyperlink: ''
+    name: NIST 800-53
+    section: SI-10 INFORMATION INPUT VALIDATION
+    subsection: ''
+  type: SAM
+- document:
+    doctype: Standard
+    hyperlink: ''
+    name: ASVS
+    section: V5.2.1
+    subsection: SANITIZE_OUTPUT_USER_SUPPLIED-SCHEMA_AND_TYPING-VALIDATE_BEFORE_RETURNING-HTML_SANITIZATION-WYSIWYG_EDITORS
+  type: SAM
+- document:
+    doctype: Standard
+    hyperlink: ''
+    name: SIG ISO 25010
+    section: Input and output verification
+    subsection: ''
+  type: SAM
+- document:
+    doctype: Standard
+    hyperlink: ''
+    name: OPC
+    section: C5
+    subsection: ''
+  type: SAM
+- document:
+    doctype: Standard
+    hyperlink: ''
+    name: TOP10
+    section: https://owasp.org/www-project-top-ten/2017/A7_2017-Cross-Site_Scripting_(XSS)
+    subsection: ''
+  type: SAM
+- document:
+    doctype: Standard
+    hyperlink: ''
+    name: NIST 800-53
+    section: AC-4 INFORMATION FLOW ENFORCEMENT,
+    subsection: ''
+  type: SAM
+- document:
+    doctype: Standard
+    hyperlink: ''
+    name: CWE
+    section: '116'
+    subsection: ''
+  type: SAM
+- document:
+    doctype: Standard
+    hyperlink: https://cheatsheetseries.owasp.org/cheatsheets/Deserialization_Cheat_Sheet.html,https://cheatsheetseries.owasp.org/cheatsheets/XML_External_Entity_Prevention_Cheat_Sheet.html,https://cheatsheetseries.owasp.org/cheatsheets/XML_Security_Cheat_Sheet.html
+    name: Cheatsheet
+    section: Validation, Sanitization and Encoding Verification Requirements
+    subsection: ''
+  type: SAM
+- document:
+    doctype: Standard
+    hyperlink: ''
+    name: WSTG
+    section: WSTG-CLNT-03
+    subsection: ''
+  type: SAM
+name: VALIDATE_INPUT_SANITIZE_WYSIWYG_HTML

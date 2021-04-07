@@ -1,0 +1,11 @@
+doctype: CRE
+id: 108-554
+links:
+- document:
+    description: Verify the application generates a new session token on user authentication.
+      (C6)
+    doctype: CRE
+    id: 011-040-033
+    name: SESSION_MANAGEMENT_TOKEN_GENERATION_ON_AUTHENTICATION
+  type: SAM
+name: TOKEN_RENEWAL

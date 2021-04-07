@@ -1,0 +1,11 @@
+doctype: CRE
+id: 408-167
+links:
+- document:
+    description: Verify that user-submitted filename metadata is not used directly
+      with system or framework file and URL API to protect against path traversal.
+    doctype: CRE
+    id: 007-042-023
+    name: FILE_HANDLING_UPLOADED_FILES_IGNORE_USER_SUBMITTED_FILE_METADATA
+  type: SAM
+name: PATH_TRAVERSAL

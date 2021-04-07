@@ -1,0 +1,12 @@
+doctype: CRE
+id: 751-661
+links:
+- document:
+    description: Verify that trusted enforcement points such as at access control
+      gateways, servers, and serverless functions enforce access controls. Never enforce
+      access controls on the client.
+    doctype: CRE
+    id: 007-042-059
+    name: ACCESS_CONTROL_ENFORCE_CONSISTENTLY_SERVERSIDE
+  type: SAM
+name: ENFORCE_SERVERSIDE

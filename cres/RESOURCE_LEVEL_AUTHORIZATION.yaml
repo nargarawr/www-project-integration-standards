@@ -1,0 +1,12 @@
+doctype: CRE
+id: 173-781
+links:
+- document:
+    description: Verify that authorization decisions are made at both the URI, enforced
+      by programmatic or declarative security at the controller or router, and at
+      the resource level, enforced by model-based permissions.
+    doctype: CRE
+    id: 008-001
+    name: ACCESS_CONTROL_AUTHORIZE_URI_AND_RESOURCE_LEVEL
+  type: SAM
+name: RESOURCE_LEVEL_AUTHORIZATION

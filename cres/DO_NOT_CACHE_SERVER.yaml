@@ -1,0 +1,11 @@
+doctype: CRE
+id: 491-977
+links:
+- document:
+    description: Verify the application protects sensitive data from being cached
+      in server components such as load balancers and application caches.
+    doctype: CRE
+    id: 005-038-029
+    name: DATA_PROTECTION_SENSITIVE_NO_CACHING_SERVERSIDE
+  type: SAM
+name: DO_NOT_CACHE_SERVER

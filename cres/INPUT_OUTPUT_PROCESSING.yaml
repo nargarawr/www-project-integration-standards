@@ -1,0 +1,26 @@
+doctype: CRE
+id: 249-151
+links:
+- document:
+    description: Verify that input and output requirements clearly define how to handle
+      and process data based on type, content, and applicable laws, regulations, and
+      other policy compliance.
+    doctype: CRE
+    id: 004-006-022
+    name: SDLC_DEFINE_INPUT_OUTPUT_REQUIREMENTS
+  type: SAM
+- document:
+    description: Verify that input validation is enforced on a trusted service layer.
+      (C5)
+    doctype: CRE
+    id: 004-019-042
+    name: VALIDATE_INPUT_TRUSTED_SERVICE_LAYER
+  type: SAM
+- document:
+    description: Verify that output encoding occurs close to or by the interpreter
+      for which it is intended. (C4)
+    doctype: CRE
+    id: 002-014-048
+    name: OUTPUT_ENCODING_NEAR_INTERPRETER
+  type: SAM
+name: INPUT_OUTPUT_PROCESSING

@@ -1,0 +1,35 @@
+doctype: CRE
+id: 873-150
+links:
+- document:
+    description: If authenticators permit users to remain logged in, verify that re-authentication
+      occurs periodically both when actively used or after an idle period. (C6)
+    doctype: CRE
+    id: 011-039-002
+    name: SESSION_MANAGEMENT_TIMEOUT_REAUTHENTICATION
+  type: SAM
+- document:
+    description: Verify that relying parties specify the maximum authentication time
+      to CSPs and that CSPs re-authenticate the subscriber if they haven't used a
+      session within that period.
+    doctype: CRE
+    id: 011-039-003
+    name: SESSION_MANAGEMENT_CREDENTIAL_SERVICE_PROVIDER_SESSION_TIMEOUT
+  type: SAM
+- document:
+    description: Verify that CSPs inform relying parties of the last authentication
+      event, to allow RPs to determine if they need to re-authenticate the user.
+    doctype: CRE
+    id: 011-039-003
+    name: SESSION_MANAGEMENT_CREDENTIAL_SERVICE_PROVIDER_INFORMS_RELYING_PARTIES
+  type: SAM
+- document:
+    description: Verify the application has additional authorization (such as step
+      up or adaptive authentication) for lower value systems, and / or segregation
+      of duties for high value applications to enforce anti-fraud controls as per
+      the risk of application and past fraud.
+    doctype: CRE
+    id: 001-002-005
+    name: ACCESS_CONTROL_AUTHORIZATION_STEP_UP
+  type: SAM
+name: REAUTHENTICATION

@@ -1,0 +1,12 @@
+doctype: CRE
+id: 552-666
+links:
+- document:
+    description: Verify that attribute or feature-based access control is used whereby
+      the code checks the user's authorization for a feature/data item rather than
+      just their role. Permissions should still be allocated using roles. (C7)
+    doctype: CRE
+    id: 004-019-032
+    name: ACCESS_CONTROL_AUTHORIZE_DATA_ITEM_LEVEL_ABAC_RBAC
+  type: SAM
+name: RBAC/ABAC

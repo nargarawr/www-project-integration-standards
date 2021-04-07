@@ -1,0 +1,20 @@
+doctype: CRE
+id: 971-474
+links:
+- document:
+    description: Verify that GraphQL or other data layer authorization logic should
+      be implemented at the business logic layer instead of the GraphQL layer.
+    doctype: CRE
+    id: 008-048-001
+    name: VALIDATE_INPUT_GRAPHQL_AUTHORIZATION
+  type: SAM
+- document:
+    description: Verify that query whitelisting or a combination of depth limiting
+      and amount limiting should be used to prevent GraphQL or data layer expression
+      denial of service (DoS) as a result of expensive, nested queries. For more advanced
+      scenarios, query cost analysis should be used.
+    doctype: CRE
+    id: 008-048-077
+    name: VALIDATE_INPUT_GRAPHQL_QUERY_WHITELISTING/LIMITING
+  type: SAM
+name: VALIDATE_QUERY

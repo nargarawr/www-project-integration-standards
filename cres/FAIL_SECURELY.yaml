@@ -1,0 +1,18 @@
+doctype: CRE
+id: 275-440
+links:
+- document:
+    description: Verify that access controls fail securely including when an exception
+      occurs. (C10)
+    doctype: CRE
+    id: 001-025
+    name: ACCESS_CONTROL_FAIL_SECURELY
+  type: SAM
+- document:
+    description: Verify that all cryptographic modules fail securely, and errors are
+      handled in a way that does not enable Padding Oracle attacks.
+    doctype: CRE
+    id: 005-021-031
+    name: ENCRYPT_DATA_AT_REST_CRYPTOGRAPHIC_MODULES_FAIL_SECURELY
+  type: SAM
+name: FAIL_SECURELY

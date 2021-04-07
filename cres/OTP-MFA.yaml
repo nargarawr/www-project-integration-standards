@@ -1,0 +1,58 @@
+doctype: CRE
+id: 507-618
+links:
+- document:
+    description: Verify that time-based OTPs have a defined lifetime before expiring.
+    doctype: CRE
+    id: 001-005-073
+    name: AUTHENTICATION_OTP_VALIDITY
+  type: SAM
+- document:
+    description: Verify that symmetric keys used to verify submitted OTPs are highly
+      protected, such as by using a hardware security module or secure operating system
+      based key storage.
+    doctype: CRE
+    id: 001-005-073
+    name: AUTHENTICATE_OTP_PROTECTED_STORAGE
+  type: SAM
+- document:
+    description: Verify physical single factor OTP generator can be revoked in case
+      of theft or other loss. Ensure that revocation is immediately effective across
+      logged in sessions, regardless of location.
+    doctype: CRE
+    id: 001-005-073
+    name: AUTHENTICATION_OTP_REVOCATION
+  type: SAM
+- document:
+    description: Verify replay resistance through the mandated use of OTP devices,
+      cryptographic authenticators, or lookup codes.
+    doctype: CRE
+    id: 001-005-020
+    name: AUTHENTICATION_VERIFY_WITH_MFA
+  type: SAM
+- document:
+    description: Verify that renewal instructions are sent with sufficient time to
+      renew time bound authenticators.
+    doctype: CRE
+    id: 001-005-073
+    name: AUTHENTICATION_OTP_VALIDITY_RENEWAL
+  type: SAM
+- document:
+    description: Verify that if a time-based multi factor OTP token is re-used during
+      the validity period, it is logged and rejected with secure notifications being
+      sent to the holder of the device.
+    doctype: CRE
+    id: 001-005-073
+    name: AUTHENTICATION_OTP_REUSE_REJECTION
+  type: SAM
+- document:
+    description: Verify that the use of weak authenticators (such as SMS and email)
+      is limited to secondary verification and transaction approval and not as a replacement
+      for more secure authentication methods. Verify that stronger methods are offered
+      before weak methods, users are aware of the risks, or that proper measures are
+      in place to limit the risks of account compromise.
+    doctype: CRE
+    id: 001-005-074
+    name: AUTHENTICATION_STRONG_FACTORS_FIRST
+  type: SAM
+name: OTP/MFA

@@ -1,0 +1,19 @@
+doctype: CRE
+id: 463-146
+links:
+- document:
+    description: Verify implementation of centralized, simple (economy of design),
+      vetted, secure, and reusable security controls to avoid duplicate, missing,
+      ineffective, or insecure controls. (C10)
+    doctype: CRE
+    id: 002-037-014
+    name: ARCHITECTURE_CENTRALIZE_SECURITY_FUNCTIONALITY
+  type: SAM
+- document:
+    description: Verify that the chosen access control solution is flexible enough
+      to meet the application's needs.
+    doctype: CRE
+    id: 007-042-066
+    name: ARCHITECTURE_ACCESS_CONTROL_FLEXIBILITY
+  type: SAM
+name: SECURITY_COMPONENTS

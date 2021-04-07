@@ -1,0 +1,38 @@
+doctype: CRE
+id: 483-281
+links:
+- document:
+    description: Verify that user-uploaded files - if required to be displayed or
+      downloaded from the application - are served by either octet stream downloads,
+      or from an unrelated domain, such as a cloud file storage bucket. Implement
+      a suitable content security policy to reduce the risk from XSS vectors or other
+      attacks from the uploaded file.
+    doctype: CRE
+    id: 001-005-020
+    name: FILE_HANDLING_UPLOADED_FILES_SERVE_ONLY_OCTET_STREAM_OR_SEPARATE_DOMAIN
+  type: SAM
+- document:
+    description: Verify that the application projects against JavaScript or JSON injection
+      attacks, including for eval attacks, remote JavaScript includes, CSP bypasses,
+      DOM XSS, and JavaScript expression evaluation. (C4)
+    doctype: CRE
+    id: 012-045-010
+    name: VALIDATE_JS/JSON_INJECTION
+  type: SAM
+- document:
+    description: Verify that a content security policy (CSPv2) is in place that helps
+      mitigate impact for XSS attacks like HTML, DOM, JSON, and JavaScript injection
+      vulnerabilities.
+    doctype: CRE
+    id: 004-015-038
+    name: CONFIGURATION_SET_HEADERS_CSP
+  type: SAM
+- document:
+    description: 'Verify that a suitable X-Frame-Options or Content-Security-Policy:
+      frame-ancestors header is in use for sites where content should not be embedded
+      in a third-party site.'
+    doctype: CRE
+    id: 004-015-038
+    name: CONFIGURATION_SET_HEADERS_FRAME
+  type: SAM
+name: CSP

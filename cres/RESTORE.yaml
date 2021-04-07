@@ -1,0 +1,12 @@
+doctype: CRE
+id: 541-152
+links:
+- document:
+    description: Verify that the application build and deployment processes are performed
+      in a secure and repeatable way, such as CI / CD automation, automated configuration
+      management, and automated deployment scripts.
+    doctype: CRE
+    id: 004-006-012
+    name: CONFIGURATION_CODE_PIPELINE_DEPLOYMENT_AUTOMATION
+  type: SAM
+name: RESTORE

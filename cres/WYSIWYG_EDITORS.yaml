@@ -1,0 +1,11 @@
+doctype: CRE
+id: 125-671
+links:
+- document:
+    description: Verify that all untrusted HTML input from WYSIWYG editors or similar
+      is properly sanitized with an HTML sanitizer library or framework feature. (C5)
+    doctype: CRE
+    id: 010-008
+    name: VALIDATE_INPUT_SANITIZE_WYSIWYG_HTML
+  type: SAM
+name: WYSIWYG_EDITORS

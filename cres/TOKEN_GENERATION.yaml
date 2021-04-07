@@ -1,0 +1,17 @@
+doctype: CRE
+id: 418-621
+links:
+- document:
+    description: Verify the application generates a new session token on user authentication.
+      (C6)
+    doctype: CRE
+    id: 011-040-033
+    name: SESSION_MANAGEMENT_TOKEN_GENERATION_ON_AUTHENTICATION
+  type: SAM
+- document:
+    description: Verify that session tokens possess at least 64 bits of entropy. (C6)
+    doctype: CRE
+    id: 011-040-033
+    name: SESSION_MANAGEMENT_TOKEN_GENERATION_CRYPTOGRAPHIC_DIRECTIVES
+  type: SAM
+name: TOKEN_GENERATION

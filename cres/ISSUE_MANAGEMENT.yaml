@@ -1,0 +1,13 @@
+doctype: CRE
+id: 505-159
+links:
+- document:
+    description: Verify that a source code control system is in use, with procedures
+      to ensure that check-ins are accompanied by issues or change tickets. The source
+      code control system should have access control and identifiable users to allow
+      traceability of any changes.
+    doctype: CRE
+    id: 002-026-031
+    name: CONFIGURATION_CODE_PIPELINE_TRACEABILITY
+  type: SAM
+name: ISSUE_MANAGEMENT

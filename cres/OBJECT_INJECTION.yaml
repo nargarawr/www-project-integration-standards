@@ -1,0 +1,13 @@
+doctype: CRE
+id: 656-356
+links:
+- document:
+    description: Verify that serialization is not used when communicating with untrusted
+      clients. If this is not possible, ensure that adequate integrity controls (and
+      possibly encryption if sensitive data is sent) are enforced to prevent deserialization
+      attacks including object injection.
+    doctype: CRE
+    id: 004-019-037
+    name: VALIDATE_DESERIALIZATION_UNTRUSTED_INPUT
+  type: SAM
+name: OBJECT_INJECTION

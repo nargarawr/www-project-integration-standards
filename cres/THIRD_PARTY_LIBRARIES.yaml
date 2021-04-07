@@ -1,0 +1,13 @@
+doctype: CRE
+id: 534-137
+links:
+- document:
+    description: Verify that the application source code and third party libraries
+      do not contain unauthorized phone home or data collection capabilities. Where
+      such functionality exists, obtain the user's permission for it to operate before
+      collecting any data.
+    doctype: CRE
+    id: 004-012-050
+    name: CONFIGURATION_CODE_THIRD_PARTY_DEPENDENCIES_SCAN_MALICIOUS_CONTENT
+  type: SAM
+name: THIRD_PARTY_LIBRARIES

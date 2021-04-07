@@ -1,0 +1,27 @@
+doctype: CRE
+id: 773-996
+links:
+- document:
+    description: Verify that the application does not log credentials or payment details.
+      Session tokens should only be stored in logs in an irreversible, hashed form.
+      (C9, C10)
+    doctype: CRE
+    id: 009-020
+    name: LOG_NO_SENSITIVE_DATA_CREDENTIALS/PAYMENT_DATA
+  type: SAM
+- document:
+    description: Verify that the application does not log other sensitive data as
+      defined under local privacy laws or relevant security policy. (C9)
+    doctype: CRE
+    id: 009-020
+    name: LOG_NO_SENSITIVE_DATA
+  type: SAM
+- document:
+    description: Verify accessing sensitive data is audited (without logging the sensitive
+      data itself), if the data is collected under relevant data protection directives
+      or where logging of access is required.
+    doctype: CRE
+    id: 005-038-009
+    name: DATA_PROTECTION_SENSITIVE_LOG_ACCESS_EVENTS
+  type: SAM
+name: DISCRETE_LOGS

@@ -1,0 +1,29 @@
+doctype: CRE
+id: 559-298
+links:
+- document:
+    description: Verify that passwords are stored in a form that is resistant to offline
+      attacks. Passwords SHALL be salted and hashed using an approved one-way key
+      derivation or password hashing function. Key derivation and password hashing
+      functions take a password, a salt, and a cost factor as inputs when generating
+      a password hash. (C6)
+    doctype: CRE
+    id: 001-005-073
+    name: CREDENTIALS_MANAGEMENT_CRYPTOGRAPHIC_DIRECTIVES_KDF_SALTING_HASHING
+  type: SAM
+- document:
+    description: Verify that approved cryptographic algorithms are used in the generation,
+      seeding, and verification.
+    doctype: CRE
+    id: 001-005-073
+    name: CREDENTIALS_MANAGEMENT_CRYPTOGRAPHIC_DIRECTIVES
+  type: SAM
+- document:
+    description: Verify that cryptographic keys used in verification are stored securely
+      and protected against disclosure, such as using a TPM or HSM, or an OS service
+      that can use this secure storage.
+    doctype: CRE
+    id: 001-005-073
+    name: CREDENTIALS_MANAGEMENT_CRYPTOGRAPHIC_DIRECTIVES_AVOID_INFO_DISCLOSURE
+  type: SAM
+name: STORAGE_DIRECTIVES

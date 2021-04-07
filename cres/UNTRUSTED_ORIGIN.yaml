@@ -1,0 +1,93 @@
+doctype: CRE
+id: 713-132
+links:
+- document:
+    description: Verify that user-uploaded files are stored outside of the web root.
+    doctype: CRE
+    id: 005-021-047
+    name: FILE_HANDLING_UPLOADED_FILES_UNPRIVILEGED_STORAGE
+  type: SAM
+- document:
+    description: Verify that user-uploaded files - if required to be displayed or
+      downloaded from the application - are served by either octet stream downloads,
+      or from an unrelated domain, such as a cloud file storage bucket. Implement
+      a suitable content security policy to reduce the risk from XSS vectors or other
+      attacks from the uploaded file.
+    doctype: CRE
+    id: 001-005-020
+    name: FILE_HANDLING_UPLOADED_FILES_SERVE_ONLY_OCTET_STREAM_OR_SEPARATE_DOMAIN
+  type: SAM
+- document:
+    description: Verify that the application will not accept large files that could
+      fill up storage or cause a denial of service attack.
+    doctype: CRE
+    id: 007-042-058
+    name: FILE_HANDLING_UPLOADED_FILES_DENY_LARGE_FILES
+  type: SAM
+- document:
+    description: Verify that compressed files are checked for "zip bombs" - small
+      input files that will decompress into huge files thus exhausting file storage
+      limits.
+    doctype: CRE
+    id: 007-042-058
+    name: FILE_HANDLING_CHECK_ZIP_BOMB
+  type: SAM
+- document:
+    description: Verify that a file size quota and maximum number of files per user
+      is enforced to ensure that a single user cannot fill up the storage with too
+      many files, or excessively large files.
+    doctype: CRE
+    id: 007-042-058
+    name: FILE_HANDLING_UPLOADED_FILES_SET_USER_MAXIMA
+  type: SAM
+- document:
+    description: Verify that files obtained from untrusted sources are validated to
+      be of expected type based on the file's content.
+    doctype: CRE
+    id: 007-042-023
+    name: FILE_HANDLING_VALIDATE_TYPE_BASED_ON_CONTENT
+  type: SAM
+- document:
+    description: Verify that user-submitted filename metadata is not used directly
+      with system or framework file and URL API to protect against path traversal.
+    doctype: CRE
+    id: 007-042-023
+    name: FILE_HANDLING_UPLOADED_FILES_IGNORE_USER_SUBMITTED_FILE_METADATA
+  type: SAM
+- document:
+    description: Verify that untrusted file metadata is not used directly with system
+      API or libraries, to protect against OS command injection.
+    doctype: CRE
+    id: 007-042-023
+    name: FILE_HANDLING_UNTRUSTED_ORIGIN_IGNORE_FILE_METADATA
+  type: SAM
+- document:
+    description: Verify that the application does not include and execute functionality
+      from untrusted sources, such as unverified content distribution networks, JavaScript
+      libraries, node npm libraries, or server-side DLLs.
+    doctype: CRE
+    id: 007-042-023
+    name: FILE_HANDLING_UNTRUSTED_ORIGIN_DENY_EXECUTION
+  type: SAM
+- document:
+    description: Verify that files obtained from untrusted sources are stored outside
+      the web root, with limited permissions, preferably with strong validation.
+    doctype: CRE
+    id: 007-042-059
+    name: FILE_HANDLING_UNTRUSTED_ORIGIN_UNPRIVILEGED_STORAGE
+  type: SAM
+- document:
+    description: Verify that files obtained from untrusted sources are scanned by
+      antivirus scanners to prevent upload of known malicious content.
+    doctype: CRE
+    id: 007-042-059
+    name: FILE_HANDLING_UNTRUSTED_ORIGIN_SCAN_MALICIOUS_CONTENT
+  type: SAM
+- document:
+    description: Verify that direct requests to uploaded files will never be executed
+      as HTML/JavaScript content.
+    doctype: CRE
+    id: 007-042-066
+    name: FILE_HANDLING_DENY_EXECUTION_UPLOADED_FILES
+  type: SAM
+name: UNTRUSTED_ORIGIN

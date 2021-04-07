@@ -1,0 +1,105 @@
+description: Verify the application can detect and alert on abnormal numbers of requests,
+  such as by IP, user, total per hour or day, or whatever makes sense for the application.
+doctype: CRE
+id: 009-003
+links:
+- document:
+    doctype: CRE
+    id: 434-566
+    name: LOG
+  type: SAM
+- document:
+    doctype: CRE
+    id: 328-402
+    name: DETECT_ANOMALIES
+  type: SAM
+- document:
+    doctype: CRE
+    id: 101-893
+    name: ALLOW_MONITORING
+  type: SAM
+- document:
+    doctype: Standard
+    hyperlink: ''
+    name: NIST 800-53
+    section: SI-4 SYSTEM MONITORING
+    subsection: ''
+  type: SAM
+- document:
+    doctype: Standard
+    hyperlink: ''
+    name: ASVS
+    section: V8.1.4
+    subsection: LOG-ALLOW_MONITORING-DETECT_ANOMALIES
+  type: SAM
+- document:
+    doctype: Standard
+    hyperlink: ''
+    name: SIG ISO 25010
+    section: Security logging
+    subsection: ''
+  type: SAM
+- document:
+    doctype: Standard
+    hyperlink: ''
+    name: TOP10
+    section: https://owasp.org/www-project-top-ten/2017/A10_2017-Insufficient_Logging%2526Monitoring
+    subsection: ''
+  type: SAM
+- document:
+    doctype: Standard
+    hyperlink: ''
+    name: NIST 800-53
+    section: CA-7 CONTINUOUS MONITORING,
+    subsection: ''
+  type: SAM
+- document:
+    doctype: Standard
+    hyperlink: ''
+    name: CWE
+    section: '770'
+    subsection: ''
+  type: SAM
+- document:
+    doctype: Standard
+    hyperlink: ''
+    name: NIST 800-53
+    section: SC-5 DENIAL-OF-SERVICE PROTECTION,
+    subsection: ''
+  type: SAM
+- document:
+    doctype: Standard
+    hyperlink: ''
+    name: NIST 800-53
+    section: 'SI-5 Security Alerts, Advisories, and Directives, '
+    subsection: ''
+  type: SAM
+- document:
+    doctype: Standard
+    hyperlink: ''
+    name: NIST 800-53
+    section: 'SI-13 Predictable Failure Prevention, '
+    subsection: ''
+  type: SAM
+- document:
+    doctype: Standard
+    hyperlink: ''
+    name: NIST 800-53
+    section: SI-17 Fail-Safe Procedures,
+    subsection: ''
+  type: SAM
+- document:
+    doctype: Standard
+    hyperlink: ''
+    name: NIST 800-53
+    section: IR-4 INCIDENT HANDLING,
+    subsection: ''
+  type: SAM
+- document:
+    doctype: Standard
+    hyperlink: ''
+    name: NIST 800-53
+    section: IR-5 INCIDENT MONITORING,
+    subsection: ''
+  type: SAM
+name: LOG_ALERTING_ANOMALIES

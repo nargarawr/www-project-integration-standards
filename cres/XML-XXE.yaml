@@ -1,0 +1,19 @@
+doctype: CRE
+id: 821-814
+links:
+- document:
+    description: Verify that the application protects against XPath injection or XML
+      injection attacks. (C4)
+    doctype: CRE
+    id: 012-045-010
+    name: VALIDATE_XPATH/XML_INJECTION
+  type: SAM
+- document:
+    description: Verify that the application correctly restricts XML parsers to only
+      use the most restrictive configuration possible and to ensure that unsafe features
+      such as resolving external entities are disabled to prevent XXE.
+    doctype: CRE
+    id: 012-030-078
+    name: VALIDATE_XML_PARSING_XXE
+  type: SAM
+name: XML/XXE

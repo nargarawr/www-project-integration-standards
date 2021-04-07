@@ -1,0 +1,13 @@
+doctype: CRE
+id: 126-939
+links:
+- document:
+    description: Verify that if application assets, such as JavaScript libraries,
+      CSS stylesheets or web fonts, are hosted externally on a content delivery network
+      (CDN) or external provider, Subresource Integrity (SRI) is used to validate
+      the integrity of the asset.
+    doctype: CRE
+    id: 004-019-041
+    name: THIRD_PARTY_DEPENDENCIES-USE_SRI_FOR_CDNS
+  type: SAM
+name: SRI

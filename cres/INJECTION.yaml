@@ -1,0 +1,95 @@
+doctype: CRE
+id: 331-772
+links:
+- document:
+    description: Verify that the application appropriately encodes user-supplied data
+      to prevent log injection. (C9)
+    doctype: CRE
+    id: 009-027
+    name: LOG_PROTECTION_LOG_INJECTION_ENCODE_INPUT
+  type: SAM
+- document:
+    description: Verify that all events are protected from injection when viewed in
+      log viewing software. (C9)
+    doctype: CRE
+    id: 009-027
+    name: LOG_PROTECTION_LOG_INJECTION
+  type: SAM
+- document:
+    description: Verify that serialization is not used when communicating with untrusted
+      clients. If this is not possible, ensure that adequate integrity controls (and
+      possibly encryption if sensitive data is sent) are enforced to prevent deserialization
+      attacks including object injection.
+    doctype: CRE
+    id: 004-019-037
+    name: VALIDATE_DESERIALIZATION_UNTRUSTED_INPUT
+  type: SAM
+- document:
+    description: Verify that the application sanitizes user input before passing to
+      mail systems to protect against SMTP or IMAP injection.
+    doctype: CRE
+    id: 010-007
+    name: VALIDATE_INPUT_SANITIZE_MAIL_SMTP/IMAP
+  type: SAM
+- document:
+    description: Verify that the application protects against template injection attacks
+      by ensuring that any user input being included is sanitized or sandboxed.
+    doctype: CRE
+    id: 010-034
+    name: VALIDATE_INPUT_SANITIZE_ISOLATE_SCRIPTABLE_TEMPLATES
+  type: SAM
+- document:
+    description: Verify that data selection or database queries (e.g. SQL, HQL, ORM,
+      NoSQL) use parameterized queries, ORMs, entity frameworks, or are otherwise
+      protected from database injection attacks. (C3)
+    doctype: CRE
+    id: 012-045-011
+    name: VALIDATE_PARAMETERIZATION_DATABASE_INJECTION
+  type: SAM
+- document:
+    description: Verify that where parameterized or safer mechanisms are not present,
+      context-specific output encoding is used to protect against injection attacks,
+      such as the use of SQL escaping to protect against SQL injection. (C3, C4)
+    doctype: CRE
+    id: 012-045-010
+    name: VALIDATE_CONTEXT_DEPENDENT_ENCODING_SQLI
+  type: SAM
+- document:
+    description: Verify that the application projects against JavaScript or JSON injection
+      attacks, including for eval attacks, remote JavaScript includes, CSP bypasses,
+      DOM XSS, and JavaScript expression evaluation. (C4)
+    doctype: CRE
+    id: 012-045-010
+    name: VALIDATE_JS/JSON_INJECTION
+  type: SAM
+- document:
+    description: Verify that the application protects against LDAP Injection vulnerabilities,
+      or that specific security controls to prevent LDAP Injection have been implemented.
+      (C4)
+    doctype: CRE
+    id: 012-045-010
+    name: VALIDATE_LDAP_INJECTION
+  type: SAM
+- document:
+    description: Verify that the application protects against OS command injection
+      and that operating system calls use parameterized OS queries or use contextual
+      command line output encoding. (C4)
+    doctype: CRE
+    id: 012-045-010
+    name: VALIDATE_OS_COMMAND_INJECTION
+  type: SAM
+- document:
+    description: Verify that the application protects against XPath injection or XML
+      injection attacks. (C4)
+    doctype: CRE
+    id: 012-045-010
+    name: VALIDATE_XPATH/XML_INJECTION
+  type: SAM
+- document:
+    description: Verify that untrusted file metadata is not used directly with system
+      API or libraries, to protect against OS command injection.
+    doctype: CRE
+    id: 007-042-023
+    name: FILE_HANDLING_UNTRUSTED_ORIGIN_IGNORE_FILE_METADATA
+  type: SAM
+name: INJECTION

@@ -1,0 +1,12 @@
+doctype: CRE
+links:
+- document:
+    description: Verify the application has additional authorization (such as step
+      up or adaptive authentication) for lower value systems, and / or segregation
+      of duties for high value applications to enforce anti-fraud controls as per
+      the risk of application and past fraud.
+    doctype: CRE
+    id: 001-002-005
+    name: ACCESS_CONTROL_AUTHORIZATION_STEP_UP
+  type: SAM
+name: ADDITIONAL_AUTHORIZATION

@@ -1,0 +1,78 @@
+description: Verify impersonation resistance against phishing, such as the use of
+  multi-factor authentication, cryptographic devices with intent (such as connected
+  keys with a push to authenticate), or at higher AAL levels, client-side certificates.
+doctype: CRE
+id: 001-005-074
+links:
+- document:
+    doctype: CRE
+    id: 914-688
+    name: AUTHENTICATION
+  type: SAM
+- document:
+    doctype: CRE
+    id: 528-757
+    name: UNIQUENESS
+  type: SAM
+- document:
+    doctype: CRE
+    id: 414-331
+    name: MFA/OTP
+  type: SAM
+- document:
+    doctype: Standard
+    hyperlink: ''
+    name: NIST 800-53
+    section: SC-13 CRYPTOGRAPHIC PROTECTION
+    subsection: ''
+  type: SAM
+- document:
+    doctype: Standard
+    hyperlink: ''
+    name: ASVS
+    section: V2.2.4
+    subsection: AUTHENTICATION-UNIQUENESS-MFA/OTP
+  type: SAM
+- document:
+    doctype: Standard
+    hyperlink: ''
+    name: NIST 800-63
+    section: 5.2.5
+    subsection: ''
+  type: SAM
+- document:
+    doctype: Standard
+    hyperlink: ''
+    name: SIG ISO 25010
+    section: Authentication strength
+    subsection: ''
+  type: SAM
+- document:
+    doctype: Standard
+    hyperlink: ''
+    name: TOP10
+    section: https://owasp.org/www-project-top-ten/2017/A2_2017-Broken_Authentication
+    subsection: ''
+  type: SAM
+- document:
+    doctype: Standard
+    hyperlink: ''
+    name: NIST 800-53
+    section: IA-2 IDENTIFICATION AND AUTHENTICATION
+    subsection: ''
+  type: SAM
+- document:
+    doctype: Standard
+    hyperlink: ''
+    name: CWE
+    section: '308'
+    subsection: ''
+  type: SAM
+- document:
+    doctype: Standard
+    hyperlink: https://cheatsheetseries.owasp.org/cheatsheets/Authentication_Cheat_Sheet.html,https://cheatsheetseries.owasp.org/cheatsheets/Transport_Layer_Protection_Cheat_Sheet.html,https://cheatsheetseries.owasp.org/cheatsheets/TLS_Cipher_String_Cheat_Sheet.html
+    name: Cheatsheet
+    section: Authentication Verification Requirements
+    subsection: ''
+  type: SAM
+name: AUTHENTICATION_MFA/OTP

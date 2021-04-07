@@ -1,0 +1,27 @@
+doctype: CRE
+id: 211-635
+links:
+- document:
+    description: Verify that the application will not accept large files that could
+      fill up storage or cause a denial of service attack.
+    doctype: CRE
+    id: 007-042-058
+    name: FILE_HANDLING_UPLOADED_FILES_DENY_LARGE_FILES
+  type: SAM
+- document:
+    description: Verify that compressed files are checked for "zip bombs" - small
+      input files that will decompress into huge files thus exhausting file storage
+      limits.
+    doctype: CRE
+    id: 007-042-058
+    name: FILE_HANDLING_CHECK_ZIP_BOMB
+  type: SAM
+- document:
+    description: Verify that a file size quota and maximum number of files per user
+      is enforced to ensure that a single user cannot fill up the storage with too
+      many files, or excessively large files.
+    doctype: CRE
+    id: 007-042-058
+    name: FILE_HANDLING_UPLOADED_FILES_SET_USER_MAXIMA
+  type: SAM
+name: DENY_DOS

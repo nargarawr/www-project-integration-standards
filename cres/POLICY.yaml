@@ -1,0 +1,12 @@
+doctype: CRE
+id: 849-801
+links:
+- document:
+    description: Verify that there is an explicit policy for management of cryptographic
+      keys and that a cryptographic key lifecycle follows a key management standard
+      such as NIST SP 800-57.
+    doctype: CRE
+    id: 002-014-008
+    name: ENCRYPT_DATA_AT_REST_KEY/SECRET_MANAGEMENT_LIFECYCLE
+  type: SAM
+name: POLICY

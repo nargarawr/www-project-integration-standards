@@ -1,0 +1,79 @@
+description: Verify that users are provided clear language regarding collection and
+  use of supplied personal information and that users have provided opt-in consent
+  for the use of that data before it is used in any way.
+doctype: CRE
+id: 005-044
+links:
+- document:
+    doctype: CRE
+    id: 365-239
+    name: DATA_PROTECTION
+  type: SAM
+- document:
+    doctype: CRE
+    id: 213-506
+    name: PII
+  type: SAM
+- document:
+    doctype: CRE
+    id: 406-125
+    name: USER_CONTROL
+  type: SAM
+- document:
+    doctype: CRE
+    id: 419-748
+    name: UNDERSTANDABILITY
+  type: SAM
+- document:
+    doctype: CRE
+    id: 909-760
+    name: CONSENT
+  type: SAM
+- document:
+    doctype: CRE
+    id: 931-150
+    name: OPT_IN
+  type: SAM
+- document:
+    doctype: Standard
+    hyperlink: ''
+    name: NIST 800-53
+    section: PT-5 PRIVACY NOTICE
+    subsection: ''
+  type: SAM
+- document:
+    doctype: Standard
+    hyperlink: ''
+    name: ASVS
+    section: V8.3.3
+    subsection: DATA_PROTECTION-USER_CONTROL-PII-UNDERSTANDABILITY-CONSENT-OPT_IN
+  type: SAM
+- document:
+    doctype: Standard
+    hyperlink: ''
+    name: SIG ISO 25010
+    section: '@SDLC'
+    subsection: ''
+  type: SAM
+- document:
+    doctype: Standard
+    hyperlink: ''
+    name: TOP10
+    section: https://owasp.org/www-project-top-ten/2017/A5_2017-Broken_Access_Control
+    subsection: ''
+  type: SAM
+- document:
+    doctype: Standard
+    hyperlink: ''
+    name: NIST 800-53
+    section: CA-1 POLICY AND PROCEDURES,
+    subsection: ''
+  type: SAM
+- document:
+    doctype: Standard
+    hyperlink: ''
+    name: CWE
+    section: '285'
+    subsection: ''
+  type: SAM
+name: DATA_PROTECTION_PII_USER_CONSENT

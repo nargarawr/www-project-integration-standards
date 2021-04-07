@@ -1,0 +1,86 @@
+description: Verify that the application uses a single vetted authentication mechanism
+  that is known to be secure, can be extended to include strong authentication, and
+  has sufficient logging and monitoring to detect account abuse or breaches.
+doctype: CRE
+id: 004-012-061
+links:
+- document:
+    doctype: CRE
+    id: 113-149
+    name: ARCHITECTURE
+  type: SAM
+- document:
+    doctype: CRE
+    id: 914-688
+    name: AUTHENTICATION
+  type: SAM
+- document:
+    doctype: CRE
+    id: 826-575
+    name: AUTHENTICATION_MECHANISM
+  type: SAM
+- document:
+    doctype: CRE
+    id: 434-566
+    name: LOG
+  type: SAM
+- document:
+    doctype: CRE
+    id: 446-562
+    name: ALLOW_LOGGING
+  type: SAM
+- document:
+    doctype: CRE
+    id: 328-402
+    name: DETECT_ANOMALIES
+  type: SAM
+- document:
+    doctype: Standard
+    hyperlink: ''
+    name: NIST 800-53
+    section: SC-3 SECURITY FUNCTION ISOLATION
+    subsection: ''
+  type: SAM
+- document:
+    doctype: Standard
+    hyperlink: ''
+    name: ASVS
+    section: V1.2.3
+    subsection: ARCHITECTURE-AUTHENTICATION-AUTHENTICATION_MECHANISM-LOG-ALLOW_LOGGING-DETECT_ANOMALIES
+  type: SAM
+- document:
+    doctype: Standard
+    hyperlink: ''
+    name: SIG ISO 25010
+    section: Authorized access
+    subsection: ''
+  type: SAM
+- document:
+    doctype: Standard
+    hyperlink: ''
+    name: TOP10
+    section: https://owasp.org/www-project-top-ten/2017/A2_2017-Broken_Authentication
+    subsection: ''
+  type: SAM
+- document:
+    doctype: Standard
+    hyperlink: ''
+    name: NIST 800-53
+    section: PL-8 Information Security Architecture,
+    subsection: ''
+  type: SAM
+- document:
+    doctype: Standard
+    hyperlink: ''
+    name: CWE
+    section: '306'
+    subsection: ''
+  type: SAM
+- document:
+    doctype: Standard
+    hyperlink: ''
+    name: NIST 800-53
+    section: SC-39 PROCESS ISOLATION,
+    subsection: ''
+  type: SAM
+name: ARCHITECTURE_AUTHENTICATE_CONSISTENTLY_EXTENDABLE_ALLOW_LOGGING

@@ -1,0 +1,12 @@
+doctype: CRE
+id: 713-461
+links:
+- document:
+    description: Verify that logout and expiration invalidate the session token, such
+      that the back button or a downstream relying party does not resume an authenticated
+      session, including across relying parties. (C6)
+    doctype: CRE
+    id: 011-039-002
+    name: SESSION_MANAGEMENT_INVALIDATE_SESSION_LOGOUT/EXPIRATION
+  type: SAM
+name: LOGOUT

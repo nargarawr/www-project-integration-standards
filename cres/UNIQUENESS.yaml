@@ -1,0 +1,133 @@
+doctype: CRE
+id: 528-757
+links:
+- document:
+    description: Verify that time-based OTPs have a defined lifetime before expiring.
+    doctype: CRE
+    id: 001-005-073
+    name: AUTHENTICATION_OTP_VALIDITY
+  type: SAM
+- document:
+    description: Verify that symmetric keys used to verify submitted OTPs are highly
+      protected, such as by using a hardware security module or secure operating system
+      based key storage.
+    doctype: CRE
+    id: 001-005-073
+    name: AUTHENTICATE_OTP_PROTECTED_STORAGE
+  type: SAM
+- document:
+    description: Verify physical single factor OTP generator can be revoked in case
+      of theft or other loss. Ensure that revocation is immediately effective across
+      logged in sessions, regardless of location.
+    doctype: CRE
+    id: 001-005-073
+    name: AUTHENTICATION_OTP_REVOCATION
+  type: SAM
+- document:
+    description: Verify that integration secrets do not rely on unchanging passwords,
+      such as API keys or shared privileged accounts.
+    doctype: CRE
+    id: 001-005-073
+    name: CREDENTIALS_MANAGEMENT_NO_STATIC_SECRETS
+  type: SAM
+- document:
+    description: Verify impersonation resistance against phishing, such as the use
+      of multi-factor authentication, cryptographic devices with intent (such as connected
+      keys with a push to authenticate), or at higher AAL levels, client-side certificates.
+    doctype: CRE
+    id: 001-005-074
+    name: AUTHENTICATION_MFA/OTP
+  type: SAM
+- document:
+    description: Verify that where a credential service provider (CSP) and the application
+      verifying authentication are separated, mutually authenticated TLS is in place
+      between the two endpoints.
+    doctype: CRE
+    id: 001-005-006
+    name: AUTHENTICATE_CREDENTIAL_SERVICE_PROVIDER_MUTUAL_TLS
+  type: SAM
+- document:
+    description: Verify replay resistance through the mandated use of OTP devices,
+      cryptographic authenticators, or lookup codes.
+    doctype: CRE
+    id: 001-005-020
+    name: AUTHENTICATION_VERIFY_WITH_MFA
+  type: SAM
+- document:
+    description: Verify system generated initial passwords or activation codes SHOULD
+      be securely randomly generated, SHOULD be at least 6 characters long, and MAY
+      contain letters and numbers, and expire after a short period of time. These
+      initial secrets must not be permitted to become the long term password.
+    doctype: CRE
+    id: 001-005-073
+    name: AUTHENTICATION_INITIAL_CREDENTIALS_CRYPTOGRAPHIC_DIRECTIVES
+  type: SAM
+- document:
+    description: Verify that enrollment and use of subscriber-provided authentication
+      devices are supported, such as a U2F or FIDO tokens.
+    doctype: CRE
+    id: 001-005-073
+    name: AUTHENTICATION_MFA/OTP_ALLOW_AUTHENTICATION_DEVICES
+  type: SAM
+- document:
+    description: Verify that renewal instructions are sent with sufficient time to
+      renew time bound authenticators.
+    doctype: CRE
+    id: 001-005-073
+    name: AUTHENTICATION_OTP_VALIDITY_RENEWAL
+  type: SAM
+- document:
+    description: Verify that clear text out of band (NIST "restricted") authenticators,
+      such as SMS or PSTN, are not offered by default, and stronger alternatives such
+      as push notifications are offered first.
+    doctype: CRE
+    id: 001-002-056
+    name: AUTHENTICATION_MFA/OTP_AVOID_CLEARTEXT
+  type: SAM
+- document:
+    description: Verify that the out of band verifier expires out of band authentication
+      requests, codes, or tokens after 10 minutes.
+    doctype: CRE
+    id: 001-005-073
+    name: AUTHENTICATION_MFA/OTP_VALIDITY
+  type: SAM
+- document:
+    description: Verify that the out of band authenticator and verifier communicates
+      over a secure independent channel.
+    doctype: CRE
+    id: 001-017-076
+    name: AUTHENTICATION_MFA/OTP_VERIFIER_SECURE_DATA_TRANSPORT
+  type: SAM
+- document:
+    description: Verify that the out of band verifier retains only a hashed version
+      of the authentication code.
+    doctype: CRE
+    id: 001-005-073
+    name: AUTHENTICATION_MFA/OTP_CRYPTOGRAPHIC_DIRECTIVES
+  type: SAM
+- document:
+    description: Verify that if a time-based multi factor OTP token is re-used during
+      the validity period, it is logged and rejected with secure notifications being
+      sent to the holder of the device.
+    doctype: CRE
+    id: 001-005-073
+    name: AUTHENTICATION_OTP_REUSE_REJECTION
+  type: SAM
+- document:
+    description: Verify that the use of weak authenticators (such as SMS and email)
+      is limited to secondary verification and transaction approval and not as a replacement
+      for more secure authentication methods. Verify that stronger methods are offered
+      before weak methods, users are aware of the risks, or that proper measures are
+      in place to limit the risks of account compromise.
+    doctype: CRE
+    id: 001-005-074
+    name: AUTHENTICATION_STRONG_FACTORS_FIRST
+  type: SAM
+- document:
+    description: Verify that if passwords are required, the credentials are not a
+      default account.
+    doctype: CRE
+    id: 001-017-076
+    name: CREDENTIALS_MANAGEMENT_NO_DEFAULT
+  type: SAM
+name: UNIQUENESS

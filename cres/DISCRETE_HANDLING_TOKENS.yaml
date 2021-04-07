@@ -1,0 +1,19 @@
+doctype: CRE
+id: 612-780
+links:
+- document:
+    description: Verify the application never reveals session tokens in URL parameters
+      or error messages.
+    doctype: CRE
+    id: 011-040-026
+    name: SESSION_MANAGEMENT_PROTECT/NOT_EXPOSE_SESSION_TOKENS
+  type: SAM
+- document:
+    description: Verify the application only stores session tokens in the browser
+      using secure methods such as appropriately secured cookies (see section 3.4)
+      or HTML 5 session storage.
+    doctype: CRE
+    id: 011-040-026
+    name: SESSION_MANAGEMENT_PROTECT/NOT_EXPOSE_SESSION_TOKENS_BROWSER_STORAGE
+  type: SAM
+name: DISCRETE_HANDLING_TOKENS

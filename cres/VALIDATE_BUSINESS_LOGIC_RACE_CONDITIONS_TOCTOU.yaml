@@ -1,0 +1,110 @@
+description: Verify that all high-value business logic flows, including authentication,
+  session management and access control, do not share unsynchronized state.
+doctype: CRE
+id: 005-021-047
+links:
+- document:
+    doctype: CRE
+    id: 738-622
+    name: BUSINESS_LOGIC
+  type: SAM
+- document:
+    doctype: CRE
+    id: 836-967
+    name: SYNCHRONIZATION
+  type: SAM
+- document:
+    doctype: CRE
+    id: 292-759
+    name: RACE_CONDITIONS
+  type: SAM
+- document:
+    doctype: CRE
+    id: 811-959
+    name: TOCTOU
+  type: SAM
+- document:
+    doctype: Standard
+    hyperlink: ''
+    name: ASVS
+    section: V11.1.6
+    subsection: BUSINESS_LOGIC-RACE_CONDITIONS-TOCTOU
+  type: SAM
+- document:
+    doctype: Standard
+    hyperlink: ''
+    name: NIST 800-53
+    section: AC-4 INFORMATION FLOW ENFORCEMENT
+    subsection: ''
+  type: SAM
+- document:
+    doctype: Standard
+    hyperlink: ''
+    name: ASVS
+    section: V1.11.2
+    subsection: BUSINESS_LOGIC-RACE_CONDITIONS-SYNCHRONIZATION
+  type: SAM
+- document:
+    doctype: Standard
+    hyperlink: ''
+    name: SIG ISO 25010
+    section: Input and output verification
+    subsection: ''
+  type: SAM
+- document:
+    doctype: Standard
+    hyperlink: ''
+    name: TOP10
+    section: https://owasp.org/www-project-top-ten/2017/A5_2017-Broken_Access_Control
+    subsection: ''
+  type: SAM
+- document:
+    doctype: Standard
+    hyperlink: ''
+    name: NIST 800-53
+    section: AC-4 INFORMATION FLOW ENFORCEMENT,
+    subsection: ''
+  type: SAM
+- document:
+    doctype: Standard
+    hyperlink: ''
+    name: CWE
+    section: '362'
+    subsection: ''
+  type: SAM
+- document:
+    doctype: Standard
+    hyperlink: https://cheatsheetseries.owasp.org/cheatsheets/Abuse_Case_Cheat_Sheet.html
+    name: Cheatsheet
+    section: Architecture, Design and Threat Modeling Requirements
+    subsection: ''
+  type: SAM
+- document:
+    doctype: Standard
+    hyperlink: https://cheatsheetseries.owasp.org/cheatsheets/Abuse_Case_Cheat_Sheet.html
+    name: Cheatsheet
+    section: Business Logic Verification Requirements
+    subsection: ''
+  type: SAM
+- document:
+    doctype: Standard
+    hyperlink: ''
+    name: ASVS
+    section: V1.11.3
+    subsection: BUSINESS_LOGIC-RACE_CONDITIONS-TOCTOU
+  type: SAM
+- document:
+    doctype: Standard
+    hyperlink: ''
+    name: CWE
+    section: '367'
+    subsection: ''
+  type: SAM
+- document:
+    doctype: Standard
+    hyperlink: ''
+    name: NIST 800-53
+    section: AU-8 Time Stamps
+    subsection: ''
+  type: SAM
+name: VALIDATE_BUSINESS_LOGIC_RACE_CONDITIONS_TOCTOU

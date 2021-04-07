@@ -1,0 +1,12 @@
+doctype: CRE
+id: 400-898
+links:
+- document:
+    description: Verify that the application does not include and execute functionality
+      from untrusted sources, such as unverified content distribution networks, JavaScript
+      libraries, node npm libraries, or server-side DLLs.
+    doctype: CRE
+    id: 007-042-023
+    name: FILE_HANDLING_UNTRUSTED_ORIGIN_DENY_EXECUTION
+  type: SAM
+name: CDN

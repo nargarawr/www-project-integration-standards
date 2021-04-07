@@ -1,0 +1,12 @@
+doctype: CRE
+id: 169-568
+links:
+- document:
+    description: Verify implementation of centralized, simple (economy of design),
+      vetted, secure, and reusable security controls to avoid duplicate, missing,
+      ineffective, or insecure controls. (C10)
+    doctype: CRE
+    id: 002-037-014
+    name: ARCHITECTURE_CENTRALIZE_SECURITY_FUNCTIONALITY
+  type: SAM
+name: ECONOMY_OF_DESIGN

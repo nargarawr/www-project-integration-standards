@@ -1,0 +1,91 @@
+description: Verify that a source code control system is in use, with procedures to
+  ensure that check-ins are accompanied by issues or change tickets. The source code
+  control system should have access control and identifiable users to allow traceability
+  of any changes.
+doctype: CRE
+id: 002-026-031
+links:
+- document:
+    doctype: CRE
+    id: 246-938
+    name: CONFIGURATION
+  type: SAM
+- document:
+    doctype: CRE
+    id: 862-757
+    name: AUTOMATE_PIPELINE
+  type: SAM
+- document:
+    doctype: CRE
+    id: 868-112
+    name: TRACEABILITY
+  type: SAM
+- document:
+    doctype: CRE
+    id: 505-159
+    name: ISSUE_MANAGEMENT
+  type: SAM
+- document:
+    doctype: Standard
+    hyperlink: ''
+    name: NIST 800-53
+    section: CM-6 CONFIGURATION SETTINGS
+    subsection: ''
+  type: SAM
+- document:
+    doctype: Standard
+    hyperlink: ''
+    name: ASVS
+    section: V1.10.1
+    subsection: CONFIGURATION-AUTOMATE_PIPELINE-TRACEABILITY-ISSUE_MANAGEMENT
+  type: SAM
+- document:
+    doctype: Standard
+    hyperlink: ''
+    name: SIG ISO 25010
+    section: '@SDLC'
+    subsection: ''
+  type: SAM
+- document:
+    doctype: Standard
+    hyperlink: ''
+    name: NIST 800-53
+    section: CM-1 POLICY AND PROCEDURES,
+    subsection: ''
+  type: SAM
+- document:
+    doctype: Standard
+    hyperlink: ''
+    name: CWE
+    section: '284'
+    subsection: ''
+  type: SAM
+- document:
+    doctype: Standard
+    hyperlink: https://cheatsheetseries.owasp.org/cheatsheets/Abuse_Case_Cheat_Sheet.html
+    name: Cheatsheet
+    section: Architecture, Design and Threat Modeling Requirements
+    subsection: ''
+  type: SAM
+- document:
+    doctype: Standard
+    hyperlink: ''
+    name: NIST 800-53
+    section: CM-2 BASELINE CONFIGURATION,
+    subsection: ''
+  type: SAM
+- document:
+    doctype: Standard
+    hyperlink: ''
+    name: NIST 800-53
+    section: CM-3 CONFIGURATION CHANGE CONTROL,
+    subsection: ''
+  type: SAM
+- document:
+    doctype: Standard
+    hyperlink: ''
+    name: NIST 800-53
+    section: CM-5 ACCESS RESTRICTIONS FOR CHANGE,
+    subsection: ''
+  type: SAM
+name: CONFIGURATION_CODE_PIPELINE_TRACEABILITY

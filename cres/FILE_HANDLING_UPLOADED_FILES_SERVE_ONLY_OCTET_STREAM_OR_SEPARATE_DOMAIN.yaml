@@ -1,0 +1,92 @@
+description: Verify that user-uploaded files - if required to be displayed or downloaded
+  from the application - are served by either octet stream downloads, or from an unrelated
+  domain, such as a cloud file storage bucket. Implement a suitable content security
+  policy to reduce the risk from XSS vectors or other attacks from the uploaded file.
+doctype: CRE
+id: 001-005-020
+links:
+- document:
+    doctype: CRE
+    id: 258-284
+    name: FILE_HANDLING
+  type: SAM
+- document:
+    doctype: CRE
+    id: 713-132
+    name: UNTRUSTED_ORIGIN
+  type: SAM
+- document:
+    doctype: CRE
+    id: 399-298
+    name: XSS
+  type: SAM
+- document:
+    doctype: CRE
+    id: 483-281
+    name: CSP
+  type: SAM
+- document:
+    doctype: CRE
+    id: 153-188
+    name: FILE_SERVING
+  type: SAM
+- document:
+    doctype: CRE
+    id: 631-918
+    name: OCTET_STREAM
+  type: SAM
+- document:
+    doctype: CRE
+    id: 440-995
+    name: CLOUD_BUCKET
+  type: SAM
+- document:
+    doctype: Standard
+    hyperlink: ''
+    name: NIST 800-53
+    section: SI-16 Memory Protection
+    subsection: ''
+  type: SAM
+- document:
+    doctype: Standard
+    hyperlink: ''
+    name: ASVS
+    section: V1.12.2
+    subsection: FILE_HANDLING-UNTRUSTED_ORIGIN-FILE_SERVING-OCTET_STREAM-CLOUD_BUCKET-CSP-XSS
+  type: SAM
+- document:
+    doctype: Standard
+    hyperlink: ''
+    name: SIG ISO 25010
+    section: Input and output verification
+    subsection: ''
+  type: SAM
+- document:
+    doctype: Standard
+    hyperlink: ''
+    name: TOP10
+    section: https://owasp.org/www-project-top-ten/2017/A2_2017-Broken_Authentication
+    subsection: ''
+  type: SAM
+- document:
+    doctype: Standard
+    hyperlink: ''
+    name: NIST 800-53
+    section: AC-4 INFORMATION FLOW ENFORCEMENT,
+    subsection: ''
+  type: SAM
+- document:
+    doctype: Standard
+    hyperlink: ''
+    name: CWE
+    section: '646'
+    subsection: ''
+  type: SAM
+- document:
+    doctype: Standard
+    hyperlink: ''
+    name: NIST 800-53
+    section: 'SI-10 Information Input Validation, '
+    subsection: ''
+  type: SAM
+name: FILE_HANDLING_UPLOADED_FILES_SERVE_ONLY_OCTET_STREAM_OR_SEPARATE_DOMAIN

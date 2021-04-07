@@ -1,0 +1,63 @@
+doctype: CRE
+id: 432-100
+links:
+- document:
+    description: Verify that output encoding occurs close to or by the interpreter
+      for which it is intended. (C4)
+    doctype: CRE
+    id: 002-014-048
+    name: OUTPUT_ENCODING_NEAR_INTERPRETER
+  type: SAM
+- document:
+    description: Verify that all untrusted HTML input from WYSIWYG editors or similar
+      is properly sanitized with an HTML sanitizer library or framework feature. (C5)
+    doctype: CRE
+    id: 010-008
+    name: VALIDATE_INPUT_SANITIZE_WYSIWYG_HTML
+  type: SAM
+- document:
+    description: Verify that unstructured data is sanitized to enforce safety measures
+      such as allowed characters and length.
+    doctype: CRE
+    id: 010-007
+    name: VALIDATE_INPUT_SANITIZE_UNSTRUCTURED_DATA
+  type: SAM
+- document:
+    description: Verify that the application sanitizes user input before passing to
+      mail systems to protect against SMTP or IMAP injection.
+    doctype: CRE
+    id: 010-007
+    name: VALIDATE_INPUT_SANITIZE_MAIL_SMTP/IMAP
+  type: SAM
+- document:
+    description: Verify that the application avoids the use of eval() or other dynamic
+      code execution features. Where there is no alternative, any user input being
+      included must be sanitized or sandboxed before being executed.
+    doctype: CRE
+    id: 010-033
+    name: VALIDATE_INPUT_NO_DYNAMIC_CODE_EXECUTION
+  type: SAM
+- document:
+    description: Verify that the application protects against template injection attacks
+      by ensuring that any user input being included is sanitized or sandboxed.
+    doctype: CRE
+    id: 010-034
+    name: VALIDATE_INPUT_SANITIZE_ISOLATE_SCRIPTABLE_TEMPLATES
+  type: SAM
+- document:
+    description: Verify that the application protects against SSRF attacks, by validating
+      or sanitizing untrusted data or HTTP file metadata, such as filenames and URL
+      input fields, use whitelisting of protocols, domains, paths and ports.
+    doctype: CRE
+    id: 010-049-043
+    name: VALIDATE_INPUT_SANITIZE_OUTPUT_SSRF_METADATA
+  type: SAM
+- document:
+    description: Verify that the application sanitizes, disables, or sandboxes user-supplied
+      SVG scriptable content, especially as they relate to XSS resulting from inline
+      scripts, and foreignObject.
+    doctype: CRE
+    id: 010-034
+    name: VALIDATE_INPUT_SANITIZE_ISOLATE_SCRIPTABLE_TEMPLATES_SVG
+  type: SAM
+name: SANITIZE_OUTPUT_USER_SUPPLIED

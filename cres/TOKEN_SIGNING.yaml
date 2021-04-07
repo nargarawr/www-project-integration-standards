@@ -1,0 +1,12 @@
+doctype: CRE
+id: 555-181
+links:
+- document:
+    description: Verify that stateless session tokens use digital signatures, encryption,
+      and other countermeasures to protect against tampering, enveloping, replay,
+      null cipher, and key substitution attacks.
+    doctype: CRE
+    id: 011-040-069
+    name: SESSION_MANAGEMENT_STATELESS_TOKENS_SIGNATURES_ENCRYPTION
+  type: SAM
+name: TOKEN_SIGNING

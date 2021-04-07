@@ -1,0 +1,51 @@
+doctype: CRE
+id: 659-431
+links:
+- document:
+    description: Verify that passwords are stored in a form that is resistant to offline
+      attacks. Passwords SHALL be salted and hashed using an approved one-way key
+      derivation or password hashing function. Key derivation and password hashing
+      functions take a password, a salt, and a cost factor as inputs when generating
+      a password hash. (C6)
+    doctype: CRE
+    id: 001-005-073
+    name: CREDENTIALS_MANAGEMENT_CRYPTOGRAPHIC_DIRECTIVES_KDF_SALTING_HASHING
+  type: SAM
+- document:
+    description: Verify that the out of band verifier retains only a hashed version
+      of the authentication code.
+    doctype: CRE
+    id: 001-005-073
+    name: AUTHENTICATION_MFA/OTP_CRYPTOGRAPHIC_DIRECTIVES
+  type: SAM
+- document:
+    description: Verify that approved cryptographic algorithms are used in the generation,
+      seeding, and verification.
+    doctype: CRE
+    id: 001-005-073
+    name: CREDENTIALS_MANAGEMENT_CRYPTOGRAPHIC_DIRECTIVES
+  type: SAM
+- document:
+    description: Verify that cryptographic keys used in verification are stored securely
+      and protected against disclosure, such as using a TPM or HSM, or an OS service
+      that can use this secure storage.
+    doctype: CRE
+    id: 001-005-073
+    name: CREDENTIALS_MANAGEMENT_CRYPTOGRAPHIC_DIRECTIVES_AVOID_INFO_DISCLOSURE
+  type: SAM
+- document:
+    description: Verify that the application does not log credentials or payment details.
+      Session tokens should only be stored in logs in an irreversible, hashed form.
+      (C9, C10)
+    doctype: CRE
+    id: 009-020
+    name: LOG_NO_SENSITIVE_DATA_CREDENTIALS/PAYMENT_DATA
+  type: SAM
+- document:
+    description: Verify that the application does not log other sensitive data as
+      defined under local privacy laws or relevant security policy. (C9)
+    doctype: CRE
+    id: 009-020
+    name: LOG_NO_SENSITIVE_DATA
+  type: SAM
+name: SALTING/HASHING

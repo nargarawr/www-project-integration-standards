@@ -1,0 +1,35 @@
+doctype: CRE
+id: 217-996
+links:
+- document:
+    description: Verify that a code analysis tool is in use that can detect potentially
+      malicious code, such as time functions, unsafe file operations and network connections.
+    doctype: CRE
+    id: 004-012-013
+    name: CONFIGURATION_CODE_SCAN_MALICIOUS_CONTENT
+  type: SAM
+- document:
+    description: Verify that the application source code and third party libraries
+      do not contain unauthorized phone home or data collection capabilities. Where
+      such functionality exists, obtain the user's permission for it to operate before
+      collecting any data.
+    doctype: CRE
+    id: 004-012-050
+    name: CONFIGURATION_CODE_THIRD_PARTY_DEPENDENCIES_SCAN_MALICIOUS_CONTENT
+  type: SAM
+- document:
+    description: Verify that the application does not ask for unnecessary or excessive
+      permissions to privacy related features or sensors, such as contacts, cameras,
+      microphones, or location.
+    doctype: CRE
+    id: 004-012-050
+    name: CONFIGURATION_VERIFY_PRIVACY_PERMISSIONS
+  type: SAM
+- document:
+    description: Verify that files obtained from untrusted sources are scanned by
+      antivirus scanners to prevent upload of known malicious content.
+    doctype: CRE
+    id: 007-042-059
+    name: FILE_HANDLING_UNTRUSTED_ORIGIN_SCAN_MALICIOUS_CONTENT
+  type: SAM
+name: MALICIOUS_LOGIC_DETECTION

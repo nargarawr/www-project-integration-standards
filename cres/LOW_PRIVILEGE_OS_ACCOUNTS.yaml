@@ -1,0 +1,11 @@
+doctype: CRE
+id: 548-405
+links:
+- document:
+    description: Verify the use of unique or special low-privilege operating system
+      accounts for all application components, services, and servers. (C3)
+    doctype: CRE
+    id: 004-006-012
+    name: COMPONENTS_LEAST_PRIVILEGE_OS_ACCOUNTS
+  type: SAM
+name: LOW_PRIVILEGE_OS_ACCOUNTS

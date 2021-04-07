@@ -1,0 +1,12 @@
+doctype: CRE
+id: 998-553
+links:
+- document:
+    description: Verify that directory browsing is disabled unless deliberately desired.
+      Additionally, applications should not allow discovery or disclosure of file
+      or directory metadata, such as Thumbs.db, .DS_Store, .git or .svn folders.
+    doctype: CRE
+    id: 001-002-005
+    name: CONFIGURATION_HARDENING_SERVER_DIRECTORY_BROWSING
+  type: SAM
+name: DIRECTORY_BROWSING

@@ -1,0 +1,20 @@
+doctype: CRE
+id: 118-823
+links:
+- document:
+    description: Verify that communications between application components, including
+      APIs, middleware and data layers, are authenticated. Components should have
+      the least necessary privileges needed. (C3)
+    doctype: CRE
+    id: 002-010-046
+    name: ARCHITECTURE_AUTHENTICATE_CONSISTENTLY_LEAST_PRIVILEGE
+  type: SAM
+- document:
+    description: Verify that all authentication pathways and identity management APIs
+      implement consistent authentication security control strength, such that there
+      are no weaker alternatives per the risk of the application.
+    doctype: CRE
+    id: 004-012-0612
+    name: ARCHITECTURE_AUTHENTICATE_CONSISTENTLY
+  type: SAM
+name: AUTHENTICATE_CONSISTENTLY

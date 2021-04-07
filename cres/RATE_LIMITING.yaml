@@ -1,0 +1,11 @@
+doctype: CRE
+id: 579-723
+links:
+- document:
+    description: Verify that REST services have anti-automation controls to protect
+      against excessive calls, especially if the API is unauthenticated.
+    doctype: CRE
+    id: 008-004-055
+    name: API_ANTI_AUTOMATION
+  type: SAM
+name: RATE_LIMITING

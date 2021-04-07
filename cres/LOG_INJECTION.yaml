@@ -1,0 +1,18 @@
+doctype: CRE
+id: 401-823
+links:
+- document:
+    description: Verify that the application appropriately encodes user-supplied data
+      to prevent log injection. (C9)
+    doctype: CRE
+    id: 009-027
+    name: LOG_PROTECTION_LOG_INJECTION_ENCODE_INPUT
+  type: SAM
+- document:
+    description: Verify that all events are protected from injection when viewed in
+      log viewing software. (C9)
+    doctype: CRE
+    id: 009-027
+    name: LOG_PROTECTION_LOG_INJECTION
+  type: SAM
+name: LOG_INJECTION

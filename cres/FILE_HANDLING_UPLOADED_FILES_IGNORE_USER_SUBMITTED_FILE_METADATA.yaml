@@ -1,0 +1,161 @@
+description: Verify that user-submitted filename metadata is not used directly with
+  system or framework file and URL API to protect against path traversal.
+doctype: CRE
+id: 007-042-023
+links:
+- document:
+    doctype: CRE
+    id: 258-284
+    name: FILE_HANDLING
+  type: SAM
+- document:
+    doctype: CRE
+    id: 713-132
+    name: UNTRUSTED_ORIGIN
+  type: SAM
+- document:
+    doctype: CRE
+    id: 838-928
+    name: HTTP_HEADERS
+  type: SAM
+- document:
+    doctype: CRE
+    id: 388-239
+    name: LFI/RFI
+  type: SAM
+- document:
+    doctype: CRE
+    id: 411-604
+    name: JSON
+  type: SAM
+- document:
+    doctype: CRE
+    id: 426-195
+    name: SSRF
+  type: SAM
+- document:
+    doctype: CRE
+    id: 558-646
+    name: FILE_METADATA
+  type: SAM
+- document:
+    doctype: CRE
+    id: 408-167
+    name: PATH_TRAVERSAL
+  type: SAM
+- document:
+    doctype: CRE
+    id: 484-943
+    name: RFI
+  type: SAM
+- document:
+    doctype: CRE
+    id: 354-583
+    name: RFD
+  type: SAM
+- document:
+    doctype: Standard
+    hyperlink: ''
+    name: ASVS
+    section: V12.3.4
+    subsection: FILE_HANDLING-UNTRUSTED_ORIGIN-FILE_METADATA-RFD-HTTP_HEADERS-JSON
+  type: SAM
+- document:
+    doctype: Standard
+    hyperlink: ''
+    name: CWE
+    section: '641'
+    subsection: ''
+  type: SAM
+- document:
+    doctype: Standard
+    hyperlink: ''
+    name: NIST 800-53
+    section: SI-3 Malicious Code Protection
+    subsection: ''
+  type: SAM
+- document:
+    doctype: Standard
+    hyperlink: ''
+    name: ASVS
+    section: V12.3.1
+    subsection: FILE_HANDLING-UNTRUSTED_ORIGIN-FILE_METADATA-PATH_TRAVERSAL
+  type: SAM
+- document:
+    doctype: Standard
+    hyperlink: ''
+    name: SIG ISO 25010
+    section: Input and output verification
+    subsection: ''
+  type: SAM
+- document:
+    doctype: Standard
+    hyperlink: ''
+    name: TOP10
+    section: https://owasp.org/www-project-top-ten/2017/A5_2017-Broken_Access_Control
+    subsection: ''
+  type: SAM
+- document:
+    doctype: Standard
+    hyperlink: ''
+    name: NIST 800-53
+    section: AC-4 INFORMATION FLOW ENFORCEMENT,
+    subsection: ''
+  type: SAM
+- document:
+    doctype: Standard
+    hyperlink: ''
+    name: CWE
+    section: '22'
+    subsection: ''
+  type: SAM
+- document:
+    doctype: Standard
+    hyperlink: ''
+    name: WSTG
+    section: WSTG-ATHZ-01
+    subsection: ''
+  type: SAM
+- document:
+    doctype: Standard
+    hyperlink: ''
+    name: ASVS
+    section: V12.3.2
+    subsection: FILE_HANDLING-UNTRUSTED_ORIGIN-LFI/RFI
+  type: SAM
+- document:
+    doctype: Standard
+    hyperlink: ''
+    name: CWE
+    section: '73'
+    subsection: ''
+  type: SAM
+- document:
+    doctype: Standard
+    hyperlink: ''
+    name: NIST 800-53
+    section: SI-10 INFORMATION INPUT VALIDATION
+    subsection: ''
+  type: SAM
+- document:
+    doctype: Standard
+    hyperlink: ''
+    name: ASVS
+    section: V12.3.3
+    subsection: FILE_HANDLING-UNTRUSTED_ORIGIN-FILE_METADATA-RFI-SSRF
+  type: SAM
+- document:
+    doctype: Standard
+    hyperlink: ''
+    name: CWE
+    section: '98'
+    subsection: ''
+  type: SAM
+- document:
+    doctype: Standard
+    hyperlink: ''
+    name: NIST 800-53
+    section: SI-10 INFORMATION INPUT VALIDATION,
+    subsection: ''
+  type: SAM
+name: FILE_HANDLING_UPLOADED_FILES_IGNORE_USER_SUBMITTED_FILE_METADATA

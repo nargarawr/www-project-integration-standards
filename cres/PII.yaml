@@ -1,0 +1,43 @@
+doctype: CRE
+id: 213-506
+links:
+- document:
+    description: Verify that data stored in client side storage (such as HTML5 local
+      storage, session storage, IndexedDB, regular cookies or Flash cookies) does
+      not contain sensitive data or PII.
+    doctype: CRE
+    id: 005-038-028
+    name: DATA_PROTECTION_SENSITIVE_NO_CACHING_CLIENTSIDE
+  type: SAM
+- document:
+    description: Verify that sensitive personal information is subject to data retention
+      classification, such that old or out of date data is deleted automatically,
+      on a schedule, or as the situation requires.
+    doctype: CRE
+    id: 005-038-054
+    name: DATA_PROTECTION_SENSITIVE_CLASSIFY_PURGE
+  type: SAM
+- document:
+    description: Verify that regulated private data is stored encrypted while at rest,
+      such as personally identifiable information (PII), sensitive personal information,
+      or data assessed likely to be subject to EU's GDPR.
+    doctype: CRE
+    id: 005-021-063
+    name: ENCRYPT_SENSITIVE_DATA_AT_REST
+  type: SAM
+- document:
+    description: Verify that users have a method to remove or export their data on
+      demand.
+    doctype: CRE
+    id: 005-044
+    name: DATA_PROTECTION_PII_USER_REMOVAL_FUNCTIONALITY
+  type: SAM
+- document:
+    description: Verify that users are provided clear language regarding collection
+      and use of supplied personal information and that users have provided opt-in
+      consent for the use of that data before it is used in any way.
+    doctype: CRE
+    id: 005-044
+    name: DATA_PROTECTION_PII_USER_CONSENT
+  type: SAM
+name: PII

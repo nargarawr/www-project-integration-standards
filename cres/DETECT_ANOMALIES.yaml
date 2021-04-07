@@ -1,0 +1,38 @@
+doctype: CRE
+id: 328-402
+links:
+- document:
+    description: Verify that the application uses a single vetted authentication mechanism
+      that is known to be secure, can be extended to include strong authentication,
+      and has sufficient logging and monitoring to detect account abuse or breaches.
+    doctype: CRE
+    id: 004-012-061
+    name: ARCHITECTURE_AUTHENTICATE_CONSISTENTLY_EXTENDABLE_ALLOW_LOGGING
+  type: SAM
+- document:
+    description: Verify that secure notifications are sent to users after updates
+      to authentication details, such as credential resets, email or address changes,
+      logging in from unknown or risky locations. The use of push notifications -
+      rather than SMS or email - is preferred, but in the absence of push notifications,
+      SMS or email is acceptable as long as no sensitive information is disclosed
+      in the notification.
+    doctype: CRE
+    id: 001-005-074
+    name: CREDENTIALS_MANAGEMENT_DETECT_ANOMALIES_NOTIFY_USER
+  type: SAM
+- document:
+    description: Verify the application can detect and alert on abnormal numbers of
+      requests, such as by IP, user, total per hour or day, or whatever makes sense
+      for the application.
+    doctype: CRE
+    id: 009-003
+    name: LOG_ALERTING_ANOMALIES
+  type: SAM
+- document:
+    description: Verify the application has configurable alerting when automated attacks
+      or unusual activity is detected.
+    doctype: CRE
+    id: 009-003
+    name: LOG_ALERTING_ANOMALIES_CONFIGURABLE
+  type: SAM
+name: DETECT_ANOMALIES

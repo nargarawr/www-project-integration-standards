@@ -1,0 +1,12 @@
+doctype: CRE
+id: 681-703
+links:
+- document:
+    description: Verify that the application projects against JavaScript or JSON injection
+      attacks, including for eval attacks, remote JavaScript includes, CSP bypasses,
+      DOM XSS, and JavaScript expression evaluation. (C4)
+    doctype: CRE
+    id: 012-045-010
+    name: VALIDATE_JS/JSON_INJECTION
+  type: SAM
+name: JS_INJECTION

@@ -1,0 +1,13 @@
+doctype: CRE
+id: 295-413
+links:
+- document:
+    description: Verify that sensitive data and APIs are protected against direct
+      object attacks targeting creation, reading, updating and deletion of records,
+      such as creating or updating someone else's record, viewing everyone's records,
+      or deleting all records.
+    doctype: CRE
+    id: 001-023
+    name: PROTECT_SENSITIVE_DATA_DIRECT_OBJECT_ATTACKS
+  type: SAM
+name: DIRECT_OBJECT_ATTACKS

@@ -1,0 +1,11 @@
+doctype: CRE
+id: 497-550
+links:
+- document:
+    description: Verify the application sets sufficient anti-caching headers so that
+      sensitive data is not cached in modern browsers.
+    doctype: CRE
+    id: 005-038-028
+    name: DATA_PROTECTION_SENSITIVE_NO_CACHING_CLIENTSIDE_HEADERS
+  type: SAM
+name: ANTI_CACHING_HEADERS

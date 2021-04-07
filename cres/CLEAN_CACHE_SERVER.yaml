@@ -1,0 +1,12 @@
+doctype: CRE
+id: 763-238
+links:
+- document:
+    description: Verify that all cached or temporary copies of sensitive data stored
+      on the server are protected from unauthorized access or purged/invalidated after
+      the authorized user accesses the sensitive data.
+    doctype: CRE
+    id: 005-038-016
+    name: DATA_PROTECTION_SENSITIVE_AUTHORIZE_AND_PURGE_TEMPORARY_DATA
+  type: SAM
+name: CLEAN_CACHE_SERVER

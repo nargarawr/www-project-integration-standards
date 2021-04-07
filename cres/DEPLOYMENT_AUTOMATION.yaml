@@ -1,0 +1,21 @@
+doctype: CRE
+id: 980-207
+links:
+- document:
+    description: Verify that the build pipeline contains a build step to automatically
+      build and verify the secure deployment of the application, particularly if the
+      application infrastructure is software defined, such as cloud environment build
+      scripts.
+    doctype: CRE
+    id: 002-018
+    name: CONFIGURATION_CODE_PIPELINE_DEPLOYMENT_AUTOMATION_VERIFY_DEPLOYMENT
+  type: SAM
+- document:
+    description: Verify that the application build and deployment processes are performed
+      in a secure and repeatable way, such as CI / CD automation, automated configuration
+      management, and automated deployment scripts.
+    doctype: CRE
+    id: 004-006-012
+    name: CONFIGURATION_CODE_PIPELINE_DEPLOYMENT_AUTOMATION
+  type: SAM
+name: DEPLOYMENT_AUTOMATION

@@ -1,0 +1,11 @@
+doctype: CRE
+id: 552-322
+links:
+- document:
+    description: Verify that logs are securely transmitted to a preferably remote
+      system for analysis, detection, alerting, and escalation. (C9)
+    doctype: CRE
+    id: 001-023
+    name: LOG_TRANSFER_EXTERNAL_SYSTEM_
+  type: SAM
+name: LOG_EXTERNAL_STORAGE

@@ -1,0 +1,12 @@
+doctype: CRE
+id: 614-655
+links:
+- document:
+    description: Verify that compressed files are checked for "zip bombs" - small
+      input files that will decompress into huge files thus exhausting file storage
+      limits.
+    doctype: CRE
+    id: 007-042-058
+    name: FILE_HANDLING_CHECK_ZIP_BOMB
+  type: SAM
+name: STORAGE

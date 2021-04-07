@@ -1,0 +1,12 @@
+doctype: CRE
+id: 411-388
+links:
+- document:
+    description: Verify that the web or application server is configured with a whitelist
+      of resources or systems to which the server can send requests or load data/files
+      from.
+    doctype: CRE
+    id: 007-041-065
+    name: FILE_HANDLING_WHITELISTED_RESOURCES
+  type: SAM
+name: TRUSTED_ORIGIN_SERVER

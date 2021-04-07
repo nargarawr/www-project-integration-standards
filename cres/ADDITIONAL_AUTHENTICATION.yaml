@@ -1,0 +1,11 @@
+doctype: CRE
+id: 989-218
+links:
+- document:
+    description: Verify administrative interfaces use appropriate multi-factor authentication
+      to prevent unauthorized use.
+    doctype: CRE
+    id: 001-002-004
+    name: ACCESS_CONTROL_AUTHORIZATION_ADMINISTRATION_MFA
+  type: SAM
+name: ADDITIONAL_AUTHENTICATION

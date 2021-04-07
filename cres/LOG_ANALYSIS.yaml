@@ -1,0 +1,35 @@
+doctype: CRE
+id: 769-770
+links:
+- document:
+    description: Verify that logs are securely transmitted to a preferably remote
+      system for analysis, detection, alerting, and escalation. (C9)
+    doctype: CRE
+    id: 001-023
+    name: LOG_TRANSFER_EXTERNAL_SYSTEM_
+  type: SAM
+- document:
+    description: Verify that the application logs security relevant events including
+      successful and failed authentication events, access control failures, deserialization
+      failures and input validation failures. (C5, C7)
+    doctype: CRE
+    id: 009-013
+    name: LOG_ACCESS_CONTROL_DECISIONS_SUFFICIENTLY
+  type: SAM
+- document:
+    description: Verify that all authentication decisions are logged, without storing
+      sensitive session identifiers or passwords. This should include requests with
+      relevant metadata needed for security investigations.
+    doctype: CRE
+    id: 009-013
+    name: LOG_ACCESS_CONTROL_DECISIONS_NO_SENSITIVE_DATA
+  type: SAM
+- document:
+    description: Verify that all access control decisions can be logged and all failed
+      decisions are logged. This should include requests with relevant metadata needed
+      for security investigations.
+    doctype: CRE
+    id: 009-013
+    name: LOG_ACCESS_CONTROL_DECISIONS
+  type: SAM
+name: LOG_ANALYSIS

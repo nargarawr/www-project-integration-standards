@@ -1,0 +1,37 @@
+doctype: CRE
+id: 458-422
+links:
+- document:
+    description: Verify that the build pipeline warns of out-of-date or insecure components
+      and takes appropriate actions.
+    doctype: CRE
+    id: 002-018
+    name: CONFIGURATION_THIRD_PARTY_DEPENDENCIES_FRESHNESS_ALERTING_PIPELINE
+  type: SAM
+- document:
+    description: Verify the application does not use unsupported, insecure, or deprecated
+      client-side technologies such as NSAPI plugins, Flash, Shockwave, ActiveX, Silverlight,
+      NACL, or client-side Java applets.
+    doctype: CRE
+    id: 005-022-025
+    name: CONFIGURATION_THIRD_PARTY_DEPENDENCIES_NO_DEPRECATED/INSECURE_CLIENTSIDE_TECHNOLOGIES
+  type: SAM
+- document:
+    description: Verify that application deployments adequately sandbox, containerize
+      and/or isolate at the network level to delay and deter attackers from attacking
+      other applications, especially when they are performing sensitive or dangerous
+      actions such as deserialization. (C5)
+    doctype: CRE
+    id: 005-022-025
+    name: CONFIGURATION_DEPLOYMENT_ISOLATE_NETWERK_LEVEL
+  type: SAM
+- document:
+    description: Verify that if application assets, such as JavaScript libraries,
+      CSS stylesheets or web fonts, are hosted externally on a content delivery network
+      (CDN) or external provider, Subresource Integrity (SRI) is used to validate
+      the integrity of the asset.
+    doctype: CRE
+    id: 004-019-041
+    name: THIRD_PARTY_DEPENDENCIES-USE_SRI_FOR_CDNS
+  type: SAM
+name: DEPENDENCIES

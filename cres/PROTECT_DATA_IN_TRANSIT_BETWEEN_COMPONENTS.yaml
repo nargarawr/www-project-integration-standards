@@ -1,0 +1,64 @@
+description: Verify the application encrypts communications between components, particularly
+  when these components are in different containers, systems, sites, or cloud providers.
+  (C3)
+doctype: CRE
+id: 002-026-057
+links:
+- document:
+    doctype: CRE
+    id: 365-239
+    name: DATA_PROTECTION
+  type: SAM
+- document:
+    doctype: CRE
+    id: 753-863
+    name: ENCRYPT_DATA_IN_TRANSIT
+  type: SAM
+- document:
+    doctype: CRE
+    id: 918-739
+    name: DIRECTIVES
+  type: SAM
+- document:
+    doctype: Standard
+    hyperlink: ''
+    name: SIG ISO 25010
+    section: Secure communication
+    subsection: ''
+  type: SAM
+- document:
+    doctype: Standard
+    hyperlink: ''
+    name: ASVS
+    section: V1.9.1
+    subsection: DATA_PROTECTION-ENCRYPT_DATA_IN_TRANSIT-DIRECTIVES
+  type: SAM
+- document:
+    doctype: Standard
+    hyperlink: https://cheatsheetseries.owasp.org/cheatsheets/Abuse_Case_Cheat_Sheet.html
+    name: Cheatsheet
+    section: Architecture, Design and Threat Modeling Requirements
+    subsection: ''
+  type: SAM
+- document:
+    doctype: Standard
+    hyperlink: ''
+    name: OPC
+    section: C3
+    subsection: ''
+  type: SAM
+- document:
+    doctype: Standard
+    hyperlink: ''
+    name: CWE
+    section: '319'
+    subsection: ''
+  type: SAM
+- document:
+    doctype: Standard
+    hyperlink: ''
+    name: NIST 800-53
+    section: SC-8 TRANSMISSION CONFIDENTIALITY AND INTEGRITY
+    subsection: ''
+  type: SAM
+name: PROTECT_DATA_IN_TRANSIT_BETWEEN_COMPONENTS

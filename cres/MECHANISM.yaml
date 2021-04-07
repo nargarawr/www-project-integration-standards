@@ -1,0 +1,12 @@
+doctype: CRE
+id: 469-331
+links:
+- document:
+    description: Verify that all authentication pathways and identity management APIs
+      implement consistent authentication security control strength, such that there
+      are no weaker alternatives per the risk of the application.
+    doctype: CRE
+    id: 004-012-0612
+    name: ARCHITECTURE_AUTHENTICATE_CONSISTENTLY
+  type: SAM
+name: MECHANISM

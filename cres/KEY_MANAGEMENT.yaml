@@ -1,0 +1,26 @@
+doctype: CRE
+id: 182-841
+links:
+- document:
+    description: Verify that there is an explicit policy for management of cryptographic
+      keys and that a cryptographic key lifecycle follows a key management standard
+      such as NIST SP 800-57.
+    doctype: CRE
+    id: 002-014-008
+    name: ENCRYPT_DATA_AT_REST_KEY/SECRET_MANAGEMENT_LIFECYCLE
+  type: SAM
+- document:
+    description: Verify that all keys and passwords are replaceable and are part of
+      a well-defined process to re-encrypt sensitive data.
+    doctype: CRE
+    id: 002-014-007
+    name: ENCRYPT_DATA_AT_REST_KEY/SECRET_MANAGEMENT
+  type: SAM
+- document:
+    description: Verify that consumers of cryptographic services protect key material
+      and other secrets by using key vaults or API based alternatives.
+    doctype: CRE
+    id: 002-005-051
+    name: ENCRYPT_DATA_AT_REST_KEY/SECRET_MANAGEMENT_VAULT
+  type: SAM
+name: KEY_MANAGEMENT

@@ -1,0 +1,11 @@
+doctype: CRE
+id: 199-189
+links:
+- document:
+    description: Verify that proper certification revocation, such as Online Certificate
+      Status Protocol (OCSP) Stapling, is enabled and configured.
+    doctype: CRE
+    id: 005-022-025
+    name: PROTECT_DATA_IN_TRANSIT_TLS_CERTIFICATE_REVOCATION
+  type: SAM
+name: OCSP

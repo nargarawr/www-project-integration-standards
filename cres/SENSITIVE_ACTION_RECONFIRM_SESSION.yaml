@@ -1,0 +1,12 @@
+doctype: CRE
+id: 822-983
+links:
+- document:
+    description: Verify the application ensures a valid login session or requires
+      re-authentication or secondary verification before allowing any sensitive transactions
+      or account modifications.
+    doctype: CRE
+    id: 011-039-064
+    name: SESSION_MANAGEMENT_VALIDATE_SESSION_REAUTHENTICATE_SENSITIVE_ACTION
+  type: SAM
+name: SENSITIVE_ACTION_RECONFIRM_SESSION

@@ -1,0 +1,14 @@
+doctype: CRE
+id: 397-610
+links:
+- document:
+    description: Verify that passwords are stored in a form that is resistant to offline
+      attacks. Passwords SHALL be salted and hashed using an approved one-way key
+      derivation or password hashing function. Key derivation and password hashing
+      functions take a password, a salt, and a cost factor as inputs when generating
+      a password hash. (C6)
+    doctype: CRE
+    id: 001-005-073
+    name: CREDENTIALS_MANAGEMENT_CRYPTOGRAPHIC_DIRECTIVES_KDF_SALTING_HASHING
+  type: SAM
+name: KDF

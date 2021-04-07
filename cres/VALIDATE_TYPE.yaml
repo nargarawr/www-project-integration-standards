@@ -1,0 +1,34 @@
+doctype: CRE
+id: 761-862
+links:
+- document:
+    description: Verify that structured data is strongly typed and validated against
+      a defined schema including allowed characters, length and pattern (e.g. credit
+      card numbers or telephone, or validating that two related fields are reasonable,
+      such as checking that suburb and zip/postcode match). (C5)
+    doctype: CRE
+    id: 012-035
+    name: VALIDATE_STRUCTURED_DATA_SCHEMA_STRONG_TYPING
+  type: SAM
+- document:
+    description: Verify that format strings do not take potentially hostile input,
+      and are constant.
+    doctype: CRE
+    id: 012-035
+    name: VALIDATE_FORMAT_STRINGS_CONSTANT
+  type: SAM
+- document:
+    description: Verify that files obtained from untrusted sources are validated to
+      be of expected type based on the file's content.
+    doctype: CRE
+    id: 007-042-023
+    name: FILE_HANDLING_VALIDATE_TYPE_BASED_ON_CONTENT
+  type: SAM
+- document:
+    description: Verify that REST services explicitly check the incoming Content-Type
+      to be the expected one, such as application/xml or application/JSON.
+    doctype: CRE
+    id: 008-046-019
+    name: VALIDATE_API_CONTENT_TYPE
+  type: SAM
+name: VALIDATE_TYPE
