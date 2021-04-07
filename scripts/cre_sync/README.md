@@ -52,6 +52,11 @@ add tests
 ~ make into flask rest api ~ Done
 ~   refer use case (search by cre) ~ Done
 ~   search by standard ~ Done
+add db integration of tags
+   ~ add tags in db  (search by tag, export with tags etc) ~ Done 
+   add parser integration of tags (parse the new new new spreadsheet template which incorporates tags)
+   ~ add search by tag in rest and frontend ~ Done
+
 write frontend
 make frontend show Graph
 
@@ -59,7 +64,6 @@ make library out of file format and spreadsheet template parsers
 add the ability for a mapping document to have multiple yamls in it
 add conditional export (select the standards you want exported and if you want to see the CRE ids or not, get spreadsheet with mappings)
 write docs and record usage gif
-add db integration of tags and metadata
 add dockerfile???
 
 add github actions ci/cd

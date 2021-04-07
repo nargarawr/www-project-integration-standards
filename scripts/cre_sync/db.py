@@ -18,7 +18,6 @@ logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
 Base = declarative_base()
 
-
 class Standard(Base):
     __tablename__ = 'standard'
     id = Column(Integer, primary_key=True)
@@ -26,6 +25,7 @@ class Standard(Base):
     # which part of <name> are we linking to
     section = Column(String, nullable=False)
     subsection = Column(String)  # which subpart of <name> are we linking to
+    tags = Column(String, default='') # coma separated tags
 
     # some external link to where this is, usually a URL with an anchor
     link = Column(String)
@@ -40,6 +40,7 @@ class CRE(Base):
     external_id = Column(String, default='')
     description = Column(String, default='')
     name = Column(String)
+    tags = Column(String, default='') # coma separated tags
 
     __table_args__ = (UniqueConstraint(
         name, external_id, name='unique_cre_fields'),)
@@ -166,7 +167,39 @@ class Standard_collection:
                 result.append(cre)
             return result
 
-    def get_standard(self, name: str, section=None, subsection=None, link=None):
+    def get_by_tags(self,tags:list) -> [cre_defs.Document]:
+        """ Returns the cre_defs.Documents and their Links
+            that are tagged with ALL of the tags provided
+        """
+        standards_where_clause = []
+        cre_where_clause = []
+        documents = []
+
+        if tags == []:
+            return []
+
+        for tag in tags:
+            standards_where_clause.append(and_(Standard.tags.like("%{}%".format(tag))))
+            cre_where_clause.append(and_(CRE.tags.like("%{}%".format(tag))))
+
+        standards = self.session.query(Standard).filter(*standards_where_clause).all() or []
+        for standard in standards:
+            standard = self.get_standards(name=standard.name,section=standard.section,subsection=standard.subsection,link=standard.link)
+            if standard:
+                documents.extend(standard)
+            else:
+                logger.fatal("db.get_standard returned None for Standard %s:%s that exists, BUG!"%(standard.name,standard.section))
+
+        cres = self.session.query(CRE).filter(*cre_where_clause).all() or []
+        for c in cres:
+            cre = self.get_CRE(external_id=c.external_id,name=c.name)
+            if cre:
+                documents.append(cre)
+            else:
+                logger.fatal("db.get_CRE returned None for CRE %s:%s that exists, BUG!"%(c.id,c.name))
+        return documents
+
+    def get_standards(self, name: str, section=None, subsection=None, link=None):
         standards = []
         query = self.session.query(Standard).filter(Standard.name == name)
         if section:
@@ -177,24 +210,23 @@ class Standard_collection:
             query = query.filter(Standard.link == link)
         dbstands = query.all()
         if dbstands:
-            for dbstandard in dbstands:
-                stand = StandardFromDB(dbstandard=dbstandard)
-                linked_cres = self.session.query(Links).filter(
-                    Links.standard == dbstandard.id).all()
+            for dbstand in dbstands:
+                standard = StandardFromDB(dbstandard=dbstand)
+                linked_cres = self.session.query(Links).filter(Links.standard == dbstand.id).all()
                 for dbcre_link in linked_cres:
-                    stand.add_link(cre_defs.Link(ltype=dbcre_link.type,
-                                   document=CREfromDB(self.session.query(CRE).filter(CRE.id == dbcre_link.cre).first())))
-                standards.append(stand)
+                    standard.add_link(cre_defs.Link(ltype=dbcre_link.type,
+                                    document=CREfromDB(self.session.query(CRE).filter(CRE.id == dbcre_link.cre).first())))
+                standards.append(standard)
         else:
             logger.fatal("Standard %s does not exist in the db" % (name))
             return
         return standards
 
-    def get_CRE(self, id: str = None, name: str = None) -> cre_defs.CRE:
+    def get_CRE(self, external_id: str = None, name: str = None) -> cre_defs.CRE:
         cre = None
         query = self.session.query(CRE)
-        if id:
-            query = query.filter(CRE.external_id == id)
+        if external_id:
+            query = query.filter(CRE.external_id == external_id)
         if name:
             query = query.filter(CRE.name == name)
 
@@ -203,7 +235,7 @@ class Standard_collection:
             cre = CREfromDB(dbcre)
         else:
             logger.fatal("CRE %s:%s does not exist in the db" %
-                         (id, name))
+                         (external_id, name))
             return
 
         # todo figure a way to return both the Standard and the link_type for that link
@@ -394,13 +426,21 @@ class Standard_collection:
 
 
 def StandardFromDB(dbstandard: Standard):
+    tags = []
+    if dbstandard.tags:
+        tags = dbstandard.tags.split(",")
     return cre_defs.Standard(name=dbstandard.name,
                              section=dbstandard.section,
                              subsection=dbstandard.subsection,
-                             hyperlink=dbstandard.link)
+                             hyperlink=dbstandard.link,
+                             tags=tags)
 
 
 def CREfromDB(dbcre: CRE):
+    tags = []
+    if dbcre.tags:
+        tags = dbcre.tags.split(",")
     return cre_defs.CRE(name=dbcre.name,
                         description=dbcre.description,
-                        id=dbcre.external_id)
+                        id=dbcre.external_id,
+                        tags=tags)

@@ -35,11 +35,19 @@ def find_standard_by_name(sname):
     opt_subsection = request.args.get('subsection')
     opt_hyperlink = request.args.get('hyperlink')
 
-    standards = database.get_standard(name=sname,section=opt_section,subsection=opt_subsection, link = opt_hyperlink)
+    standards = database.get_standards(name=sname,section=opt_section,subsection=opt_subsection, link = opt_hyperlink)
     if standards:
         res = [stand.todict() for stand in standards]
         return jsonify(res)
 
+
+@app.route('/rest/v1/tags', methods=["GET"])
+def find_document_by_tag(sname):
+    tags = request.args.getlist('tag')
+    documents = database.get_by_tags(tags)
+    if documents:
+        res = [doc.todict() for doc in documents]
+        return jsonify(res)
 
 
 if __name__ == '__main__':

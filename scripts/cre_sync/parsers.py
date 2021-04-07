@@ -212,11 +212,11 @@ def parse_v1_standards(cre_file: list) -> dict:
                     if element:
                         cre.add_link(defs.Link(document=defs.Standard(name='NIST 800-53',
                                                                       section=element,
-                                                                      tags="is related to")))
+                                                                      tags=["is related to"])))
             else:
                 cre.add_link(defs.Link(document=defs.Standard(name='NIST 800-53',
                                                               section=nist_items,
-                                                              tags="is related to")))
+                                                              tags=["is related to"])))
         if not is_empty(cre_mapping.get('NIST 800-63')):
             cre.add_link(defs.Link(document=defs.Standard(name='NIST 800-63',
                                                           section=cre_mapping.pop('NIST 800-63'))))

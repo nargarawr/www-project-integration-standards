@@ -36,6 +36,42 @@ class TestDB(unittest.TestCase):
         collection.session.commit()
         self.collection = collection
 
+    def test_get_by_tags(self):
+        """
+        Given: A CRE with no links and a combination of possible tags:
+                    "tag1,dash-2,underscore_3,space 4,co_mb-ination%5"
+               A Standard with no links and a combination of possible tags
+                    "tag1, dots.5.5, space 6 , several spaces and newline          7        \n"
+               some limited overlap between the tag-sets
+        Expect:
+               The CRE to be returned when searching for "tag-2" and for ["tag1","underscore_3"]
+               The Standard to be returned when searching for "space 6" and ["dots.5.5", "space 6"]
+               Both to be returned when searching for "space" and "tag1"
+        """
+
+        dbcre = db.CRE(description="tagCREdesc1", name="tagCREname1", tags="tag1,dash-2,underscore_3,space 4,co_mb-ination%5")
+        cre = db.CREfromDB(dbcre)
+        cre.id = ''
+        dbstandard = db.Standard(subsection="4.5.6.7", section="tagsstand", name="tagsstand", link="https://example.com",
+        tags="tag1, dots.5.5, space 6 , several spaces and newline          7        \n")
+        standard = db.StandardFromDB(dbstandard)
+        self.collection.session.add(dbcre)
+        self.collection.session.add(dbstandard)
+        self.collection.session.commit()
+
+        self.maxDiff=None
+        self.assertEqual(self.collection.get_by_tags(["dash-2"]),[cre])
+        self.assertEqual(self.collection.get_by_tags(["tag1","underscore_3"]),[cre])
+        self.assertEqual(self.collection.get_by_tags(["space 6"]),[standard])
+        self.assertEqual(self.collection.get_by_tags(["dots.5.5", "space 6"]),[standard])
+
+        self.assertCountEqual([cre,standard],self.collection.get_by_tags(["space"]))
+        self.assertCountEqual([cre,standard],self.collection.get_by_tags(["space","tag1"]))
+        self.assertCountEqual(self.collection.get_by_tags(["tag1"]),[cre,standard])
+
+        self.assertEqual(self.collection.get_by_tags([]),[])
+        self.assertEqual(self.collection.get_by_tags(["this should not be a tag"]),[])
+
     def test_get_standards_names(self):
         result = self.collection.get_standards_names()
         expected = ['BarStand', 'Unlinked']
@@ -264,7 +300,7 @@ class TestDB(unittest.TestCase):
         res = collection.get_CRE(name='C1')
         self.assertEqual(expected, res)
 
-    def test_get_standard(self):
+    def test_get_standards(self):
         """ Given: a Standard 'S1' that links to cres
         return the Standard in Document format"""
         collection = db.Standard_collection(cache_file="")
@@ -290,7 +326,7 @@ class TestDB(unittest.TestCase):
             defs.Link(document=defs.CRE(name='C3', description="CD3")),
         ])]
 
-        res = collection.get_standard(name='S1')
+        res = collection.get_standards(name='S1')
         self.assertEqual(expected, res)
 
 

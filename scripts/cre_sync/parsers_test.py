@@ -263,7 +263,7 @@ class TestParsers(unittest.TestCase):
 
         groupless={'GROUPLESS': defs.CRE(
             doctype=defs.Credoctypes.CRE, id='999-999', description='groupless desc', name='GROUPLESS', links=[
-                defs.Link(document=defs.Standard(doctype=defs.Credoctypes.Standard, name='NIST 800-53', tags='is related to', section='RA-3 RISK ASSESSMENT'))])}
+                defs.Link(document=defs.Standard(doctype=defs.Credoctypes.Standard, name='NIST 800-53', tags=['is related to'], section='RA-3 RISK ASSESSMENT'))])}
     
         expected={'REQUIREMENTS': defs.CRE(doctype=defs.Credoctypes.CRE, id='654-390', name='REQUIREMENTS',
                                              links=[
@@ -276,9 +276,9 @@ class TestParsers(unittest.TestCase):
                                                                                  defs.Link(document=defs.Standard(doctype=defs.Credoctypes.Standard, name='Cheatsheet', section='Architecture, Design and Threat Modeling Requirements',
                                                                                                                   hyperlink='https: // cheatsheetseries.owasp.org/cheatsheets/Threat_Modeling_Cheat_Sheet.html, https: // cheatsheetseries.owasp.org/cheatsheets/Abuse_Case_Cheat_Sheet.html, https: // cheatsheetseries.owasp.org/cheatsheets/Attack_Surface_Analysis_Cheat_Sheet.html')),
                                                                                  defs.Link(document=defs.Standard(doctype=defs.Credoctypes.Standard, name='NIST 800-53', links=[
-                                                                                 ], tags='is related to', section='RA-3 RISK ASSESSMENT')),
+                                                                                 ], tags=['is related to'], section='RA-3 RISK ASSESSMENT')),
                                                                                  defs.Link(document=defs.Standard(doctype=defs.Credoctypes.Standard, name='NIST 800-53', links=[
-                                                                                 ], tags='is related to', section='PL-8 SECURITY AND PRIVACY ARCHITECTURES')),
+                                                                                 ], tags=['is related to'], section='PL-8 SECURITY AND PRIVACY ARCHITECTURES')),
                                                                                  defs.Link(document=defs.Standard(doctype=defs.Credoctypes.Standard, name='OPC', links=[
                                                                                  ], section='C1')),
                                                                                  defs.Link(document=defs.Standard(doctype=defs.Credoctypes.Standard, name='SIG ISO 25010', section='@SDLC'))],
@@ -291,8 +291,8 @@ class TestParsers(unittest.TestCase):
                                                                                    defs.Link(document=defs.Standard(doctype=defs.Credoctypes.Standard, name='CWE', links=[], section='0')),
                                                                                    defs.Link(document=defs.Standard(doctype=defs.Credoctypes.Standard, name='Cheatsheet', section='Architecture, Design and Threat Modeling Requirements',
                                                                                                                     hyperlink='https: // cheatsheetseries.owasp.org/cheatsheets/Threat_Modeling_Cheat_Sheet.html, https: // cheatsheetseries.owasp.org/cheatsheets/Abuse_Case_Cheat_Sheet.html, https: // cheatsheetseries.owasp.org/cheatsheets/Attack_Surface_Analysis_Cheat_Sheet.html')),
-                                                                                   defs.Link(document=defs.Standard(doctype=defs.Credoctypes.Standard, name='NIST 800-53', links=[], tags='is related to', section='RA-3 RISK ASSESSMENT')),
-                                                                                   defs.Link(document=defs.Standard(doctype=defs.Credoctypes.Standard, name='NIST 800-53', links=[], tags='is related to', section='PL-8 SECURITY AND PRIVACY ARCHITECTURES')),
+                                                                                   defs.Link(document=defs.Standard(doctype=defs.Credoctypes.Standard, name='NIST 800-53', links=[], tags=['is related to'], section='RA-3 RISK ASSESSMENT')),
+                                                                                   defs.Link(document=defs.Standard(doctype=defs.Credoctypes.Standard, name='NIST 800-53', links=[], tags=['is related to'], section='PL-8 SECURITY AND PRIVACY ARCHITECTURES')),
                                                                                    defs.Link(document=defs.Standard(doctype=defs.Credoctypes.Standard, name='OPC', links=[
                                                                                    ], section='C1')),
                                                                                    defs.Link(document=defs.Standard(doctype=defs.Credoctypes.Standard, name='SIG ISO 25010', section='@SDLC'))],
@@ -306,7 +306,7 @@ class TestParsers(unittest.TestCase):
                                                                                                   defs.Link(document=defs.Standard(
                                                                                                       doctype=defs.Credoctypes.Standard, name='CWE', section='0')),
                                                                                                   defs.Link(document=defs.Standard(
-                                                                                                      doctype=defs.Credoctypes.Standard, name='NIST 800-53', tags='is related to', section='RA-3 RISK ASSESSMENT')),
+                                                                                                      doctype=defs.Credoctypes.Standard, name='NIST 800-53', tags=['is related to'], section='RA-3 RISK ASSESSMENT')),
                                                                                               ])),
                                                                   defs.Link(document=defs.CRE(doctype=defs.Credoctypes.CRE, id='002-036', description='Verify the use of a secure software development lifecycle that addresses security in all stages of development. (C1)', name='SDLC_APPLY_CONSISTENTLY',
                                                                                               links=[
@@ -317,9 +317,9 @@ class TestParsers(unittest.TestCase):
                                                                                                   defs.Link(document=defs.Standard(doctype=defs.Credoctypes.Standard, name='Cheatsheet', section='Architecture, Design and Threat Modeling Requirements',
                                                                                                             hyperlink='https: // cheatsheetseries.owasp.org/cheatsheets/Threat_Modeling_Cheat_Sheet.html, https: // cheatsheetseries.owasp.org/cheatsheets/Abuse_Case_Cheat_Sheet.html, https: // cheatsheetseries.owasp.org/cheatsheets/Attack_Surface_Analysis_Cheat_Sheet.html')),
                                                                                                   defs.Link(document=defs.Standard(
-                                                                                                      doctype=defs.Credoctypes.Standard, name='NIST 800-53', tags='is related to', section='RA-3 RISK ASSESSMENT')),
+                                                                                                      doctype=defs.Credoctypes.Standard, name='NIST 800-53', tags=['is related to'], section='RA-3 RISK ASSESSMENT')),
                                                                                                   defs.Link(document=defs.Standard(
-                                                                                                      doctype=defs.Credoctypes.Standard, name='NIST 800-53', tags='is related to', section='PL-8 SECURITY AND PRIVACY ARCHITECTURES')),
+                                                                                                      doctype=defs.Credoctypes.Standard, name='NIST 800-53', tags=['is related to'], section='PL-8 SECURITY AND PRIVACY ARCHITECTURES')),
                                                                                                   defs.Link(document=defs.Standard(
                                                                                                       doctype=defs.Credoctypes.Standard, name='OPC', section='C1')),
                                                                                                   defs.Link(document=defs.Standard(
@@ -337,9 +337,9 @@ class TestParsers(unittest.TestCase):
                                                                                   defs.Link(document=defs.Standard(doctype=defs.Credoctypes.Standard, name='Cheatsheet', section='Architecture, Design and Threat Modeling Requirements',
                                                                                                                    hyperlink='https: // cheatsheetseries.owasp.org/cheatsheets/Threat_Modeling_Cheat_Sheet.html, https: // cheatsheetseries.owasp.org/cheatsheets/Abuse_Case_Cheat_Sheet.html, https: // cheatsheetseries.owasp.org/cheatsheets/Attack_Surface_Analysis_Cheat_Sheet.html')),
                                                                                   defs.Link(document=defs.Standard(doctype=defs.Credoctypes.Standard,
-                                                                                                                   name='NIST 800-53', tags='is related to', section='RA-3 RISK ASSESSMENT')),
+                                                                                                                   name='NIST 800-53', tags=['is related to'], section='RA-3 RISK ASSESSMENT')),
                                                                                   defs.Link(document=defs.Standard(doctype=defs.Credoctypes.Standard, name='NIST 800-53', links=[
-                                                                                  ], tags='is related to', section='PL-8 SECURITY AND PRIVACY ARCHITECTURES')),
+                                                                                  ], tags=['is related to'], section='PL-8 SECURITY AND PRIVACY ARCHITECTURES')),
                                                                                   defs.Link(document=defs.Standard(doctype=defs.Credoctypes.Standard,
                                                                                                                    name='OPC', section='C1')),
                                                                                   defs.Link(document=defs.Standard(doctype=defs.Credoctypes.Standard, name='SIG ISO 25010', section='@SDLC'))],

@@ -145,6 +145,7 @@ class Document():
             self.links == other.links and \
             self.tags == other.tags and \
             self.metadata == other.metadata
+
     def __hash__(self):
         return hash(json.dumps(self.todict()))
 
@@ -180,6 +181,8 @@ class Document():
         self.name = str(name) or raise_MandatoryFieldException(
             "Document name not defined for document of doctype %s" % doctype)
         self.links = links or []
+        if '' in tags:
+            tags.remove('')
         self.tags = tags
         self.id = id
         self.metadata = metadata
@@ -192,7 +195,8 @@ class CRE(Document):
     def __init__(self, *args, **kwargs):
         self.doctype = Credoctypes.CRE
         super().__init__(*args, **kwargs)
-
+    def __hash__(self):
+        return super().__hash__()
 
 @dataclass
 class Standard(Document):
@@ -208,6 +212,8 @@ class Standard(Document):
         result['hyperlink'] = self.hyperlink
         return result
 
+    def __hash__(self):
+        return super().__hash__()
     def __eq__(self, other):
         return super().__eq__(other) and \
             self.section == other.section and \
