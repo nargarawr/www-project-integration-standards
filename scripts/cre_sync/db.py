@@ -81,7 +81,11 @@ class Standard_collection:
         Base.metadata.bind = connection
 
         if not connection.dialect.has_table(connection, Standard.__tablename__):
-            Base.metadata.create_all(connection)
+            try:
+                Base.metadata.create_all(connection)
+            except sqlalchemy.exc.OperationalError:
+                pass
+
 
     def __get_external_links(self):
         external_links = []

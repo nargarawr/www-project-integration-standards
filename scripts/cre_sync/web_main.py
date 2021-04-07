@@ -41,4 +41,7 @@ def find_standard_by_name(sname):
         return jsonify(res)
 
 
-app.run()
+
+if __name__ == '__main__':
+    app.run(use_reloader=False, debug=False)
+    
