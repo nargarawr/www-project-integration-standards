@@ -21,12 +21,12 @@ class ExportFormat(Enum):
     def section_key(sname: str):
         "returns <sname>:section"
         return "%s%s%s" % (sname, ExportFormat.separator.value, ExportFormat.section.value)
-    
+
     @staticmethod
     def subsection_key(sname: str):
         "returns <sname>:subsection"
         return "%s%s%s" % (sname, ExportFormat.separator.value, ExportFormat.subsection.value)
-    
+
     @staticmethod
     def hyperlink_key(sname: str):
         "returns <sname>:hyperlink"
@@ -41,27 +41,27 @@ class ExportFormat(Enum):
     def linked_cre_id_key(name: str):
         "returns Linked_CRE_<name>:id"
         return "%s%s%s%s" % (ExportFormat.cre_link.value, name, ExportFormat.separator.value, ExportFormat.id.value)
-    
+
     @staticmethod
     def linked_cre_name_key(name: str):
         "returns Linked_CRE_<name>:name"
         return "%s%s%s%s" % (ExportFormat.cre_link.value, name, ExportFormat.separator.value, ExportFormat.name.value)
-    
+
     @staticmethod
     def linked_cre_link_type_key(name: str):
         "returns Linked_CRE_<name>:link_type"
         return "%s%s%s%s" % (ExportFormat.cre_link.value, name, ExportFormat.separator.value, ExportFormat.link_type.value)
-    
+
     @staticmethod
     def cre_id_key():
         "returns CRE:id"
         return "%s%s%s" % (ExportFormat.cre.value, ExportFormat.separator.value, ExportFormat.id.value)
-    
+
     @staticmethod
     def cre_name_key():
         "returns CRE:name"
         return "%s%s%s" % (ExportFormat.cre.value, ExportFormat.separator.value, ExportFormat.name.value)
-    
+
     @staticmethod
     def cre_description_key():
         "returns CRE:description"
@@ -109,7 +109,7 @@ class Link():
         else:
             self.ltype = ltype
         self.tags = tags
-   
+
     def __hash__(self):
         return hash(json.dumps(self.todict()))
 
@@ -195,8 +195,10 @@ class CRE(Document):
     def __init__(self, *args, **kwargs):
         self.doctype = Credoctypes.CRE
         super().__init__(*args, **kwargs)
+
     def __hash__(self):
         return super().__hash__()
+
 
 @dataclass
 class Standard(Document):
@@ -214,6 +216,7 @@ class Standard(Document):
 
     def __hash__(self):
         return super().__hash__()
+
     def __eq__(self, other):
         return super().__eq__(other) and \
             self.section == other.section and \

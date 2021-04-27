@@ -13,7 +13,7 @@ jobs:
       - name: Test
         run: python -m unittest discover -s scripts/cre_sync -p "*_test.py"
 
-      - name: GitHub Action for pylint
+      - name: Lint
         uses: cclauss/GitHub-Action-for-pylint@0.7.0
         with:
           args: pip install -r requirements.txt ; pylint scripts/cre_sync/*.py

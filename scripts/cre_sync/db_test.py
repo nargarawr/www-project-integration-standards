@@ -49,28 +49,35 @@ class TestDB(unittest.TestCase):
                Both to be returned when searching for "space" and "tag1"
         """
 
-        dbcre = db.CRE(description="tagCREdesc1", name="tagCREname1", tags="tag1,dash-2,underscore_3,space 4,co_mb-ination%5")
+        dbcre = db.CRE(description="tagCREdesc1", name="tagCREname1",
+                       tags="tag1,dash-2,underscore_3,space 4,co_mb-ination%5")
         cre = db.CREfromDB(dbcre)
         cre.id = ''
         dbstandard = db.Standard(subsection="4.5.6.7", section="tagsstand", name="tagsstand", link="https://example.com",
-        tags="tag1, dots.5.5, space 6 , several spaces and newline          7        \n")
+                                 tags="tag1, dots.5.5, space 6 , several spaces and newline          7        \n")
         standard = db.StandardFromDB(dbstandard)
         self.collection.session.add(dbcre)
         self.collection.session.add(dbstandard)
         self.collection.session.commit()
 
-        self.maxDiff=None
-        self.assertEqual(self.collection.get_by_tags(["dash-2"]),[cre])
-        self.assertEqual(self.collection.get_by_tags(["tag1","underscore_3"]),[cre])
-        self.assertEqual(self.collection.get_by_tags(["space 6"]),[standard])
-        self.assertEqual(self.collection.get_by_tags(["dots.5.5", "space 6"]),[standard])
+        self.maxDiff = None
+        self.assertEqual(self.collection.get_by_tags(["dash-2"]), [cre])
+        self.assertEqual(self.collection.get_by_tags(
+            ["tag1", "underscore_3"]), [cre])
+        self.assertEqual(self.collection.get_by_tags(["space 6"]), [standard])
+        self.assertEqual(self.collection.get_by_tags(
+            ["dots.5.5", "space 6"]), [standard])
 
-        self.assertCountEqual([cre,standard],self.collection.get_by_tags(["space"]))
-        self.assertCountEqual([cre,standard],self.collection.get_by_tags(["space","tag1"]))
-        self.assertCountEqual(self.collection.get_by_tags(["tag1"]),[cre,standard])
+        self.assertCountEqual(
+            [cre, standard], self.collection.get_by_tags(["space"]))
+        self.assertCountEqual(
+            [cre, standard], self.collection.get_by_tags(["space", "tag1"]))
+        self.assertCountEqual(
+            self.collection.get_by_tags(["tag1"]), [cre, standard])
 
-        self.assertEqual(self.collection.get_by_tags([]),[])
-        self.assertEqual(self.collection.get_by_tags(["this should not be a tag"]),[])
+        self.assertEqual(self.collection.get_by_tags([]), [])
+        self.assertEqual(self.collection.get_by_tags(
+            ["this should not be a tag"]), [])
 
     def test_get_standards_names(self):
         result = self.collection.get_standards_names()

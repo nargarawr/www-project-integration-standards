@@ -97,14 +97,14 @@ class TestMain(unittest.TestCase):
     def test_parse_file(self):
         file = {'description': 'Verify that approved cryptographic algorithms are used in the generation, seeding, and verification.',
                 'doctype': 'CRE', 'id': '001-005-073', 'links': [
-                    {'type':'SAM','tags':[],'document':{'description': '', 'doctype': 'Standard', 'hyperlink': 'None',
+                    {'type': 'SAM', 'tags': [], 'document':{'description': '', 'doctype': 'Standard', 'hyperlink': 'None',
                      'id': '', 'links': [], 'metadata': {},
                      'name': 'TOP10', 'section': 'https://owasp.org/www-project-top-ten/2017/A5_2017-Broken_Access_Control',
-                     'subsection': 'None', 'tags': []}}, {'type':'SAM','tags':[],'document':{'description': '',
-                                                         'doctype': 'Standard', 'hyperlink': 'None',
-                                                         'id': '', 'links': [], 'metadata': {},
-                                                         'name': 'ISO 25010', 'section': 'Secure data storage',
-                                                         'subsection': 'None', 'tags': []}}], 'metadata': {},
+                     'subsection': 'None', 'tags': []}}, {'type': 'SAM', 'tags': [], 'document':{'description': '',
+                                                                                                 'doctype': 'Standard', 'hyperlink': 'None',
+                                                                                                 'id': '', 'links': [], 'metadata': {},
+                                                                                                 'name': 'ISO 25010', 'section': 'Secure data storage',
+                                                                                                 'subsection': 'None', 'tags': []}}], 'metadata': {},
                 'name': 'CREDENTIALS_MANAGEMENT_CRYPTOGRAPHIC_DIRECTIVES',
                 'tags': []}
         expected = defs.CRE(doctype=defs.Credoctypes.CRE, id='001-005-073', description='Verify that approved cryptographic algorithms are used in the generation, seeding, and verification.', name='CREDENTIALS_MANAGEMENT_CRYPTOGRAPHIC_DIRECTIVES',

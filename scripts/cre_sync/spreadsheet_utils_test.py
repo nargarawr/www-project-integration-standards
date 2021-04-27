@@ -115,7 +115,8 @@ class TestDB(unittest.TestCase):
                      'NormalStand2:hyperlink': None, 'NormalStand2:link_type': None, 'NormalStand2:section': None, 'NormalStand2:subsection': None,
                      'OtherLoneStand:hyperlink': 'https://example.com/ls2', 'OtherLoneStand:link_type': None, 'OtherLoneStand:section': 'OtherLoneStandSection', 'OtherLoneStand:subsection': '4.5.2'}]
 
-        result = prepare_spreadsheet(collection, collection.export(dir=tempfile.mkdtemp()))
+        result = prepare_spreadsheet(
+            collection, collection.export(dir=tempfile.mkdtemp()))
         assert all([a == b for a, b in zip(result, expected)])
 
     def test_prepare_spreadsheet_groups(self):
@@ -188,7 +189,8 @@ class TestDB(unittest.TestCase):
                      'NormalStand1:hyperlink': None, 'NormalStand1:link_type': None, 'NormalStand1:section': None, 'NormalStand1:subsection': None,
                      'NormalStand2:hyperlink': None, 'NormalStand2:link_type': None, 'NormalStand2:section': None, 'NormalStand2:subsection': None}]
 
-        result = prepare_spreadsheet(collection, collection.export(dir=tempfile.mkdtemp()))
+        result = prepare_spreadsheet(
+            collection, collection.export(dir=tempfile.mkdtemp()))
 
         assert all([a == b for a, b in zip(result, expected)])
 
@@ -238,7 +240,8 @@ class TestDB(unittest.TestCase):
                      'NormalStand0:hyperlink': None, 'NormalStand0:link_type': None, 'NormalStand0:section': None, 'NormalStand0:subsection': None,
                      'NormalStand1:hyperlink': None, 'NormalStand1:link_type': None, 'NormalStand1:section': None, 'NormalStand1:subsection': None}]
 
-        result = prepare_spreadsheet(collection, collection.export(dir=tempfile.mkdtemp()))
+        result = prepare_spreadsheet(
+            collection, collection.export(dir=tempfile.mkdtemp()))
 
         assert all([a == b for a, b in zip(result, expected)])
 

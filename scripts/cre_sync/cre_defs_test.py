@@ -18,7 +18,7 @@ class TestCreDefs(unittest.TestCase):
         cre_output = {'description': 'CREdesc', 'doctype': 'CRE', 'id': '100',
                       'links': [
                           {'type': 'SAM', 'document': {'doctype': 'Standard', 'hyperlink': None, 'name': 'ASVS', 'section': 'SESSION-MGT-TOKEN-DIRECTIVES-DISCRETE-HANDLING',
-                           'subsection': '3.1.1', }}],
+                                                       'subsection': '3.1.1', }}],
                       'name': 'CREname', 'tags': ['CREt1', 'CREt2'], }
 
         standard2 = defs.Standard(doctype=defs.Credoctypes.Standard, name='Standard',
@@ -28,13 +28,13 @@ class TestCreDefs(unittest.TestCase):
         group_output = {'description': 'desc', 'doctype': 'CRE', 'id': '500',
                         'links': [
                             {'type': 'SAM', 'document': {'description': 'CREdesc', 'doctype': 'CRE', 'id': '100',
-                             'links': [
-                                       {'type': 'SAM', 'document': {'doctype': 'Standard', 'hyperlink': None,
-                                        'name': 'ASVS', 'section': 'SESSION-MGT-TOKEN-DIRECTIVES-DISCRETE-HANDLING', 'subsection': '3.1.1'}}
-                             ],
-                                'name': 'CREname', 'tags': ['CREt1', 'CREt2'], }},
+                                                         'links': [
+                                                             {'type': 'SAM', 'document': {'doctype': 'Standard', 'hyperlink': None,
+                                                                                          'name': 'ASVS', 'section': 'SESSION-MGT-TOKEN-DIRECTIVES-DISCRETE-HANDLING', 'subsection': '3.1.1'}}
+                                                         ],
+                                                         'name': 'CREname', 'tags': ['CREt1', 'CREt2'], }},
                             {'type': 'SAM', 'document': {'doctype': 'Standard', 'hyperlink': None,
-                             'name': 'Standard', 'section': 'StandardSection', 'subsection': '3.1.1'}}],
+                                                         'name': 'Standard', 'section': 'StandardSection', 'subsection': '3.1.1'}}],
                         'name': 'name',
                         'tags': ['tag1', 't2']}
         nested = defs.Standard(doctype=defs.Credoctypes.Standard, name='ASVS',

@@ -46,12 +46,16 @@ def __add_cre_to_spreadsheet(document: defs.Document, header: dict, cresheet: li
     if document.doctype == defs.Credoctypes.CRE:
         working_array[defs.ExportFormat.cre_name_key()] = document.name
         working_array[defs.ExportFormat.cre_id_key()] = document.id
-        working_array[defs.ExportFormat.cre_description_key()] = document.description
+        working_array[defs.ExportFormat.cre_description_key()
+                      ] = document.description
     # case where a lone standard is displayed without any CRE links
     elif document.doctype == defs.Credoctypes.Standard:
-        working_array[defs.ExportFormat.section_key(document.name)] = document.section
-        working_array[defs.ExportFormat.subsection_key(document.name)] = document.subsection
-        working_array[defs.ExportFormat.hyperlink_key(document.name)] = document.hyperlink
+        working_array[defs.ExportFormat.section_key(
+            document.name)] = document.section
+        working_array[defs.ExportFormat.subsection_key(
+            document.name)] = document.subsection
+        working_array[defs.ExportFormat.hyperlink_key(
+            document.name)] = document.hyperlink
 
     for link in document.links:
         if link.document.doctype == defs.Credoctypes.Standard:  # linking to normal standard
@@ -59,18 +63,25 @@ def __add_cre_to_spreadsheet(document: defs.Document, header: dict, cresheet: li
             if working_array[defs.ExportFormat.section_key(link.document.name)]:
                 conflicts.append(link)
             else:
-                working_array[defs.ExportFormat.section_key(link.document.name)] = link.document.section
-                working_array[defs.ExportFormat.subsection_key(link.document.name)] = link.document.subsection
-                working_array[defs.ExportFormat.hyperlink_key(link.document.name)] = link.document.hyperlink
-                working_array[defs.ExportFormat.link_type_key(link.document.name)] = link.ltype.value
+                working_array[defs.ExportFormat.section_key(
+                    link.document.name)] = link.document.section
+                working_array[defs.ExportFormat.subsection_key(
+                    link.document.name)] = link.document.subsection
+                working_array[defs.ExportFormat.hyperlink_key(
+                    link.document.name)] = link.document.hyperlink
+                working_array[defs.ExportFormat.link_type_key(
+                    link.document.name)] = link.ltype.value
         elif link.document.doctype == defs.Credoctypes.CRE:  # linking to another CRE
             grp_added = False
             for i in range(0, maxgroups):
                 if not working_array[defs.ExportFormat.linked_cre_id_key(i)]:
                     grp_added = True
-                    working_array[defs.ExportFormat.linked_cre_id_key(i)] = link.document.id
-                    working_array[defs.ExportFormat.linked_cre_name_key(i)] = link.document.name
-                    working_array[defs.ExportFormat.linked_cre_link_type_key(i)] = link.ltype.value
+                    working_array[defs.ExportFormat.linked_cre_id_key(
+                        i)] = link.document.id
+                    working_array[defs.ExportFormat.linked_cre_name_key(
+                        i)] = link.document.name
+                    working_array[defs.ExportFormat.linked_cre_link_type_key(
+                        i)] = link.ltype.value
                     break
             if not grp_added:
                 logger.fatal("Tried to add Group %s but all of the %s group slots are filled. This must be a bug" % (
@@ -90,7 +101,8 @@ def prepare_spreadsheet(collection: db.Standard_collection, docs: list) -> str:
         Given a list of cre_defs.Document will create a list of key,value dict representing the mappings
     """
     standard_names = collection.get_standards_names()  # get header from db (cheap enough)
-    header = {defs.ExportFormat.cre_name_key(): None, defs.ExportFormat.cre_id_key(): None, defs.ExportFormat.cre_description_key(): None}
+    header = {defs.ExportFormat.cre_name_key(): None, defs.ExportFormat.cre_id_key(
+    ): None, defs.ExportFormat.cre_description_key(): None}
     groups = {}
     for name in standard_names:
         header[defs.ExportFormat.section_key(name)] = None

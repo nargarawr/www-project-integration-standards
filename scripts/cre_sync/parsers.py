@@ -62,7 +62,6 @@ def parse_export_format(lfile: list) -> [defs.Document]:
     max_internal_cre_links = len(
         set([k for k, v in lfile[0].items() if link_types_regexp.match(k)]))
 
- 
     # input()
     for mapping in lfile:
         # if the line does not register a CRE
@@ -79,7 +78,7 @@ def parse_export_format(lfile: list) -> [defs.Document]:
             if name not in cres.keys():  # register new cre
                 cre = defs.CRE(name=name, id=id, description=description)
             else:  # it's a conflict mapping so we've seen this before, just retrive so we can add the new info
-                
+
                 cre = cres.get(name)
                 if cre.id != id:
                     if is_empty(id):
@@ -93,11 +92,11 @@ def parse_export_format(lfile: list) -> [defs.Document]:
                     cre.description = description
 
             # register the standards part
-            
+
             for standard in get_linked_standards(mapping):
                 # cre.links.append(standard)
                 cre.add_link(standard)
-                    
+
             # add the CRE links
             for i in range(0, max_internal_cre_links):
                 name = mapping.pop(defs.ExportFormat.linked_cre_name_key(i))
@@ -112,7 +111,7 @@ def parse_export_format(lfile: list) -> [defs.Document]:
                                 id = internal_mapping.id
                             else:
                                 logger.fatal("id from sheet %s does not match already parsed id %s for cre/group %s, this looks like a bug" %
-                                            (id, internal_mapping.id, name))
+                                             (id, internal_mapping.id, name))
                                 continue
                     else:
                         internal_mapping = defs.CRE(name=name, id=id)
