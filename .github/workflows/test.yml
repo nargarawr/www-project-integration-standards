@@ -12,3 +12,8 @@ jobs:
         run: sudo apt-get update && sudo apt-get install -y python3-setuptools python3-pip && pip install -r scripts/cre_sync/requirements.txt
       - name: Test
         run: python -m unittest discover -s scripts/cre_sync -p "*_test.py"
+
+      - name: GitHub Action for pylint
+        uses: cclauss/GitHub-Action-for-pylint@0.7.0
+        with:
+          args: pip install -r requirements.txt ; pylint scripts/cre_sync/*.py
