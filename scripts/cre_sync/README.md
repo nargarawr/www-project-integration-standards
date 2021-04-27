@@ -29,31 +29,29 @@ This script runs automatically, if you want to run it yourself against your own 
 Notes
 ---
 
-TODO:
-add more edge cases in spreadsheet
-
 add tests
    ~ defs --- Done
    ~ db -- Done
    ~ parsers -- Done   --- needs edge cases
     mapping_add -- Done for important methods, -- argparse logic only remains
    ~ spreadsheet_utils ~ -- Done
+   Frontend
 
-~ add parse from export format ~ Done
-~ add parse from export format where the root doc is a standard and it links to cres or groups ~ Done
-~ add parse from spreadsheet with unknown standards (for key,val in items add_standard) ~ Done
-~ merge spreadsheet to yaml and mapping add, they do the same thing ~ Done
-~ add the ability for standards to link other standards, then you can handle assigning CREs yourself ~ Done
-~ support importing yaml export files of more than 1 levels deep ~ Done
-~ add export for Standards unmapped to CREs as lone standards (useful for visibility) ~ Done
-~ add sparse_spreadsheet_export functionality one level of mapping per row, either everything that maps to standard X or everything that maps to CRE x ~ Done
-~ add parse from export format ~ Done
+* ~ add parse from export format ~ Done
+* ~ add parse from export format where the root doc is a standard and it links to cres or groups ~ Done
+* ~ add parse from spreadsheet with unknown standards (for key,val in items add_standard) ~ Done
+* ~ merge spreadsheet to yaml and mapping add, they do the same thing ~ Done
+* ~ add the ability for standards to link other standards, then you can handle assigning CREs yourself ~ Done
+* ~ support importing yaml export files of more than 1 levels deep ~ Done
+* ~ add export for Standards unmapped to CREs as lone standards (useful for visibility) ~ Done
+* ~ add sparse_spreadsheet_export functionality one level of mapping per row, either everything that maps to standard X or everything that maps to CRE x ~ Done
+* ~ add parse from export format ~ Done
 
-~ make into flask rest api ~ Done
-~   refer use case (search by cre) ~ Done
-~   search by standard ~ Done
-add db integration of tags
-   ~ add tags in db  (search by tag, export with tags etc) ~ Done 
+* ~ make into flask rest api ~ Done
+* ~   refer use case (search by cre) ~ Done
+* ~   search by standard ~ Done
+* add db integration of tags
+   * ~ add tags in db  (search by tag, export with tags etc) ~ Done 
    add parser integration of tags (parse the new new new spreadsheet template which incorporates tags)
    ~ add search by tag in rest and frontend ~ Done
 
@@ -62,9 +60,8 @@ make frontend show Graph
 
 make library out of file format and spreadsheet template parsers
 add the ability for a mapping document to have multiple yamls in it
-add conditional export (select the standards you want exported and if you want to see the CRE ids or not, get spreadsheet with mappings)
+add conditional export (select the standards you want exported and if you want to see the CRE ids or not, get spreadsheet with mappings)  (gap analysis use case)
 write docs and record usage gif
 add dockerfile???
 
 add github actions ci/cd
-
