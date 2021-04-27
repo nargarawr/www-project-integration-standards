@@ -2,10 +2,15 @@
 /Gemfile.lock
 _site/
 __pycache__
-
+.coverage
+.aws-sam/
+*.orig
+.vagrant/*
+*.patch
+Vagrantfile
 
 ### vscode ###
-.vscode/*
+.vscode/
 *.code-workspace
 
 ## act secrets

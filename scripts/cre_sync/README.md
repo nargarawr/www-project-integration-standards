@@ -6,7 +6,6 @@ The Github Action is run on a cron schedule defined in .github/ .
 It syncs the contents of the spreadsheets with links between CREs and other external entities to CRE yaml files on Github.
 There is a different Github Action which syncs those Yaml files to a CRE REST API for querying.
 
-
 Assumptions
 -----------
 
