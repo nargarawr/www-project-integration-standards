@@ -118,7 +118,7 @@ class Credoctypes(Enum):
 
 
 class LinkTypes(Enum):
-    Same = "SAM"
+    Same = "SAME"
 
     @staticmethod
     def from_str(name):

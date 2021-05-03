@@ -33,7 +33,7 @@ class TestCreDefs(unittest.TestCase):
             "id": "100",
             "links": [
                 {
-                    "type": "SAM",
+                    "type": "SAME",
                     "document": {
                         "doctype": "Standard",
                         "hyperlink": None,
@@ -66,14 +66,14 @@ class TestCreDefs(unittest.TestCase):
             "id": "500",
             "links": [
                 {
-                    "type": "SAM",
+                    "type": "SAME",
                     "document": {
                         "description": "CREdesc",
                         "doctype": "CRE",
                         "id": "100",
                         "links": [
                             {
-                                "type": "SAM",
+                                "type": "SAME",
                                 "document": {
                                     "doctype": "Standard",
                                     "hyperlink": None,
@@ -88,7 +88,7 @@ class TestCreDefs(unittest.TestCase):
                     },
                 },
                 {
-                    "type": "SAM",
+                    "type": "SAME",
                     "document": {
                         "doctype": "Standard",
                         "hyperlink": None,
