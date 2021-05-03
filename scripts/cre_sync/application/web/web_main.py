@@ -58,6 +58,14 @@ def find_document_by_tag(sname):
         res = [doc.todict() for doc in documents]
         return jsonify(res)
 
+@app.route('/rest/v1/export_standars',methods=["GET"])
+def gap_analysis(): # TODO (spyros): add the ability to export specific sections/subsections
+                    # TODO (spyros): add export result to spreadsheet 
+        standards = request.args.getlist('standard')
+        documents = database.export_standards(standards_names=standards)
+        if documents:
+            res = [doc.todict() for doc in documents]
+            return jsonify(res)
 
 @app.errorhandler(404)
 def page_not_found(e):

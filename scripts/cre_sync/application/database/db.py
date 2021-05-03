@@ -18,6 +18,7 @@ from .. import sqla
 logging.basicConfig()
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
+Base = declarative_base()
 
 
 class Standard(sqla.Model):
