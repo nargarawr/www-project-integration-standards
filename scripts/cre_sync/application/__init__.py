@@ -5,9 +5,12 @@ from application.config import config
 sqla = SQLAlchemy()
 
 
-def create_app(mode: str='production'):
+def create_app(mode: str='production',conf=None):
     app = Flask(__name__)
-    app.config.from_object(config[mode])
+    if not conf:
+        app.config.from_object(config[mode])
+    else:
+        app.config.from_object(conf)
     config[mode].init_app(app)
     sqla.init_app(app=app)
 

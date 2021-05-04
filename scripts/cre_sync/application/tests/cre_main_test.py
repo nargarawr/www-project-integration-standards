@@ -25,7 +25,6 @@ class TestMain(unittest.TestCase):
         self.app_context.push()
         self.collection = db.Standard_collection()
 
-
     def test_register_standard_with_links(self):
         standard_with_links = defs.Standard(
             doctype=defs.Credoctypes.Standard,
@@ -242,7 +241,7 @@ class TestMain(unittest.TestCase):
         )  # 1 cre in the db
 
     def test_parse_file(self):
-        file = {
+        file = [{
             "description": "Verify that approved cryptographic algorithms are used in the generation, seeding, and verification.",
             "doctype": "CRE",
             "id": "001-005-073",
@@ -283,8 +282,13 @@ class TestMain(unittest.TestCase):
             "metadata": {},
             "name": "CREDENTIALS_MANAGEMENT_CRYPTOGRAPHIC_DIRECTIVES",
             "tags": [],
-        }
-        expected = defs.CRE(
+        }, {
+            "description": "Desc",
+            "doctype": "CRE",
+            "id": "14",
+            "name": "name",
+        }]
+        expected = [defs.CRE(
             doctype=defs.Credoctypes.CRE,
             id="001-005-073",
             description="Verify that approved cryptographic algorithms are used in the generation, seeding, and verification.",
@@ -321,13 +325,19 @@ class TestMain(unittest.TestCase):
             ],
             tags=[],
             metadata={},
-        )
+        ),defs.CRE(id='14', description='Desc', name='name')]
 
-        result = main.parse_file(file, self.collection)
+        result = main.parse_file(
+            filename="tests", yamldocs=file[0], scollection=self.collection)
+        # negative test first parse_file accepts a list of objects
+        self.assertEqual(result, None)
 
-        self.assertEqual(result, expected)
+        result = main.parse_file(filename="tests", yamldocs=
+                                 file, scollection=self.collection)
+        self.assertCountEqual(result, expected)
 
     # TODO: ensure db has exact values instead of correct number of elements
+
     def test_parse_standards_from_spreadsheeet(self):
         input = [
             {
@@ -375,9 +385,17 @@ class TestMain(unittest.TestCase):
         self.assertEqual(
             len(self.collection.session.query(db.InternalLinks).all()), 4)
 
-    # TODO:implement
-    #  def test_get_standards_files_from_disk(self):
-    #     raise NotImplementedError
+    def test_get_standards_files_from_disk(self):
+        loc = tempfile.mkdtemp()
+        ymls = []
+        cre = defs.CRE(name="c", description="cd")
+        for _ in range(1, 5):
+            ymldesc, location = tempfile.mkstemp(
+                dir=loc, suffix=".yaml", text=True)
+            os.write(ymldesc, bytes(str(cre), 'utf-8'))
+            ymls.append(location)
+        self.assertCountEqual(
+            ymls, [x for x in main.get_standards_files_from_disk(loc)])
 
     # def test_add_from_spreadsheet(self):
     #     raise NotImplementedError
