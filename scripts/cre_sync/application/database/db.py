@@ -120,11 +120,11 @@ class Standard_collection:
         # TODO: (spyros) this should be made into a count(*) query
         q = self.session.query(InternalLinks).all()
         for il in q:
-            if il.group in count:
+            if il.group in count.keys():
                 count[il.group] += 1
             else:
                 count[il.group] = 1
-            if il.cre in count:
+            if il.cre in count.keys():
                 count[il.cre] += 1
             else:
                 count[il.cre] = 1

@@ -62,10 +62,8 @@ def __add_cre_to_spreadsheet(
         ] = document.hyperlink
 
     for link in document.links:
-        if (
-            link.document.doctype == defs.Credoctypes.Standard
-        ):  # linking to normal standard
-            # a single CRE can link to multiple standards hence we can have conflicts
+        if link.document.doctype == defs.Credoctypes.Standard:  # linking to normal standard
+            # a single CRE can link to multiple subsections of the same standard hence we can have conflicts
             if working_array[defs.ExportFormat.section_key(link.document.name)]:
                 conflicts.append(link)
             else:
@@ -106,7 +104,7 @@ def __add_cre_to_spreadsheet(
     if len(conflicts):
         new_cre = deepcopy(document)
         new_cre.links = conflicts
-        cresheet = __add_cre_to_spreadsheet(new_cre, header, cresheet, maxgroups)
+        cresheet = __add_cre_to_spreadsheet(document=new_cre, header=header, cresheet=cresheet, maxgroups=maxgroups)
     return cresheet
 
 
@@ -122,7 +120,6 @@ def prepare_spreadsheet(collection: db.Standard_collection, docs: list) -> str:
         defs.ExportFormat.cre_id_key(): None,
         defs.ExportFormat.cre_description_key(): None,
     }
-    groups = {}
     for name in standard_names:
         header[defs.ExportFormat.section_key(name)] = None
         header[defs.ExportFormat.subsection_key(name)] = None

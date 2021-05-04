@@ -169,7 +169,7 @@ def add_from_spreadsheet(spreadsheet_url: str, cache_loc: str, cre_loc: str):
     import new mappings from <url>
     export db to ../../cres/
     """
-    database = db.Standard_collection(cache=True, cache_file=cache_loc)
+    database = db_connect(path=cache_loc)
     spreadsheet = sheet_utils.readSpreadsheet(
         url=spreadsheet_url, cres_loc=cre_loc, alias="new spreadsheet", validate=False
     )

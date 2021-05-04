@@ -282,7 +282,7 @@ class TestDB(unittest.TestCase):
         result = prepare_spreadsheet(
             collection, collection.export(dir=tempfile.mkdtemp())
         )
-        assert all([a == b for a, b in zip(result, expected)])
+        self.assertCountEqual(result, expected)
 
     def test_prepare_spreadsheet_groups(self):
         """Given:
@@ -433,7 +433,7 @@ class TestDB(unittest.TestCase):
             collection, collection.export(dir=tempfile.mkdtemp())
         )
 
-        assert all([a == b for a, b in zip(result, expected)])
+        self.assertCountEqual(result, expected)
 
     def test_prepare_spreadsheet_simple(self):
         """Given:
@@ -527,8 +527,7 @@ class TestDB(unittest.TestCase):
         result = prepare_spreadsheet(
             collection, collection.export(dir=tempfile.mkdtemp())
         )
-
-        assert all([a == b for a, b in zip(result, expected)])
+        self.assertCountEqual(result, expected)
 
 
 if __name__ == "__main__":
