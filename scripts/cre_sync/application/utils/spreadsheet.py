@@ -94,6 +94,7 @@ def __add_cre_to_spreadsheet(
                         defs.ExportFormat.linked_cre_link_type_key(i)
                     ] = link.ltype.value
                     break
+
             if not grp_added:
                 logger.fatal(
                     "Tried to add Group %s but all of the %s group slots are filled. This must be a bug"

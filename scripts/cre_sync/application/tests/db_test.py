@@ -124,8 +124,32 @@ class TestDB(unittest.TestCase):
         self.assertEqual(expected, result)
 
     def test_get_max_internal_connections(self):
+        self.assertEqual(self.collection.get_max_internal_connections(), 1)
+
+        dbcrelo = db.CRE(name='internal connections test lo',
+                         description='ictlo')
+        dbcrehi = db.CRE(name='internal connections test hi',
+                         description='icthi')
+        self.collection.session.add(dbcrelo)
+        self.collection.session.add(dbcrehi)
+        self.collection.session.commit()
+        for i in range(0, 100):
+            dbcre = db.CRE(name=str(i)+' name', description=str(i)+' desc')
+            self.collection.session.add(dbcre)
+            self.collection.session.commit()
+
+            # 1 low level cre to multiple groups
+            self.collection.session.add(
+                db.InternalLinks(group=dbcre.id, cre=dbcrelo.id))
+
+            # 1 hi level cre to multiple low level
+            self.collection.session.add(
+                db.InternalLinks(group=dbcrehi.id, cre=dbcre.id))
+
+            self.collection.session.commit()
+
         result = self.collection.get_max_internal_connections()
-        self.assertEqual(result, 1)
+        self.assertEqual(result, 100)
 
     def test_export(self):
         """
