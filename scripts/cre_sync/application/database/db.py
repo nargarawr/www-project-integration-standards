@@ -1,24 +1,25 @@
 
 
+import base64
+import logging
+import os
 # from sqlalchemy.ext.declarative import declarative_base
+from collections import namedtuple
 # from sqlalchemy.sql import operators
 # from sqlalchemy.orm import sessionmaker, relationship
 from enum import Enum
-from collections import namedtuple
+from pprint import pprint
+
+import yaml
+
 from application.defs import cre_defs
 from application.utils import file
-import yaml
-import logging
-import os
-import base64
 
-from pprint import pprint
 from .. import sqla
 
 logging.basicConfig()
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
-Base = declarative_base()
 
 
 class Standard(sqla.Model):
@@ -33,7 +34,7 @@ class Standard(sqla.Model):
     tags = sqla.Column(sqla.String, default="")  # coma separated tags
 
     # some external link to where this is, usually a URL with an anchor
-    link = sqla.Column(sqla.String)
+    link = sqla.Column(sqla.String, default="")
     __table_args__ = (
         sqla.UniqueConstraint(name, section, subsection,
                               name="standard_section"),
@@ -298,7 +299,6 @@ class Standard_collection:
             .all()
         )
         for il in internal_links:
-            # pprint(cre)
             q = self.session.query(CRE)
             res = None
             if il.cre == dbcre.id:
@@ -545,6 +545,78 @@ class Standard_collection:
             self.session.add(
                 Links(type=type.value, cre=cre.id, standard=standard.id))
         self.session.commit()
+
+    def find_internal_connection(self, source: CRE.id, target: CRE.id, exclude=[]):
+        if not source or not target:
+            return
+        if source == target:
+            return [(source, source)]
+
+        if self.session.query(InternalLinks).filter(sqla.or_(
+            sqla.and_(InternalLinks.group == source,
+                      InternalLinks.cre == target),
+            sqla.and_(InternalLinks.cre == source, InternalLinks.group == target))
+        ).first():
+            return [(source, target)]
+        else:
+            ccres = self.__get_cres_of_cre(source)
+            for transient_cre in ccres:
+                if not transient_cre:
+                    return
+                elif transient_cre in exclude:
+                    continue
+                exclude.append(source)
+                res = self.find_internal_connection(
+                    source=transient_cre, target=target, exclude=exclude)
+                if res:
+                    res.extend([(source, transient_cre)])
+                    return res
+
+    def __get_cres_of_cre(self, cre_id: CRE.id):
+        result = []
+        result.extend([x[0] for x in self.session.query(
+            InternalLinks.cre).filter(InternalLinks.group == cre_id).all()])
+        result.extend([x[0] for x in self.session.query(
+            InternalLinks.group).filter(InternalLinks.cre == cre_id).all()])
+        return result
+
+    def __get_cres_of_standard(self, standard_id: Standard.id):
+        return self.session.query(Links).filter(Links.standard == standard_id).all() or []
+
+    def gap_analysis(self, standards: list) -> [cre_defs.Document]:
+        """  If the CRE structure is a Tree-like thing with leaves being standards
+        find the immediate CRE of each standard and then find if there's a path in  the tree between the immediate cres
+        find_internal_connection() is a graph-path-finding method
+        """
+
+        processed_standards = []
+        # key is a standard ID, value is an array of CREids that link to it
+        cres_of_each_standard = {}
+        for stand in standards:
+            ids = self.session.query(Standard).filter(
+                Standard.name == stand).all()
+            for s in ids:
+                current_cres = [
+                    link.cre for link in self.__get_cres_of_standard(s.id)]
+                cres_of_each_standard[s.id] = current_cres
+        # inefficient and slow solution, could be improved maybe with a filter map
+        for working_stand_id, working_stand_cre_ids in cres_of_each_standard.copy().items():
+            working_standard = StandardFromDB(self.session.query(
+                Standard).filter(Standard.id == working_stand_id).first())
+            for stand_id, stand_cre_ids in cres_of_each_standard.items():
+                if stand_id == working_stand_id:
+                    continue
+                for wsc in working_stand_cre_ids:
+                    for sc in stand_cre_ids:
+                        path = self.find_internal_connection(
+                            source=wsc, target=sc, exclude=[])
+                        if path:
+                            lstand = StandardFromDB(self.session.query(
+                                Standard).filter(Standard.id == stand_id).first())
+                            working_standard.add_link(
+                                cre_defs.Link(document=lstand))
+            processed_standards.append(working_standard)
+        return processed_standards
 
 
 def StandardFromDB(dbstandard: Standard):

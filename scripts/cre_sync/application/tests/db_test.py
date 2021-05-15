@@ -1,4 +1,5 @@
 import base64
+import copy
 import os
 import tempfile
 import unittest
@@ -8,10 +9,9 @@ from unittest import skip
 
 import yaml
 
+from application import create_app, sqla
 from application.database import db
 from application.defs import cre_defs as defs
-
-from application import create_app, sqla
 
 
 class TestDB(unittest.TestCase):
@@ -488,6 +488,126 @@ class TestDB(unittest.TestCase):
 
         res = collection.get_standards(name="S1")
         self.assertEqual(expected, res)
+
+    def test_gap_analysis(self):
+        """ Given 
+        the following standards SA1, SA2, SA3 SAA1 , SB1, SD1, SDD1, SW1, SX1
+        the following CREs CA, CB, CC, CD, CDD , CW, CX
+        the following links
+        CC -> CA, CB,CD
+        CD -> CDD
+        CA-> SA1, SAA1
+        CB -> SB1
+        CD -> SD1
+        CDD -> SDD1
+        CW -> SW1
+        CX -> SA3, SX1
+        NoCRE -> SA2
+
+        Then:
+        gap_analysis(SA) returns SA1, SA2, SA3
+        gap_analysis(SA,SAA) returns SA1 <-> SAA1, SA2, SA3
+        gap_analysis(SA,SDD) returns SA1 <-> SDD1, SA2, SA3
+        gap_analysis(SA, SW) returns SA1,SA2,SA3, SW1 # no connection
+        gap_analysis(SA, SB, SD, SW) returns SA1 <->(SB1,SD1), SA2 , SW1, SA3
+        gap_analysis(SA, SX) returns SA1, SA2, SA3->SX1
+
+            give me a single standard
+            give me two standards connected by same cre
+            give me two standards connected by cres who are children of the same cre
+            give me two standards connected by completely different cres
+            give me two standards with sections on different trees.
+
+            give me two standards without  connections
+            give me 3 or more standards
+
+        """
+
+        collection = db.Standard_collection()
+        cres = {"dbca": db.CRE(external_id="1", description="CA", name="CA"),
+                'dbcb': db.CRE(external_id="2", description="CB", name="CB"),
+                'dbcc': db.CRE(external_id="3", description="CC", name="CC"),
+                'dbcd': db.CRE(external_id="4", description="CD", name="CD"),
+                'dbcdd': db.CRE(external_id="5", description="CDD", name="CDD"),
+                'dbcw': db.CRE(external_id="6", description="CW", name="CW"),
+                'dbcx': db.CRE(external_id="7", description="CX", name="CX")
+                }
+        standards = {'dbsa1': db.Standard(name="SA", section="SA1", subsection="", link=""),
+                     'dbsa2': db.Standard(name="SA", section="SA2", subsection="", link=""),
+                     'dbsa3': db.Standard(name="SA", section="SA3", subsection="", link=""),
+                     'dbsaa1': db.Standard(name="SAA", section="SAA1", subsection="", link=""),
+                     'dbsb1': db.Standard(name="SB", section="SB1", subsection="", link=""),
+                     'dbsd1': db.Standard(name="SD", section="SD1", subsection="", link=""),
+                     'dbsdd1': db.Standard(name="SDD", section="SDD1", subsection="", link=""),
+                     'dbsw1': db.Standard(name="SW", section="SW1", subsection="", link=""),
+                     'dbsx1': db.Standard(name="SX", section="SX1", subsection="", link="")
+                     }
+
+        for cre in cres.values():
+            collection.session.add(cre)
+        for standard in standards.values():
+            collection.session.add(standard)
+        collection.session.commit()
+
+        collection.session.add(
+            db.Links(cre=cres['dbca'].id, standard=standards['dbsa1'].id))
+        collection.session.add(
+            db.Links(cre=cres['dbca'].id, standard=standards['dbsaa1'].id))
+        collection.session.add(
+            db.Links(cre=cres['dbcb'].id, standard=standards['dbsb1'].id))
+        collection.session.add(
+            db.Links(cre=cres['dbcd'].id, standard=standards['dbsd1'].id))
+        collection.session.add(
+            db.Links(cre=cres['dbcdd'].id, standard=standards['dbsdd1'].id))
+        collection.session.add(
+            db.Links(cre=cres['dbcw'].id, standard=standards['dbsw1'].id))
+        collection.session.add(
+            db.Links(cre=cres['dbcx'].id, standard=standards['dbsa3'].id))
+        collection.session.add(
+            db.Links(cre=cres['dbcx'].id, standard=standards['dbsx1'].id))
+
+        collection.session.add(db.InternalLinks(
+            group=cres['dbcc'].id, cre=cres['dbca'].id))
+        collection.session.add(db.InternalLinks(
+            group=cres['dbcc'].id, cre=cres['dbcb'].id))
+        collection.session.add(db.InternalLinks(
+            group=cres['dbcc'].id, cre=cres['dbcd'].id))
+        collection.session.add(db.InternalLinks(
+            group=cres['dbcd'].id, cre=cres['dbcdd'].id))
+
+        collection.session.commit()
+
+        sa1 = defs.Standard(name="SA", section="SA1")
+        sa2 = defs.Standard(name="SA", section="SA2")
+        sa3 = defs.Standard(name="SA", section="SA3")
+        saa1 = defs.Standard(name="SAA", section="SAA1")
+        sdd1 = defs.Standard(name="SDD", section="SDD1")
+        sw1 = defs.Standard(name="SW", section="SW1")
+        sb1 = defs.Standard(name="SB", section="SB1")
+        sd1 = defs.Standard(name="SD", section="SD1")
+        sx1 = defs.Standard(name="SX", section="SX1")
+        expected = {
+            "SA": [sa1, sa2, sa3],
+            "SA,SAA": [copy.copy(sa1).add_link(defs.Link(document=saa1)), copy.copy(saa1).add_link(defs.Link(document=sa1)), sa2, sa3],
+            "SAA,SA": [copy.copy(sa1).add_link(defs.Link(document=saa1)), copy.copy(saa1).add_link(defs.Link(document=sa1)), sa2, sa3],
+            "SA,SDD": [copy.copy(sa1).add_link(defs.Link(document=sdd1)), copy.copy(sdd1).add_link(defs.Link(document=sa1)), sa2, sa3],
+            "SA,SW": [sa1, sa2, sa3, sw1],
+            "SA,SB,SD,SW": [copy.copy(sa1).add_link(defs.Link(document=sb1)).add_link(defs.Link(document=sd1)),
+                            copy.copy(sb1).add_link(defs.Link(document=sa1)).add_link(
+                defs.Link(document=sd1)),
+                copy.copy(sd1).add_link(defs.Link(document=sa1)).add_link(
+                defs.Link(document=sb1)),
+                sa2, sa3, sw1],
+            "SA,SX": [sa1, sa2, copy.copy(sa3).add_link(defs.Link(document=sx1)),
+                      copy.copy(sx1).add_link(defs.Link(document=sa3))],
+        }
+
+        self.maxDiff = None
+        for args, expected_vals in expected.items():
+            stands = args.split(",")
+            res = self.collection.gap_analysis(stands)
+            # unfortunately named, asserts element and count equality
+            self.assertCountEqual(res, expected_vals)
 
 
 if __name__ == "__main__":
