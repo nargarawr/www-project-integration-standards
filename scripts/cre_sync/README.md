@@ -76,6 +76,7 @@ add tests
 * make results per page a config item from env
 * add flask cover command from here https://github.com/miguelgrinberg/flasky/blob/master/flasky.py#L33
 * make library out of file format and spreadsheet template parsers
-* add conditional export (select the standards you want exported and if you want to see the CRE ids or not, get spreadsheet with mappings)  (gap analysis use case)
+* add conditional export (select the standards you want exported and if you want to see the CRE ids or not, get spreadsheet with mappings)  (gap analysis use case)  -- DB part without CREs or checking linktypes done
+
 * write docs and record usage gif
 * add dockerfile???
