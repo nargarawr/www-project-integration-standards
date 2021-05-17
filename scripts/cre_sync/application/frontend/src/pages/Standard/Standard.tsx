@@ -7,7 +7,6 @@ import { Pagination } from 'semantic-ui-react';
 
 import { DocumentNode } from '../../components/DocumentNode';
 import { LoadingAndErrorIndicator } from '../../components/LoadingAndErrorIndicator';
-import { PAGE_SIZE } from '../../const';
 import { useEnvironment } from '../../hooks';
 import { Document } from '../../types';
 
